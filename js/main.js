@@ -1,12 +1,13 @@
 $(document).ready(function() {
+    // configure debugging
+    shell.debug.enabled = config.debug;
+    
     // draw the shell
     shell.draw(); 
 
     // re-draw the shell when the window is resized
     $(window).resize(function(){shell.draw()});
 
-    // configure debugging
-    shell.debug.enabled = config.debug;
 
     /*
     // @note
@@ -14,5 +15,6 @@ $(document).ready(function() {
         alert("Data Loaded: " + data);
     });
     */
-
+    
+    shell.status.set('Initializing wash version ' + wash.version);
 });

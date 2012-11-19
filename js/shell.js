@@ -155,7 +155,7 @@ var shell = {
         clear: function(){
             shell.debug.log('shell.status.clear');
             $('#status').html('');
-        }
+        },
 
         // sets the status bar message
         set: function(data){
