@@ -202,6 +202,12 @@ var shell = {
         // the password to unlock the trojan
         password: 'sex-secret-love-god',
 
+        // hides the target bar
+        hide: function(){
+            $(shell.elements.target).fadeOut();
+            shell.status.set('Target bar hidden. Press Ctrl+h to unhide.');
+        },
+
         // clears the target
         clear: function(){
             shell.target.url      = '',
@@ -218,10 +224,22 @@ var shell = {
             shell.target.password = $(shell.elements.password).val();
         },
 
+        // un-hides the target bar
+        show: function(){
+            $(shell.elements.target).fadeIn();
+            shell.status.set('Target bar revealed. Press Ctrl+h to hide.');
+        },
+
         // tests the connection to the target
         test: function(){
             //@TODO: implement this
         },
+
+        // toggles target bar visibility
+        toggle: function(){
+            $(shell.elements.target).fadeToggle();
+            shell.status.set('Target bar toggled. Press Ctrl+h to toggle.');
+        }
     },
 
     // encapsulates some simple debugging functionality

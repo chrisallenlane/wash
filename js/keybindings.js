@@ -1,6 +1,12 @@
 // for information on keybinding API, see:
 // http://craig.is/killing/mice
 
+// ctrl+h: toggles target bar visibility
+Mousetrap.bind(['command+h', 'ctrl+h'], function(e) {
+    shell.target.toggle();
+    return false;
+});
+
 // ctrl+l: clear the terminal output
 Mousetrap.bind(['command+l', 'ctrl+l'], function(e) {
     shell.output.clear();
