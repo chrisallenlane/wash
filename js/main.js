@@ -8,6 +8,11 @@ $(document).ready(function() {
     // re-draw the shell when the window is resized
     $(window).resize(function(){shell.draw()});
 
+    // bind to the main form
+    $(shell.elements.terminal).bind('submit', function(){
+        shell.command.prompt.enter();
+        return false;
+    });
 
     /*
     // @note

@@ -8,16 +8,19 @@ var shell = {
     elements: {
         output   : ('#output'),
         password : ('#password'),
+        port     : ('#port'),
         prompt   : ('#prompt'),
+        protocol : ('#protocol'),
         shell    : ('#shell'),
         status   : ('#status'),
         target   : ('#target'),
+        terminal : ('#terminal'),
         url      : ('#url'),
     },
 
     // draw the shell
     draw: function(){
-        shell.debug.log('shell.command.draw');
+        shell.debug.log('shell.draw');
         
         // capture window and outer shell dimensions
         var window_height = $(window).innerHeight();
@@ -72,30 +75,37 @@ var shell = {
     // encapsulates command processing
     command: {
 
-        // clears the command prompt
-        clear: function(){
-            shell.debug.log('shell.command.clear');
-            $(shell.elements.prompt).val('');
-        },
+        // encapsulates the command prompt
+        prompt: {
 
-        // enters a command
-        enter: function(){
-            // @todo: do some kind of "inspect" method here to scan for macros
-            shell.debug.log('shell.command.enter');
-            var command = shell.command.get_prompt();
-            shell.output.write(command);
-            shell.command.history.add(command);
-            shell.command.clear();
-        },
+            // clears the command prompt
+            clear: function(){
+                shell.debug.log('shell.command.prompt.clear');
+                $(shell.elements.prompt).val('');
+            },
 
-        // gets the command prompt value
-        get_prompt: function(){
-            return $(shell.elements.prompt).val();
-        },
+            // enters a command
+            enter: function(){
+                // @todo: do some kind of "inspect" method here to scan for macros
+                shell.debug.log('shell.command.prompt.enter');
+                var command = shell.command.prompt.get();
+                shell.output.write(command);
+                shell.command.history.add(command);
+                shell.command.prompt.clear();
+            },
 
-        // sets the command prompt value
-        set_prompt: function(data){
-            $(shell.elements.prompt).val(data);
+            // gets the command prompt value
+            get: function(){
+                shell.debug.log('shell.command.prompt.get');
+                return $(shell.elements.prompt).val();
+            },
+
+            // sets the command prompt value
+            set: function(data){
+                shell.debug.log('shell.command.prompt.set');
+                $(shell.elements.prompt).val(data);
+            },
+
         },
 
         // tracks command history
@@ -103,6 +113,9 @@ var shell = {
             
             // an array of historic commands
             commands: [],
+
+            // a buffer for a command in-progress
+            current: '', 
 
             // current position in commands
             position: 0,
@@ -199,8 +212,10 @@ var shell = {
 
         // clears the target
         set: function(){
-            shell.target.url      = $(shell.elements.url).val('');
-            shell.target.password = $(shell.elements.password).val('');
+            shell.target.protocol = $(shell.elements.protocol).val();
+            shell.target.url      = $(shell.elements.url).val();
+            shell.target.port     = $(shell.elements.port).val();
+            shell.target.password = $(shell.elements.password).val();
         },
 
         // tests the connection to the target

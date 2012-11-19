@@ -9,13 +9,7 @@ Mousetrap.bind(['command+l', 'ctrl+l'], function(e) {
 
 // ctrl+p: focus on prompt
 Mousetrap.bind(['command+p', 'ctrl+p'], function(e) {
-    $('#prompt').focus();
-    return false;
-});
-
-// ctrl+p: focus on prompt
-Mousetrap.bind(['command+l', 'ctrl+p'], function(e) {
-    $('#prompt').focus();
+    $(shell.elements.prompt).focus();
     return false;
 });
 
