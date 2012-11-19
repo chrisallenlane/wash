@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webshell</title>
+        <link rel='stylesheet' href='css/main.css'> 
+        <script src='js/jquery.min.js'></script>
+        <script src='js/shell.js'></script>
+        <script src='js/mousetrap.min.js'></script>
+        <script src='js/keybindings.js'></script>
+        <script src='js/payloads.js'></script>
+        <script src='js/main.js'></script>
+    </head>
+    <body>
+        <div id='shell'>
+            <div id='output'>
+                here is some stuff or whatever
+            </div>
+            <form action='#' method='get' onsubmit='shell.command.enter(); return false'>
+                <input autofocus type='text' id='prompt'>
+            </form>
+        </div>
+    </body>
+</html>

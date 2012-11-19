@@ -1,0 +1,25 @@
+body{
+    color: white;
+    font-size: small;
+    font-family: arial;
+    background-color: gray;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+
+#output{
+    overflow: scroll-y;
+}
+
+#prompt{
+    background-color: black;
+    border: none;
+    color: white;
+    font-family: arial;
+    font-size: small;
+}
+
+#shell{
+    background-color: black;
+}
