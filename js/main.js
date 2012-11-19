@@ -16,5 +16,5 @@ $(document).ready(function() {
     });
     */
     
-    shell.status.set('Initializing wash version ' + wash.version);
+    shell.status.set('Initialized wash version ' + wash.version + '.');
 });

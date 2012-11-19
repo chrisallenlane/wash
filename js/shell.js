@@ -42,10 +42,13 @@ var shell = {
             .css('color'            , config.color.foreground)
             .css('max-width'        , '400px')
             .css('margin-right'     , (this.padding / 2) + 'px')
-        $('#target input')
+        $('#target input[type=text], #target input[type=password]')
             .css('width'            , (shell_width / 3) + 'px');
         $('#target input, #target select option')
             .css('color'            , config.color.background);
+        $('#target input[type=number]')
+            .css('color'            , 'white')
+            .css('width'            , '70px');
         $('#target #ssl')
             .css('padding'          , '0 ' + this.padding + 'px')
             .css('background-color' , config.color.background);

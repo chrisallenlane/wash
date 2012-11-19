@@ -15,17 +15,35 @@
     <body>
         <div id='shell'>
             <div id='target'>
-                <input type='text' id='url' placeholder='http://example.com/path/to/trojan.php'
+
+                <!-- protocol -->
+                <select id='protocol' title='Specify the protocol (http/https).'>
+                    <option value='http'>http://</option>
+                    <option value='https'>https://</option>
+                </select>
+
+                <!-- URL -->
+                <input type='text' id='url' placeholder='example.com/path/to/trojan.php'
                     title='Specify the path to the trojan file, including host and protocol.' >
+
+                <!-- port -->
+                <input type='number' id='port' value='80' maxlength='5'
+                    title='Specify the connection port.' >
+
+                <!-- password -->
                 <input type='password' id='password' placeholder='password'
                     title='Specify the password to command the trojan.'>
-                    <label>Request Type:
-                    <select id='request_type'>
-                        <option value='get'>GET</option>
-                        <option value='post'>POST</option>
-                        <option value='put'>PUT</option>
-                        <option value='delete'>DELETE</option>
-                    </select></label>
+
+                <!-- request type -->
+                <label>Request Type:
+                <select id='request_type' title='Specify the request type.'>
+                    <option value='get'>GET</option>
+                    <option value='post'>POST</option>
+                    <option value='put'>PUT</option>
+                    <option value='delete'>DELETE</option>
+                </select></label>
+
+                <!-- SSL indicator -->
                 <span id='ssl'>SSL</span>
             </div>
 
