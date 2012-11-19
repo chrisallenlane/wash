@@ -3,6 +3,18 @@ var shell = {
     // specify the window padding
     padding: 10,
 
+    // map elements to their jQuery selectors to facilitate loose-coupling
+    // between the logic and layout
+    elements: {
+        output   : ('#output'),
+        password : ('#password'),
+        prompt   : ('#prompt'),
+        shell    : ('#shell'),
+        status   : ('#status'),
+        target   : ('#target'),
+        url      : ('#url'),
+    },
+
     // draw the shell
     draw: function(){
         shell.debug.log('shell.command.draw');
@@ -15,7 +27,7 @@ var shell = {
 
         // @todo: I might move all of this into less.js
         // draw #shell
-        $('#shell')
+        $(this.elements.shell)
             .css('background-color', config.color.background)
             .css('color'  , config.color.foreground)
             .css('height' , shell_height + 'px')
@@ -23,7 +35,7 @@ var shell = {
             .css('width'  , shell_width + 'px');
 
         // draw #target
-        $('#target')
+        $(this.elements.target)
             .css('padding-bottom'   , (this.padding / 2) + 'px');
         $('#target input, #target select')
             .css('background-color' , config.color.background)
@@ -39,12 +51,12 @@ var shell = {
             .css('background-color' , config.color.background);
 
         // draw #prompt
-        $('#prompt')
+        $(this.elements.prompt)
             .css('background-color' , config.color.background)
             .css('width'            , (shell_width - (2 * this.padding)) + 'px');
 
         // draw #status
-        $('#status')
+        $(this.elements.status)
             .css('width'      , shell_width + 'px')
             .css('top'        , (shell_height - (this.padding * 2)) + 'px')
             .css('border-top' , (this.padding / 2) + 'px solid gray')
@@ -60,7 +72,7 @@ var shell = {
         // clears the command prompt
         clear: function(){
             shell.debug.log('shell.command.clear');
-            $('#prompt').val('');
+            $(shell.elements.prompt).val('');
         },
 
         // enters a command
@@ -75,12 +87,12 @@ var shell = {
 
         // gets the command prompt value
         get_prompt: function(){
-            return $('#prompt').val();
+            return $(shell.elements.prompt).val();
         },
 
         // sets the command prompt value
         set_prompt: function(data){
-            $('#prompt').val(data);
+            $(shell.elements.prompt).val(data);
         },
 
         // tracks command history
@@ -131,13 +143,13 @@ var shell = {
         clear: function(){
             shell.debug.log('shell.output.clear');
             // @todo: don't actually clear: just scroll
-            $('#output').html('');
+            $(shell.elements.output).html('');
         },
 
         // writes to the shell output
         write: function(data){
             shell.debug.log('shell.output.write');
-            $('#output').append('<div class="command">' + data + '</div>');
+            $(shell.elements.output).append('<div class="command">' + data + '</div>');
         },
 
     },
@@ -148,19 +160,19 @@ var shell = {
         // appends to the status bar
         append: function(data){
             shell.debug.log('shell.status.append');
-            $('#status').append(data);
+            $(shell.elements.status).append(data);
         },
 
         // clears the status bar
         clear: function(){
             shell.debug.log('shell.status.clear');
-            $('#status').html('');
+            $(shell.elements.status).html('');
         },
 
         // sets the status bar message
         set: function(data){
             shell.debug.log('shell.status.set');
-            $('#status').html(data);
+            $(shell.elements.status).html(data);
         },
 
     },
@@ -178,14 +190,14 @@ var shell = {
         clear: function(){
             shell.target.url      = '',
             shell.target.password = '',
-            $('#url').val('');
-            $('#password').val('');
+            $(shell.elements.url).val('');
+            $(shell.elements.password).val('');
         },
 
         // clears the target
         set: function(){
-            shell.target.url      = $('#url').val('');
-            shell.target.password = $('#password').val('');
+            shell.target.url      = $(shell.elements.url).val('');
+            shell.target.password = $(shell.elements.password).val('');
         },
 
         // tests the connection to the target
