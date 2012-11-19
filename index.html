@@ -3,6 +3,7 @@
     <head>
         <title>Webshell</title>
         <link rel='stylesheet' href='css/main.css'> 
+        <script src='config.js'></script>
         <script src='js/jquery.min.js'></script>
         <script src='js/shell.js'></script>
         <script src='js/mousetrap.min.js'></script>
@@ -12,12 +13,30 @@
     </head>
     <body>
         <div id='shell'>
-            <div id='output'>
-                here is some stuff or whatever
+            <div id='target'>
+                <input type='text' id='url' placeholder='http://example.com/path/to/trojan.php'
+                    title='Specify the path to the trojan file, including host and protocol.' >
+                <input type='password' id='password' placeholder='password'
+                    title='Specify the password to command the trojan.'>
+                    <label>Request Type:
+                    <select id='request_type'>
+                        <option value='get'>GET</option>
+                        <option value='post'>POST</option>
+                        <option value='put'>PUT</option>
+                        <option value='delete'>DELETE</option>
+                    </select></label>
+                <span id='ssl'>SSL</span>
             </div>
+
+            <div id='output' class='padded'></div>
+
             <form action='#' method='get' onsubmit='shell.command.enter(); return false'>
-                <input autofocus type='text' id='prompt'>
+                <input class='padded' autofocus type='text' id='prompt'>
             </form>
+
+            <div id='status'>
+                Status text can go here.
+            </div>
         </div>
     </body>
 </html>
