@@ -8,7 +8,25 @@ Mousetrap.bind(['command+l', 'ctrl+l'], function(e) {
 });
 
 // ctrl+p: focus on prompt
+Mousetrap.bind(['command+p', 'ctrl+p'], function(e) {
+    $('#prompt').focus();
+    return false;
+});
+
+// ctrl+p: focus on prompt
 Mousetrap.bind(['command+l', 'ctrl+p'], function(e) {
     $('#prompt').focus();
+    return false;
+});
+
+// up: move back in command history
+Mousetrap.bind('up', function(e) {
+    shell.command.history.backward();
+    return false;
+});
+
+// down: move forward in command history
+Mousetrap.bind('down', function(e) {
+    shell.command.history.forward();
     return false;
 });
