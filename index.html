@@ -15,7 +15,6 @@
     <body>
         <div id='shell'>
             <div id='target'>
-
                 <!-- protocol -->
                 <select id='protocol' title='Specify the protocol (http/https).'>
                     <option value='http'>http://</option>
@@ -47,11 +46,11 @@
                 <span id='ssl'>SSL</span>
             </div>
 
-            <!-- terminal output will be injected into this div -->
-            <div id='output' class='padded'></div>
-
             <form id='terminal'>
-                <input class='padded' autofocus type='text' id='prompt'>
+                <!-- terminal output will be injected into this div -->
+                <div id='output'></div>
+
+                <input autofocus type='text' id='prompt'>
             </form>
 
             <div id='status'>

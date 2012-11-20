@@ -6,16 +6,18 @@ var shell = {
     // map elements to their jQuery selectors to facilitate loose-coupling
     // between the logic and layout
     elements: {
-        output   : ('#output'),
-        password : ('#password'),
-        port     : ('#port'),
-        prompt   : ('#prompt'),
-        protocol : ('#protocol'),
-        shell    : ('#shell'),
-        status   : ('#status'),
-        target   : ('#target'),
-        terminal : ('#terminal'),
-        url      : ('#url'),
+        inner_shell : ('#inner_shell'),
+        output      : ('#output'),
+        password    : ('#password'),
+        port        : ('#port'),
+        prompt      : ('#prompt'),
+        protocol    : ('#protocol'),
+        shell       : ('#shell'),
+        ssl         : ('#ssl'),
+        status      : ('#status'),
+        target      : ('#target'),
+        terminal    : ('#terminal'),
+        url         : ('#url'),
     },
 
     // draw the shell
@@ -28,48 +30,52 @@ var shell = {
         var shell_width   = window_width  - (this.padding * 2);
         var shell_height  = window_height - (this.padding * 2);
 
-        // @todo: I might move all of this into less.js
-        // draw #shell
-        $(this.elements.shell)
-            .css('background-color', config.color.background)
-            .css('color'  , config.color.foreground)
-            .css('height' , shell_height + 'px')
-            .css('margin' , this.padding + 'px 0 0 ' + this.padding + 'px')
-            .css('width'  , shell_width + 'px');
+        // draw the user interface
+        $(this.elements.output)
+            .css('max-height'       , (shell_height - 80) + 'px' )
+            .css('overflow'         , 'auto');
 
-        // draw #target
-        $(this.elements.target)
-            .css('padding-bottom'   , (this.padding / 2) + 'px');
-        $('#target input, #target select')
-            .css('background-color' , config.color.background)
+        $(this.elements.port)
             .css('color'            , config.color.foreground)
-            .css('max-width'        , '400px')
-            .css('margin-right'     , (this.padding / 2) + 'px')
-        $('#target input[type=text], #target input[type=password]')
-            .css('width'            , (shell_width / 3) + 'px');
-        $('#target input, #target select option')
-            .css('color'            , config.color.background);
-        $('#target input[type=number]')
-            .css('color'            , 'white')
             .css('width'            , '70px');
-        $('#target #ssl')
+
+        $(this.elements.prompt)
+            .css('background-color' , 'transparent')
+            .css('color'            , config.color.foreground)
+            .css('width'            , shell_width + 'px')
+
+        $(this.elements.shell)
+            .css('height'           , shell_height + 'px')
+            .css('margin'           , this.padding + 'px 0 0 ' + this.padding + 'px')
+            .css('width'            , shell_width + 'px');
+
+        $(this.elements.ssl)
             .css('padding'          , '0 ' + this.padding + 'px')
             .css('background-color' , config.color.background);
 
-        // draw #prompt
-        $(this.elements.prompt)
-            .css('background-color' , config.color.background)
-            .css('width'            , (shell_width - (2 * this.padding)) + 'px');
-
-        // draw #status
         $(this.elements.status)
-            .css('width'      , shell_width + 'px')
-            .css('top'        , (shell_height - (this.padding * 2)) + 'px')
-            .css('border-top' , (this.padding / 2) + 'px solid gray')
-            .css('padding'    , (this.padding / 2) + 'px');
-        
-        // generic padding class
-        $('.padded').css('padding' , this.padding + 'px');
+            .css('background-color' , config.color.background)
+            .css('margin-top'       , (this.padding / 2) + 'px')
+            .css('padding'          , (this.padding / 2) + 'px ' + (this.padding) + 'px')
+
+        $(this.elements.target)
+            .css('padding-bottom'   , (this.padding / 2) + 'px');
+
+        $(this.elements.target + ' input, ' + this.elements.target + ' select')
+            .css('background-color' , config.color.background)
+            .css('color'            , config.color.foreground)
+            .css('margin-right'     , (this.padding / 2) + 'px')
+
+        $(this.elements.target + ' select option')
+            .css('color'            , config.color.background);
+
+        $(this.elements.terminal)
+            .css('background-color' , config.color.background)
+            .css('height'           , (shell_height - 80) + 'px' )
+
+        $(this.elements.url + ', ' + this.elements.password)
+            .css('max-width'        , '400px')
+            .css('width'            , (shell_width / 3) + 'px');
     },
 
     // encapsulates command processing

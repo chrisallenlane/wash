@@ -14,21 +14,12 @@ body{
 
 #prompt{
     border: none;
-    color: white;
     font-family: arial;
     font-size: small;
 }
 
-#shell{
-}
-
 #status{
     font-size: x-small;
-    position: absolute;
-}
-
-#target{
-    background-color: gray;
 }
 
 #target #ssl{
