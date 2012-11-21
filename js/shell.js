@@ -28,7 +28,7 @@ var shell = {
         var window_height = $(window).innerHeight();
         var target_height = $(this.elements.target).height();
         var status_height = $(this.elements.status).height();
-        var terminal_height = window_height - target_height - status_height - (this.padding * 4);
+        var terminal_height = window_height - target_height - status_height - (this.padding * 6);
 
         $(this.elements.terminal)
             .css('height', terminal_height)

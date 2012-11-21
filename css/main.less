@@ -1,14 +1,17 @@
+@border_radius    : 5px;
 @color_foreground : white;
 @color_background : black;
 @padding          : 10px;
 @shell_width      : 99%;
 @url_pw_max_width : 100px;
 
+
+
 body{
     color: white;
     font-size: small;
     font-family: arial;
-    background-color: gray;
+    background-color: slategray;
     line-height: 1.5;
     margin: 0;
     padding: 0;
@@ -24,8 +27,10 @@ body{
         input, select{
             background-color: @color_background;
             border: none;
+            border-radius: 5px;
             color: @color_foreground;
             margin-right: @padding / 4;
+            padding: @padding / 2;
 
             option{
                 color: @color_background;
@@ -50,8 +55,9 @@ body{
 
     #terminal{
         background-color: @color_background;
+        border-radius: 5px;
         overflow: auto;
-        padding: 0 @padding / 2;
+        padding: @padding;
 
         #output{
             overflow: auto;
@@ -74,6 +80,7 @@ body{
 
     #status{
         background-color: @color_background;
+        border-radius: 5px;
         font-size: x-small;
         margin-top: @padding / 2;
         padding: @padding / 2;

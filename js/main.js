@@ -19,6 +19,8 @@ $(document).ready(function() {
         .keydown(function(e){ key_monitor.key_down(e); })
         .keyup(function(e){ key_monitor.key_up(e); });
 
+    $('#terminal').click(function(){ shell.command.prompt.focus() });
+
     /*
     // @note
     $.post("http://test5.lab", { name: "John", time: "2pm" }, function(data) {
