@@ -25,7 +25,7 @@ var key_monitor = {
 
     // 
     key_down: function(e){
-        console.log('KM key down.');
+        //console.log('KM key down.');
         this.monitor_meta_down(e);
 
         // bind up and down arrows to history commands
@@ -35,7 +35,7 @@ var key_monitor = {
 
     // 
     key_up: function(e){
-        console.log('KM key up.');
+        //console.log('KM key up.');
         this.monitor_meta_up(e);
     },
 

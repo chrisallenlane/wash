@@ -97,6 +97,7 @@ var shell = {
             backward: function(){
                 shell.debug.log('shell.command.history.backward');
                 if(shell.command.history.position >= 1){
+                    // decrement the command history pointer
                     shell.command.history.position--;
                     shell.command.prompt.set(shell.command.history.commands[shell.command.history.position]);
                 }
