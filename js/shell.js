@@ -54,19 +54,19 @@ var shell = {
                 // clears the prompt context
                 clear: function(){
                     shell.debug.log('shell.command.prompt.context.clear');
-                    $(shell.elements.prompt_context).html('');
+                    $(shell.elements.prompt_context).text('');
                 },
 
                 // gets the prompt context
                 get: function(){
                     shell.debug.log('shell.command.prompt.context.get');
-                    return $(shell.elements.prompt_context).html();
+                    return $(shell.elements.prompt_context).text();
                 },
                 
                 // sets the prompt context
                 set: function(data){
                     shell.debug.log('shell.command.prompt.context.set');
-                    $(shell.elements.prompt_context).html(data);
+                    $(shell.elements.prompt_context).text(data).text();
                 },
 
             },
@@ -94,7 +94,8 @@ var shell = {
                 shell.debug.log('shell.command.prompt.enter');
                 var command = shell.command.prompt.get();
                 var context = shell.command.prompt.context.get();
-                shell.output.write(context + ' ' + command);
+                var out     = jQuery('<div/>').text(context + ' ' + command).html();
+                shell.output.write(out);
                 shell.command.history.add(command);
                 shell.command.prompt.clear();
             },
@@ -107,7 +108,7 @@ var shell = {
             // gets the command prompt value
             get: function(){
                 shell.debug.log('shell.command.prompt.get');
-                return $(shell.elements.prompt).val();
+                return $(shell.elements.prompt).val().trim();
             },
 
             // sets the command prompt value
@@ -170,7 +171,7 @@ var shell = {
         clear: function(){
             shell.debug.log('shell.output.clear');
             // @todo: don't actually clear: just scroll
-            $(shell.elements.output).html('');
+            $(shell.elements.output).text('');
         },
 
         // writes to the shell output
@@ -193,13 +194,13 @@ var shell = {
         // clears the status bar
         clear: function(){
             shell.debug.log('shell.status.clear');
-            $(shell.elements.status).html('');
+            $(shell.elements.status).text('');
         },
 
         // sets the status bar message
         set: function(data){
             shell.debug.log('shell.status.set');
-            $(shell.elements.status).html(data);
+            $(shell.elements.status).text(data).text();
         },
 
     },
