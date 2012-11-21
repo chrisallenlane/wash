@@ -12,53 +12,52 @@ body{
     padding: 0;
 }
 
-#output{
-    overflow: auto;
-}
-
-
-#prompt{
-    background-color: transparent;
-    border: none;
-    font-family: arial;
-    font-size: small;
-    width: 100%;
-}
-
 #shell{
+
     margin: @padding auto;
     width: @shell_width;
+
+    #target{
+        padding-bottom: @padding / 2;
+
+        input, select{
+            border: none;
+            margin-right: @padding / 4;
+        }
+
+        #password{
+            max_width: @url_pw_max_width;
+            width: 33%;
+        }
+        
+        #port{
+            width: 70px;
+        }
+
+        #url{
+            width: 33%;
+            max_width: @url_pw_max_width;
+        }
+    }
+
+    #terminal{
+        #output{
+            overflow: auto;
+        }
+
+        #prompt{
+            background-color: transparent;
+            border: none;
+            font-family: arial;
+            font-size: small;
+            width: 100%;
+        }
+    }
+
+    #status{
+        font-size: x-small;
+        margin-top: @padding / 2;
+        padding: @padding / 2;
+    }
+
 }
-
-#status{
-    font-size: x-small;
-    margin-top: @padding / 2;
-    padding: @padding / 2;
-}
-
-
-#target{
-
-    padding-bottom: @padding / 2;
-
-    input, select{
-        border: none;
-        margin-right: @padding / 4;
-    }
-
-    #password{
-        max_width: @url_pw_max_width;
-        width: 33%;
-    }
-    
-    #port{
-        width: 70px;
-    }
-
-    #url{
-        width: 33%;
-        max_width: @url_pw_max_width;
-    }
-}
-
-
