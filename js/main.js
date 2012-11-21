@@ -14,6 +14,11 @@ $(document).ready(function() {
         return false;
     });
 
+    // inspect the prompt in real-time
+    $('#prompt')
+        .keydown(function(e){ key_monitor.key_down(e); })
+        .keyup(function(e){ key_monitor.key_up(e); });
+
     /*
     // @note
     $.post("http://test5.lab", { name: "John", time: "2pm" }, function(data) {

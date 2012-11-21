@@ -98,7 +98,7 @@ var shell = {
                 shell.debug.log('shell.command.history.backward');
                 if(shell.command.history.position >= 1){
                     shell.command.history.position--;
-                    shell.command.set_prompt(shell.command.history.commands[shell.command.history.position]);
+                    shell.command.prompt.set(shell.command.history.commands[shell.command.history.position]);
                 }
             },
             
@@ -107,7 +107,7 @@ var shell = {
                 shell.debug.log('shell.command.history.forward');
                 if(shell.command.history.position <= (shell.command.history.commands.length - 1)){
                     shell.command.history.position++;
-                    shell.command.set_prompt(shell.command.history.commands[shell.command.history.position]);
+                    shell.command.prompt.set(shell.command.history.commands[shell.command.history.position]);
                 }
             },
 
