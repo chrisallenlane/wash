@@ -1,3 +1,6 @@
+// @note: I'm going to have to come through here and sanitize the markup later on
+
+
 var shell = {
 
     // specify the window padding
@@ -6,18 +9,19 @@ var shell = {
     // map elements to their jQuery selectors to facilitate loose-coupling
     // between the logic and layout
     elements: {
-        inner_shell : ('#inner_shell'),
-        output      : ('#output'),
-        password    : ('#password'),
-        port        : ('#port'),
-        prompt      : ('#prompt'),
-        protocol    : ('#protocol'),
-        shell       : ('#shell'),
-        ssl         : ('#ssl'),
-        status      : ('#status'),
-        target      : ('#target'),
-        terminal    : ('#terminal'),
-        url         : ('#url'),
+        inner_shell    : ('#inner_shell'),
+        output         : ('#output'),
+        password       : ('#password'),
+        port           : ('#port'),
+        prompt         : ('#prompt'),
+        prompt_context : ('#prompt_context'),
+        protocol       : ('#protocol'),
+        shell          : ('#shell'),
+        ssl            : ('#ssl'),
+        status         : ('#status'),
+        target         : ('#target'),
+        terminal       : ('#terminal'),
+        url            : ('#url'),
     },
 
     // draw the shell
@@ -33,6 +37,9 @@ var shell = {
         $(this.elements.terminal)
             .css('height', terminal_height)
             .css('max-height', terminal_height);
+
+        // draw (size) the command prompt
+        this.command.prompt.draw();
     },
 
     // encapsulates command processing
@@ -41,10 +48,44 @@ var shell = {
         // encapsulates the command prompt
         prompt: {
 
+            // encapsulates the context before the prompt input
+            context: {
+
+                // clears the prompt context
+                clear: function(){
+                    shell.debug.log('shell.command.prompt.context.clear');
+                    $(shell.elements.prompt_context).html('');
+                },
+
+                // gets the prompt context
+                get: function(){
+                    shell.debug.log('shell.command.prompt.context.get');
+                    return $(shell.elements.prompt_context).html();
+                },
+                
+                // sets the prompt context
+                set: function(data){
+                    shell.debug.log('shell.command.prompt.context.set');
+                    $(shell.elements.prompt_context).html(data);
+                },
+
+            },
+
             // clears the command prompt
             clear: function(){
                 shell.debug.log('shell.command.prompt.clear');
                 $(shell.elements.prompt).val('');
+                // @note @kludge: is this elegant?
+                shell.command.prompt.draw();
+            },
+
+            // draws (mostly sizes) the command prompt
+            draw: function(){
+                shell.debug.log('shell.command.prompt.draw');
+                var terminal_width       = $(shell.elements.terminal).width() - shell.padding;
+                var prompt_context_width = $(shell.elements.prompt_context).width();
+                var prompt_width         = terminal_width - prompt_context_width;
+                $(shell.elements.prompt).css('width', prompt_width);
             },
 
             // enters a command
@@ -52,7 +93,8 @@ var shell = {
                 // @todo: do some kind of "inspect" method here to scan for macros
                 shell.debug.log('shell.command.prompt.enter');
                 var command = shell.command.prompt.get();
-                shell.output.write(command);
+                var context = shell.command.prompt.context.get();
+                shell.output.write(context + ' ' + command);
                 shell.command.history.add(command);
                 shell.command.prompt.clear();
             },
