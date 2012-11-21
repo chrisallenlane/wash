@@ -57,6 +57,11 @@ var shell = {
                 shell.command.prompt.clear();
             },
 
+            // puts focus on the prompt box
+            focus: function(){
+                $(shell.elements.prompt).focus();
+            },
+
             // gets the command prompt value
             get: function(){
                 shell.debug.log('shell.command.prompt.get');

@@ -1,6 +1,9 @@
 // for information on keybinding API, see:
 // http://craig.is/killing/mice
 
+// @note @kludge: there's some redundancy between here and key-monitor.js that I
+// need to remove later. This is really inelegant currently. 
+
 // ctrl+h: toggles target bar visibility
 Mousetrap.bind(['command+h', 'ctrl+h'], function(e) {
     shell.target.toggle();
@@ -15,7 +18,7 @@ Mousetrap.bind(['command+l', 'ctrl+l'], function(e) {
 
 // ctrl+p: focus on prompt
 Mousetrap.bind(['command+p', 'ctrl+p'], function(e) {
-    $(shell.elements.prompt).focus();
+    shell.prompt.focus();
     return false;
 });
 
