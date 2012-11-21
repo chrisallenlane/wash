@@ -79,7 +79,7 @@ var key_monitor = {
     // monitors for meta keys to be released
     monitor_meta_up: function(e){
         if(e.keyCode == this.keycodes.meta.shift){ this.state.shift = false; }
-        if(e.keyCode == this.keycodes.meta.control){ this.state.control = false; console.log('ctl up') }
+        if(e.keyCode == this.keycodes.meta.control){ this.state.control = false; }
         if(e.keyCode == this.keycodes.meta.alt){ this.state.alt = false; }
     },
 

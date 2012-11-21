@@ -15,7 +15,6 @@ body{
 }
 
 #shell{
-
     margin: @padding auto;
     width: @shell_width;
 
@@ -52,6 +51,7 @@ body{
     #terminal{
         background-color: @color_background;
         overflow: auto;
+        padding: 0 @padding / 2;
 
         #output{
             overflow: auto;
@@ -59,12 +59,16 @@ body{
 
         #prompt{
             background-color: transparent;
-            background-color: green;
             border: none;
             color: @color_foreground;
             font-family: arial;
             font-size: small;
             width: 100%;
+
+            &:focus{
+                outline: none;
+                outline-width: 0;
+            }
         }
     }
 
@@ -74,5 +78,4 @@ body{
         margin-top: @padding / 2;
         padding: @padding / 2;
     }
-
 }
