@@ -23,29 +23,16 @@ var shell = {
     // draw the shell
     draw: function(){
         shell.debug.log('shell.draw');
-        
-        // capture window and outer shell dimensions
+
+        // calculate the appropriate terminal height
         var window_height = $(window).innerHeight();
-        var window_width  = $(window).innerWidth();
-        var shell_width   = window_width  - (this.padding * 2);
-        var shell_height  = window_height - (this.padding * 2);
-
-        // draw the user interface
-        $(this.elements.output).css('max-height', (shell_height - 80) + 'px' );
-        $(this.elements.port).css('color', config.color.foreground);
-        $(this.elements.prompt).css('color', config.color.foreground);
-        $(this.elements.shell).css('height', shell_height + 'px');
-        $(this.elements.ssl).css('background-color' , config.color.background);
-        $(this.elements.status).css('background-color' , config.color.background); 
-        $(this.elements.target + ' input, ' + this.elements.target + ' select')
-            .css('background-color' , config.color.background)
-            .css('color'            , config.color.foreground);
-
-        $(this.elements.target + ' select option').css('color', config.color.background);
+        var target_height = $(this.elements.target).height();
+        var status_height = $(this.elements.status).height();
+        var terminal_height = window_height - target_height - status_height - (this.padding * 4);
 
         $(this.elements.terminal)
-            .css('background-color' , config.color.background)
-            .css('height'           , (shell_height - 80) + 'px' );
+            .css('height', terminal_height)
+            .css('max-height', terminal_height);
     },
 
     // encapsulates command processing
@@ -172,20 +159,18 @@ var shell = {
     // encapsulates targeting functionality
     target: {
 
-        // the path to the trojaned file
-        url: 'http://example.com/path/to/trojan.php',
-
-        // the password to unlock the trojan
-        password: 'sex-secret-love-god',
-
         // hides the target bar
         hide: function(){
-            $(shell.elements.target).fadeOut();
-            shell.status.set('Target bar hidden. Press Ctrl+h to unhide.');
+            shell.debug.log('shell.target.hide');
+            $(shell.elements.target).fadeOut(function(){
+                shell.status.set('Target bar hidden. Press Ctrl+h to unhide.');
+                shell.draw();
+            });
         },
 
         // clears the target
         clear: function(){
+            shell.debug.log('shell.target.clear');
             shell.target.url      = '',
             shell.target.password = '',
             $(shell.elements.url).val('');
@@ -194,6 +179,7 @@ var shell = {
 
         // clears the target
         set: function(){
+            shell.debug.log('shell.target.set');
             shell.target.protocol = $(shell.elements.protocol).val();
             shell.target.url      = $(shell.elements.url).val();
             shell.target.port     = $(shell.elements.port).val();
@@ -202,19 +188,23 @@ var shell = {
 
         // un-hides the target bar
         show: function(){
+            shell.debug.log('shell.target.show');
             $(shell.elements.target).fadeIn();
             shell.status.set('Target bar revealed. Press Ctrl+h to hide.');
         },
 
         // tests the connection to the target
         test: function(){
+            shell.debug.log('shell.target.test');
             //@TODO: implement this
         },
 
         // toggles target bar visibility
         toggle: function(){
+            shell.debug.log('shell.target.toggle');
             $(shell.elements.target).fadeToggle();
             shell.status.set('Target bar toggled. Press Ctrl+h to toggle.');
+            shell.draw();
         }
     },
 

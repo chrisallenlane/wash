@@ -1,3 +1,5 @@
+@color_foreground : white;
+@color_background : black;
 @padding          : 10px;
 @shell_width      : 99%;
 @url_pw_max_width : 100px;
@@ -21,8 +23,14 @@ body{
         padding-bottom: @padding / 2;
 
         input, select{
+            background-color: @color_background;
             border: none;
+            color: @color_foreground;
             margin-right: @padding / 4;
+
+            option{
+                color: @color_background;
+            }
         }
 
         #password{
@@ -31,6 +39,7 @@ body{
         }
         
         #port{
+            color: @color_foreground;
             width: 70px;
         }
 
@@ -41,13 +50,18 @@ body{
     }
 
     #terminal{
+        background-color: @color_background;
+        overflow: auto;
+
         #output{
             overflow: auto;
         }
 
         #prompt{
             background-color: transparent;
+            background-color: green;
             border: none;
+            color: @color_foreground;
             font-family: arial;
             font-size: small;
             width: 100%;
@@ -55,6 +69,7 @@ body{
     }
 
     #status{
+        background-color: @color_background;
         font-size: x-small;
         margin-top: @padding / 2;
         padding: @padding / 2;
