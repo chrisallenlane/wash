@@ -26,7 +26,7 @@ var shell = {
 
         // calculate the appropriate terminal height
         var window_height = $(window).innerHeight();
-        var target_height = $(this.elements.target).height();
+        var target_height = ($(this.elements.target).is(':visible')) ? $(this.elements.target).height() + (this.padding / 2) : 0 ;
         var status_height = $(this.elements.status).height();
         var terminal_height = window_height - target_height - status_height - (this.padding * 6);
 
@@ -165,15 +165,6 @@ var shell = {
     // encapsulates targeting functionality
     target: {
 
-        // hides the target bar
-        hide: function(){
-            shell.debug.log('shell.target.hide');
-            $(shell.elements.target).fadeOut(function(){
-                shell.status.set('Target bar hidden. Press Ctrl+h to unhide.');
-                shell.draw();
-            });
-        },
-
         // clears the target
         clear: function(){
             shell.debug.log('shell.target.clear');
@@ -181,6 +172,15 @@ var shell = {
             shell.target.password = '',
             $(shell.elements.url).val('');
             $(shell.elements.password).val('');
+        },
+
+        // hides the target bar
+        hide: function(){
+            shell.debug.log('shell.target.hide');
+            $(shell.elements.target).fadeOut(function(){
+                shell.status.set('Target bar hidden. Press Ctrl+h to unhide.');
+                shell.draw();
+            });
         },
 
         // clears the target
@@ -208,9 +208,13 @@ var shell = {
         // toggles target bar visibility
         toggle: function(){
             shell.debug.log('shell.target.toggle');
-            $(shell.elements.target).fadeToggle();
-            shell.status.set('Target bar toggled. Press Ctrl+h to toggle.');
-            shell.draw();
+            if($(shell.elements.target).is(':visible')){
+                shell.target.hide();
+                shell.draw();
+            } else {
+                shell.target.show();
+                shell.draw();
+            }
         }
     },
 
