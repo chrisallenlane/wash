@@ -34,9 +34,9 @@ var key_monitor = {
         alt     : false,
     },
 
-    // 
+    // listens to the $.keydown event
     key_down: function(e){
-        //console.log('KM key down.');
+        shell.debug.log('key_monitor.key_down');
         this.monitor_meta_down(e);
 
         // bind up and down arrows to history commands
@@ -62,22 +62,25 @@ var key_monitor = {
         }
     }, 
 
-    // 
+    // listens to the $.keyup event
     key_up: function(e){
-        //console.log('KM key up.');
+        shell.debug.log('key_monitor.key_up');
         this.monitor_meta_up(e);
     },
 
-    // monitors for meta keys to be pressed
+    // listens for meta keys to be pressed
     monitor_meta_down: function(e){
+        shell.debug.log('key_monitor.monitor_meta_down');
         // flag the down state of meta keys
         if(e.keyCode == this.keycodes.meta.shift){ this.state.shift = true; }
         if(e.keyCode == this.keycodes.meta.control){ this.state.control = true; }
         if(e.keyCode == this.keycodes.meta.alt){ this.state.alt = true; }
     },
 
-    // monitors for meta keys to be released
+    // listens for meta keys to be released
     monitor_meta_up: function(e){
+        shell.debug.log('key_monitor.monitor_meta_up');
+        // flag the down state of meta keys
         if(e.keyCode == this.keycodes.meta.shift){ this.state.shift = false; }
         if(e.keyCode == this.keycodes.meta.control){ this.state.control = false; }
         if(e.keyCode == this.keycodes.meta.alt){ this.state.alt = false; }
