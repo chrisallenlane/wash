@@ -2,9 +2,11 @@
 <html>
     <head>
         <title>Webshell</title>
-        <link rel='stylesheet' href='css/main.css'> 
+        <!-- <link rel='stylesheet' href='css/main.css'> -->
+        <link rel='stylesheet/less' type='text/css' href='./css/main.less'> 
         <script src='config.js'></script>
         <script src='js/jquery.min.js'></script>
+        <script src='js/less.min.js'></script>
         <script src='js/shell.js'></script>
         <script src='js/mousetrap.min.js'></script>
         <script src='js/keybindings.js'></script>
@@ -41,9 +43,6 @@
                     <option value='put'>PUT</option>
                     <option value='delete'>DELETE</option>
                 </select></label>
-
-                <!-- SSL indicator -->
-                <span id='ssl'>SSL</span>
             </div>
 
             <form id='terminal'>

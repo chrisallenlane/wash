@@ -1,3 +1,7 @@
+@padding          : 10px;
+@shell_width      : 99%;
+@url_pw_max_width : 100px;
+
 body{
     color: white;
     font-size: small;
@@ -9,25 +13,52 @@ body{
 }
 
 #output{
-    overflow: scroll-y;
+    overflow: auto;
 }
 
+
 #prompt{
+    background-color: transparent;
     border: none;
     font-family: arial;
     font-size: small;
+    width: 100%;
+}
+
+#shell{
+    margin: @padding auto;
+    width: @shell_width;
 }
 
 #status{
     font-size: x-small;
+    margin-top: @padding / 2;
+    padding: @padding / 2;
 }
 
-#target #ssl{
-    display: inline-block;
-    float: right;
+
+#target{
+
+    padding-bottom: @padding / 2;
+
+    input, select{
+        border: none;
+        margin-right: @padding / 4;
+    }
+
+    #password{
+        max_width: @url_pw_max_width;
+        width: 33%;
+    }
+    
+    #port{
+        width: 70px;
+    }
+
+    #url{
+        width: 33%;
+        max_width: @url_pw_max_width;
+    }
 }
 
-#target input,
-#target select{
-    border: none;
-}
+
