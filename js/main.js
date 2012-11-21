@@ -19,7 +19,13 @@ $(document).ready(function() {
         .keydown(function(e){ key_monitor.key_down(e); })
         .keyup(function(e){ key_monitor.key_up(e); });
 
+    // send focus to the prompt when the terminal is clicked on 
     $('#terminal').click(function(){ shell.command.prompt.focus() });
+
+    // automatically update the target parameters when they are changed
+    $('#target input, #target select').change(function(obj){
+        wash.target.update(this.id, this.value);
+    });
 
     /*
     // @note

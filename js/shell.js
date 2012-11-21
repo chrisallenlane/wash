@@ -195,8 +195,9 @@ var shell = {
         // un-hides the target bar
         show: function(){
             shell.debug.log('shell.target.show');
-            $(shell.elements.target).fadeIn();
-            shell.status.set('Target bar revealed. Press Ctrl+h to hide.');
+            $(shell.elements.target).fadeIn(function(){
+                shell.status.set('Target bar revealed. Press Ctrl+h to hide.');
+            });
         },
 
         // tests the connection to the target
