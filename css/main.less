@@ -76,13 +76,25 @@ body{
             }
         }
 
+        pre{
+            display: inline;
+            margin: 0;
+            padding: 0;
+        }
+
+        #prompt_context{
+            margin-right: 1em;
+        }
+
         #prompt{
             background-color: transparent;
             border: none;
             color: @color_foreground;
             display: inline;
-            font-family: arial;
+            font-family: "Courier New";
             font-size: small;
+            margin: 0;
+            padding: 0;
 
             &:focus{
                 outline: none;
