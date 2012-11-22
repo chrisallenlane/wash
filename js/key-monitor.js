@@ -40,8 +40,8 @@ var key_monitor = {
         this.monitor_meta_down(e);
 
         // bind up and down arrows to history commands
-        if(e.keyCode == this.keycodes.arrow.up){ shell.command.history.backward(); }
-        if(e.keyCode == this.keycodes.arrow.down){ shell.command.history.forward(); }
+        if(e.keyCode == this.keycodes.arrow.up){ shell.history.backward(); }
+        if(e.keyCode == this.keycodes.arrow.down){ shell.history.forward(); }
 
         // watch for ctrl+h
         if(this.state.control && e.keyCode == this.keycodes.char.h){
@@ -57,9 +57,15 @@ var key_monitor = {
 
         // watch for ctrl+p
         if(this.state.control && e.keyCode == this.keycodes.char.p){
-            shell.command.prompt.focus();
+            shell.prompt.focus();
             event.preventDefault();
         }
+
+        // watch for wash commands
+        if(shell.prompt.mode.get() != 'wash' && shell.prompt.get().substr(0, 4) === 'wash'){
+            shell.prompt.mode.set('wash');
+        }
+        
     }, 
 
     // listens to the $.keyup event

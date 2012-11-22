@@ -24,12 +24,12 @@ Mousetrap.bind(['command+p', 'ctrl+p'], function(e) {
 
 // up: move back in command history
 Mousetrap.bind('up', function(e) {
-    shell.command.history.backward();
+    shell.history.backward();
     return false;
 });
 
 // down: move forward in command history
 Mousetrap.bind('down', function(e) {
-    shell.command.history.forward();
+    shell.history.forward();
     return false;
 });

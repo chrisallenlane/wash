@@ -1,0 +1,12 @@
+Recon:
+    find writable directories
+    find suid binaries
+
+Exploit:
+
+    mysql dump database
+
+upload
+exfil file
+
+

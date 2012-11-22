@@ -39,127 +39,152 @@ var shell = {
             .css('max-height', terminal_height);
 
         // draw (size) the command prompt
-        this.command.prompt.draw();
+        this.prompt.draw();
     },
 
-    // encapsulates command processing
-    command: {
+    // encapsulates the command prompt
+    prompt: {
 
-        // encapsulates the command prompt
-        prompt: {
+        // track command mode
+        mode: {
+            state: 'shell',
 
-            // encapsulates the context before the prompt input
-            context: {
-
-                // clears the prompt context
-                clear: function(){
-                    shell.debug.log('shell.command.prompt.context.clear');
-                    $(shell.elements.prompt_context).text('');
-                },
-
-                // gets the prompt context
-                get: function(){
-                    shell.debug.log('shell.command.prompt.context.get');
-                    return $(shell.elements.prompt_context).text();
-                },
-                
-                // sets the prompt context
-                set: function(data){
-                    shell.debug.log('shell.command.prompt.context.set');
-                    $(shell.elements.prompt_context).text(data).text();
-                },
-
-            },
-
-            // clears the command prompt
-            clear: function(){
-                shell.debug.log('shell.command.prompt.clear');
-                $(shell.elements.prompt).val('');
-                // @note @kludge: is this elegant?
-                shell.command.prompt.draw();
-            },
-
-            // draws (mostly sizes) the command prompt
-            draw: function(){
-                shell.debug.log('shell.command.prompt.draw');
-                var terminal_width       = $(shell.elements.terminal).width() - shell.padding;
-                var prompt_context_width = $(shell.elements.prompt_context).width();
-                var prompt_width         = terminal_width - prompt_context_width;
-                $(shell.elements.prompt).css('width', prompt_width);
-            },
-
-            // enters a command
-            enter: function(){
-                // @todo: do some kind of "inspect" method here to scan for macros
-                shell.debug.log('shell.command.prompt.enter');
-                var command = shell.command.prompt.get();
-                var context = shell.command.prompt.context.get();
-                var out     = jQuery('<div/>').text(context + ' ' + command).html();
-                shell.output.write(out);
-                shell.command.history.add(command);
-                shell.command.prompt.clear();
-            },
-
-            // puts focus on the prompt box
-            focus: function(){
-                $(shell.elements.prompt).focus();
-            },
-
-            // gets the command prompt value
+            // gets the prompt mode
             get: function(){
-                shell.debug.log('shell.command.prompt.get');
-                return $(shell.elements.prompt).val().trim();
+                shell.debug.log('shell.prompt.mode.get');
+                return shell.prompt.mode.state;
             },
 
-            // sets the command prompt value
-            set: function(data){
-                shell.debug.log('shell.command.prompt.set');
-                $(shell.elements.prompt).val(data);
+            // sets the prompt mode
+            set: function(mode){
+                console.log(mode);
+                shell.debug.log('shell.prompt.mode.set');
+                shell.prompt.mode.state = mode;
+
+                // @todo: decouple these colors
+                if(mode === 'wash'){
+                    $(shell.elements.prompt).css('color', 'lightgreen');
+                    $(shell.elements.prompt_context).css('color', 'lightgreen');
+                }
+                else{
+                    $(shell.elements.prompt).css('color', 'white');
+                    $(shell.elements.prompt_context).css('color', 'white');
+                }
             },
 
         },
 
-        // tracks command history
-        history: {
-            
-            // an array of historic commands
-            commands: [],
+        // encapsulates the context before the prompt input
+        context: {
 
-            // a buffer for a command in-progress
-            current: '', 
-
-            // current position in commands
-            position: 0,
-
-            // number of commands to track
-            size: 1000,
-
-            // adds a command to the history
-            add: function(command){
-                shell.debug.log('shell.command.history.add');
-                shell.command.history.commands.push(command); 
-                shell.command.history.position++;
-            }, 
-
-            // moves backward (older) in history
-            backward: function(){
-                shell.debug.log('shell.command.history.backward');
-                if(shell.command.history.position >= 1){
-                    // decrement the command history pointer
-                    shell.command.history.position--;
-                    shell.command.prompt.set(shell.command.history.commands[shell.command.history.position]);
-                }
-            },
-            
-            // moves forward (more recent) in history
-            forward: function(){
-                shell.debug.log('shell.command.history.forward');
-                if(shell.command.history.position <= (shell.command.history.commands.length - 1)){
-                    shell.command.history.position++;
-                    shell.command.prompt.set(shell.command.history.commands[shell.command.history.position]);
-                }
+            // clears the prompt context
+            clear: function(){
+                shell.debug.log('shell.prompt.context.clear');
+                $(shell.elements.prompt_context).text('');
             },
 
+            // gets the prompt context
+            get: function(){
+                shell.debug.log('shell.prompt.context.get');
+                return $(shell.elements.prompt_context).text();
+            },
+            
+            // sets the prompt context
+            set: function(data){
+                shell.debug.log('shell.prompt.context.set');
+                $(shell.elements.prompt_context).text(data).text();
+            },
+
+        },
+
+        // clears the command prompt
+        clear: function(){
+            shell.debug.log('shell.prompt.clear');
+            $(shell.elements.prompt).val('');
+            // @note @kludge: is this elegant?
+            shell.prompt.draw();
+        },
+
+        // draws (mostly sizes) the command prompt
+        draw: function(){
+            shell.debug.log('shell.prompt.draw');
+            var terminal_width       = $(shell.elements.terminal).width() - shell.padding;
+            var prompt_context_width = $(shell.elements.prompt_context).width();
+            var prompt_width         = terminal_width - prompt_context_width;
+            $(shell.elements.prompt).css('width', prompt_width);
+        },
+
+        // enters a command
+        enter: function(cmd_class){
+            // @todo: do some kind of "inspect" method here to scan for macros
+            shell.debug.log('shell.prompt.enter');
+            var command = shell.prompt.get();
+            var context = shell.prompt.context.get();
+            var out     = jQuery('<div/>').text(context + ' ' + command).html();
+            shell.output.write(out, shell.prompt.mode.get());
+            shell.history.add(command);
+            shell.prompt.clear();
+            shell.prompt.mode.set('shell');
+        },
+
+        // puts focus on the prompt box
+        focus: function(){
+            $(shell.elements.prompt).focus();
+        },
+
+        // gets the command prompt value
+        get: function(){
+            shell.debug.log('shell.prompt.get');
+            return $(shell.elements.prompt).val().trim();
+        },
+
+        // sets the command prompt value
+        set: function(data){
+            shell.debug.log('shell.prompt.set');
+            $(shell.elements.prompt).val(data);
+        },
+
+    },
+
+    // tracks command history
+    history: {
+        
+        // an array of historic commands
+        commands: [],
+
+        // a buffer for a command in-progress
+        current: '', 
+
+        // current position in commands
+        position: 0,
+
+        // number of commands to track
+        size: 1000,
+
+        // adds a command to the history
+        add: function(command){
+            shell.debug.log('shell.history.add');
+            shell.history.commands.push(command); 
+            shell.history.position++;
+        }, 
+
+        // moves backward (older) in history
+        backward: function(){
+            shell.debug.log('shell.history.backward');
+            if(shell.history.position >= 1){
+                // decrement the command history pointer
+                shell.history.position--;
+                shell.prompt.set(shell.history.commands[shell.history.position]);
+            }
+        },
+        
+        // moves forward (more recent) in history
+        forward: function(){
+            shell.debug.log('shell.history.forward');
+            if(shell.history.position <= (shell.history.commands.length - 1)){
+                shell.history.position++;
+                shell.prompt.set(shell.history.commands[shell.history.position]);
+            }
         },
 
     },
@@ -175,9 +200,10 @@ var shell = {
         },
 
         // writes to the shell output
-        write: function(data){
+        write: function(data, cmd_class){
+            var cmd_class = (cmd_class == null) ? '' : cmd_class ;
             shell.debug.log('shell.output.write');
-            $(shell.elements.output).append('<div class="command">' + data + '</div>');
+            $(shell.elements.output).append('<div class="command ' + cmd_class + '">' + data + '</div>');
         },
 
     },

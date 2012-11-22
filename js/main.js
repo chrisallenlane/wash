@@ -10,7 +10,7 @@ $(document).ready(function() {
 
     // bind to the main form
     $(shell.elements.terminal).bind('submit', function(){
-        shell.command.prompt.enter();
+        shell.prompt.enter();
         return false;
     });
 
@@ -20,7 +20,7 @@ $(document).ready(function() {
         .keyup(function(e){ key_monitor.key_up(e); });
 
     // send focus to the prompt when the terminal is clicked on 
-    $('#terminal').click(function(){ shell.command.prompt.focus() });
+    $('#terminal').click(function(){ shell.prompt.focus() });
 
     // automatically update the target parameters when they are changed
     $('#target input, #target select').change(function(obj){
