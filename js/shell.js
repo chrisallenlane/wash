@@ -57,7 +57,6 @@ var shell = {
 
             // sets the prompt mode
             set: function(mode){
-                console.log(mode);
                 shell.debug.log('shell.prompt.mode.set');
                 shell.prompt.mode.state = mode;
 
@@ -116,13 +115,24 @@ var shell = {
 
         // enters a command
         enter: function(cmd_class){
-            // @todo: do some kind of "inspect" method here to scan for macros
             shell.debug.log('shell.prompt.enter');
+            
+            // capture and sanitize the output data
             var command = shell.prompt.get();
             var context = shell.prompt.context.get();
             var out     = jQuery('<div/>').text(context + ' ' + command).html();
+
+            // interpret (process) the command
+            wash.command.interpret(command);
+
+            // write the command to the history
+            // @todo: probably need some kind of error write here
             shell.output.write(out, shell.prompt.mode.get());
+
+            // add the command to the command history
             shell.history.add(command);
+
+            // clear command prompt and reset its mode
             shell.prompt.clear();
             shell.prompt.mode.set('shell');
         },
