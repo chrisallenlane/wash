@@ -3,6 +3,9 @@ var wash = {
 
     version: '1.0.0',
 
+    // may use this to manage emulation
+    mode:            : 'wash',
+
     // target parameters
     target: {
         protocol     : '',
