@@ -26,13 +26,7 @@ $(document).ready(function() {
     $('#target input, #target select').change(function(obj){
         wash.target.update(this.id, this.value);
     });
-
-    /*
-    // @note
-    $.post("http://test5.lab", { name: "John", time: "2pm" }, function(data) {
-        alert("Data Loaded: " + data);
-    });
-    */
     
+    // initialize the status bar
     shell.status.set('Initialized wash version ' + wash.version + '.');
 });

