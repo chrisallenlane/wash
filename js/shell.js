@@ -122,8 +122,8 @@ var shell = {
             var context = shell.prompt.context.get();
             var out     = jQuery('<div/>').text(context + ' ' + command).html();
 
-            // interpret (process) the command
-            wash.command.interpret(command);
+            // process the command
+            wash.command.process(command);
 
             // write the command to the history
             // @todo: probably need some kind of error write here
@@ -210,10 +210,10 @@ var shell = {
         },
 
         // writes to the shell output
-        write: function(data, cmd_class){
-            var cmd_class = (cmd_class == null) ? '' : cmd_class ;
+        write: function(data, out_class){
+            var out_class = (out_class == null) ? '' : out_class ;
             shell.debug.log('shell.output.write');
-            $(shell.elements.output).append('<div class="command ' + cmd_class + '">' + data + '</div>');
+            $(shell.elements.output).append('<div class="' + out_class + '">' + data + '</div>');
         },
 
     },

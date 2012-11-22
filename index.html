@@ -8,9 +8,11 @@
         <script src='js/jquery.min.js'></script>
         <script src='js/less.min.js'></script>
         <script src='js/mousetrap.min.js'></script>
+        <script src='js/command.js'></script>
         <script src='js/keybindings.js'></script>
         <script src='js/key-monitor.js'></script>
         <script src='js/payloads.js'></script>
+        <script src='js/response.js'></script>
         <script src='js/shell.js'></script>
         <script src='js/wash.js'></script>
         <script src='js/main.js'></script>
@@ -26,7 +28,7 @@
 
                 <!-- URL -->
                 <input type='text' id='url' placeholder='example.com/path/to/trojan.php'
-                    title='Specify the path to the trojan file, including host and protocol.' >
+                    value='http://wash/trojans/plaintext/trojan.php' title='Specify the path to the trojan file, including host and protocol.' >
 
                 <!-- port -->
                 <input type='number' id='port' value='80' maxlength='5'
