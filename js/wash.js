@@ -44,8 +44,8 @@ var wash = {
             //console.log(wash.command.response);
             shell.prompt.context.set(wash.command.response.prompt_context);
             shell.output.write(wash.command.response.output , 'output');
-            console.log('output');
-            console.log(wash.command.response);
+            //console.log('output');
+            //console.log(wash.command.response);
         },
 
         process: function(command){
@@ -55,6 +55,9 @@ var wash = {
         },
 
         send: function(){
+
+            console.log(wash.command.obj);
+
             // make the AJAX request to the trojan
             $.ajax({
                 type : wash.target.request_type,
