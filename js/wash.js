@@ -52,7 +52,6 @@ var wash = {
             wash.command.interpret(command);
             // might also want a package step to manage crypto
             wash.command.send();
-            //wash.command.output();
         },
 
         send: function(){
@@ -65,28 +64,11 @@ var wash = {
                 wash.command.response = JSON.parse(response);
                 console.log('deep');
                 console.log(wash.command.response);
-
-                // @kludge @todo: this is horrible tight-coupled garbage
-                // getting into trouble here because code is executing asynchronously
+                // this has to go here rather than in command.process because
+                // it is a callback that will be processed asynchronously
                 wash.command.output();
-
             });
-            console.log('send');
-            console.log(wash.command.response);
         }
-    },
-
-    // manage connections
-    connection: {
-        load: function(){
-            console.log('TODO: implement this.');
-        },
-        save: function(){
-            console.log('TODO: implement this.');
-        },
-        saveas: function(){
-            console.log('TODO: implement this.');
-        },
     },
 
     // target parameters
@@ -98,10 +80,28 @@ var wash = {
         password     : '',
         request_type : 'post',
 
-        // updates a target parameter
-        update: function(parameter, value){
-            wash.target[parameter] = value;
-            shell.status.set('wash.target.' + parameter + ' has been set to ' + value + '.');
+        // manage connections
+        connection: {
+            // loads a saved connection
+            load: function(){
+                console.log('TODO: implement this.');
+            },
+
+            // saves a connection
+            save: function(){
+                console.log('TODO: implement this.');
+            },
+
+            // saves a connection under a new name
+            saveas: function(){
+                console.log('TODO: implement this.');
+            },
+
+            // updates a target parameter
+            update: function(parameter, value){
+                wash.target[parameter] = value;
+                shell.status.set('wash.target.' + parameter + ' has been set to ' + value + '.');
+            },
         },
     },
 }

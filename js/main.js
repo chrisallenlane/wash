@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     // automatically update the target parameters when they are changed
     $('#target input, #target select').change(function(obj){
-        wash.target.update(this.id, this.value);
+        wash.target.connection.update(this.id, this.value);
     });
     
     // initialize the status bar

