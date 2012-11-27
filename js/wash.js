@@ -29,6 +29,8 @@ var wash = {
                 console.log('@todo: process arguments here');
             }
 
+            console.log(wash.command.obj);
+
             // encrypt and send the command object
             wash.command.encrypt();
             wash.command.send();

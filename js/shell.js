@@ -1,6 +1,3 @@
-// @note: I'm going to have to come through here and sanitize the markup later on
-
-
 var shell = {
 
     // specify the window padding
@@ -109,7 +106,7 @@ var shell = {
             shell.debug.log('shell.prompt.draw');
             var terminal_width       = $(shell.elements.terminal).width() - shell.padding;
             var prompt_context_width = $(shell.elements.prompt_context).width();
-            var prompt_width         = terminal_width - prompt_context_width;
+            var prompt_width         = terminal_width - prompt_context_width - (shell.padding * 2);
             $(shell.elements.prompt).css('width', prompt_width);
         },
 
