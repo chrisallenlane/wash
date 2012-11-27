@@ -1,5 +1,5 @@
 function Command(){
-    this.shell             = '';
-    this.payload           = '';
-    this.payload_arguments = {};
+    this.type = '';
+    this.cmd  = '';
+    this.args = {};
 }

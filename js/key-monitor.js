@@ -62,10 +62,12 @@ var key_monitor = {
         }
 
         // watch for wash commands
+        // @todo: this is all kind of inelegant
         if(shell.prompt.mode.get() != 'wash' && shell.prompt.get().substr(0, 4) === 'wash'){
             shell.prompt.mode.set('wash');
+        } else {
+            shell.prompt.mode.set('shell');
         }
-        
     }, 
 
     // listens to the $.keyup event

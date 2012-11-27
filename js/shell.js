@@ -122,12 +122,6 @@ var shell = {
             var context = shell.prompt.context.get();
             var out     = $('<div/>').text(context + ' ' + command).html();
 
-            /*
-            var command = jQuery('<div/>').text(shell.prompt.get()).html();
-            var context = jQuery('<div/>').text(shell.prompt.context.get()).html();
-            var out     = jQuery('<div/>').text(context + ' ' + '<pre>' + command + '</pre>').html();
-            */
-
             // process the command
             wash.command.process(command);
 
