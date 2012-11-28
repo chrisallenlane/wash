@@ -1,5 +1,5 @@
 function Command(){
-    this.type = '';
-    this.cmd  = '';
-    this.args = {};
+    this.action = '';
+    this.cmd    = '';
+    this.args   = {};
 }

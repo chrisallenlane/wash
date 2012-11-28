@@ -62,7 +62,6 @@ var key_monitor = {
         }
 
         // watch for wash commands
-        // @todo @kludge: this is all kind of inelegant
         if(shell.prompt.get().substr(0, 4) === 'wash'){
             shell.prompt.mode.set('wash');
         } else {

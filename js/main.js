@@ -22,9 +22,9 @@ $(document).ready(function() {
     // send focus to the prompt when the terminal is clicked on 
     $('#terminal').click(function(){ shell.prompt.focus() });
 
-    // automatically update the target parameters when they are changed
+    // automatically update the connection parameters when they are changed
     $('#target input, #target select').change(function(obj){
-        wash.target.connection.update(this.id, this.value);
+        wash.connection.set(this.id, this.value);
     });
     
     // initialize the status bar
