@@ -34,7 +34,6 @@ var wash = {
                 }catch(e){
                     wash.response.obj.prompt_context = shell.prompt.context.get();
                     wash.response.obj.output         = 'wash error: Invalid command.'
-                    //shell.prompt.context.set(wash.response.obj.prompt_context);
                     shell.output.write(wash.response.obj.output , 'wash_error');
                 }
             }
@@ -96,6 +95,7 @@ var wash = {
         },
     },
 
+    // manage responses from the trojans
     response: {
         // this is a buffer for the response from the trojan
         obj: new Response(),
@@ -104,6 +104,7 @@ var wash = {
         display: function(output_class){
             //decrypt here
             shell.prompt.context.set(wash.response.obj.prompt_context);
+            // if a error was returned, output it to the console
             shell.output.write(wash.response.obj.output , 'output ' + output_class);
         },
     },

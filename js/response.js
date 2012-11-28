@@ -1,5 +1,5 @@
 function Response(){
-    this.error          = [];
+    this.error          = '';
     this.output         = '';
     this.prompt_context = '';
 }

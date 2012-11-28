@@ -5,7 +5,7 @@ wash.file = {
         console.log('up');
 
         // assemble the command to send to the trojan
-        wash.command.obj.action = 'payload_laser';
+        wash.command.obj.action = 'payload_blah';
         wash.command.obj.cmd    = '';
         wash.command.obj.args   = {one: 1, two: 2} ;
 
@@ -15,5 +15,12 @@ wash.file = {
 
     down: function(){
         console.log('down');
+        // assemble the command to send to the trojan
+        wash.command.obj.action = 'payload_laser';
+        wash.command.obj.cmd    = '';
+        wash.command.obj.args   = {one: 1, two: 2} ;
+
+        // send the request upstream
+        wash.command.send();
     },
 }
