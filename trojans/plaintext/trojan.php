@@ -43,8 +43,9 @@ class Trojan{
 
         # otherwise, simply invoke the method directly
         else {
-            # PHP Haters: suck it.
-            $this->${$json['action']}($json['cmd'], $json['args']);
+            # metaprogramming FTW
+            $func = $json['action'];
+            $this->$func($json['args']);
         }
     }
 
@@ -152,6 +153,19 @@ class Trojan{
             die();
         }
         */
+    }
+
+    # fire mah layzor
+    public function laser($args){
+        $args = join($args, "\n");
+
+        # assemble a response
+        $this->response = array(
+            'output'         => 'Laser fired!!1' . $args,
+            'prompt_context' => 'wash.file.up',
+        );
+
+        $this->send_response();
     }
 }
 

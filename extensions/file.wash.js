@@ -2,6 +2,14 @@
 wash.file = {
     up: function(){
         console.log('up');
+
+        // assemble the command to send to the trojan
+        wash.command.obj.action = 'laser';
+        wash.command.obj.cmd    = '';
+        wash.command.obj.args   = {one: 1, two: 2} ;
+
+        // send the request upstream
+        wash.command.send();
     },
 
     down: function(){
