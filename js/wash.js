@@ -55,10 +55,14 @@ var wash = {
                 url  : wash.connection.protocol + '://' + wash.connection.url,
                 data : wash.command.obj,
             }).done(function(response){
-                wash.response.obj = JSON.parse(response);
+                var response_obj  = JSON.parse(response);
                 // this has to go here rather than in command.process because
                 // it is a callback that will be processed asynchronously
-                wash.response.display();
+                // @kludge
+                var output_class = 'blah';
+                // if a error was returned, output it to the console
+                shell.prompt.context.set(response_obj.prompt_context);
+                shell.output.write(response_obj.output , 'output ' + output_class);
             });
         }
     },
@@ -92,20 +96,6 @@ var wash = {
         set: function(parameter, value){
             wash.connection[parameter] = value;
             shell.status.set('wash.connection.' + parameter + ' has been set to ' + value + '.');
-        },
-    },
-
-    // manage responses from the trojans
-    response: {
-        // this is a buffer for the response from the trojan
-        obj: new Response(),
-
-        // displays response data to the wash interface
-        display: function(output_class){
-            //decrypt here
-            shell.prompt.context.set(wash.response.obj.prompt_context);
-            // if a error was returned, output it to the console
-            shell.output.write(wash.response.obj.output , 'output ' + output_class);
         },
     },
 }
