@@ -1,6 +1,11 @@
-body{color:white;font-size:small;font-family:arial;background-color:gray;line-height:1.5;margin:0;padding:0;}
-#output{overflow:scroll-y;}
-#prompt{border:none;font-family:arial;font-size:small;}
-#status{font-size:x-small;}
-#target #ssl{display:inline-block;float:right;}
-#target input,#target select{border:none;}
+body{color:white;font-size:small;font-family:arial;background-color:slategray;line-height:1.5;margin:0;padding:0;}body p.warning{background-color:darkred;border-radius:5px;font-weight:bold;padding:10px;text-align:center;}
+#shell{margin:10px auto;width:99%;}#shell #target{padding-bottom:5px;}#shell #target input,#shell #target select{background-color:#000000;border:none;border-radius:5px;color:#ffffff;margin-right:2.5px;padding:5px;}#shell #target input option,#shell #target select option{color:#000000;}
+#shell #target #password{max_width:100px;width:33%;}
+#shell #target #port{color:#ffffff;width:70px;}
+#shell #target #url{width:33%;max_width:100px;}
+#shell #terminal{background-color:#000000;border-radius:5px;overflow:auto;padding:10px;}#shell #terminal #output{overflow:auto;}#shell #terminal #output div.wash{color:lightgreen;}
+#shell #terminal #output div.wash_error{color:salmon;}
+#shell #terminal pre{display:inline;margin:0;padding:0;}#shell #terminal pre div.output{color:silver;}
+#shell #terminal #prompt_context{margin-right:1em;}
+#shell #terminal #prompt{background-color:transparent;border:none;color:#ffffff;display:inline;font-family:"Courier New";font-size:small;margin:0;padding:0;}#shell #terminal #prompt:focus{outline:none;outline-width:0;}
+#shell #status{background-color:#000000;border-radius:5px;font-size:x-small;margin-top:5px;padding:5px;}
