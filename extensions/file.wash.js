@@ -32,6 +32,7 @@ wash.file = {
 
         // assemble the URL for the file download
         var url = wash.connection.protocol + '://';
+        // @todo @bug: deal with the port here
         url += wash.connection.url + '?';
         url += 'args[file]=' + args.file + '&';
         url += 'action=payload_download';

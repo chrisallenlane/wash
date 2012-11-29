@@ -43,7 +43,7 @@
 
                 <!-- URL -->
                 <input type='text' id='url' placeholder='example.com/path/to/trojan.php'
-                    title='Specify the path to the trojan file, including host and protocol.' >
+                    title='Specify the path to the trojan file, including the host.' >
 
                 <!-- port -->
                 <input type='number' id='port' value='80' maxlength='5'
@@ -77,7 +77,7 @@
                 <pre><div id='output'></div></pre>
 
                 <!-- this is the actual prompt line -->
-                <pre><span id='prompt_context'>Specify connection parameters above, then type <code>wash.connect</code> to connect to the target:</span></pre><pre><input autofocus type='text' id='prompt'></pre>
+                <pre><span id='prompt_context'>To begin, specify connection parameters above or type wash.connection.load():</span></pre><pre><input autofocus type='text' id='prompt'></pre>
             </form>
 
             <div id='status'>
