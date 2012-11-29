@@ -80,7 +80,7 @@ shell.prompt = {
         var out     = $('<div/>').text(context + ' ' + command).html();
 
         // process the command
-        wash.command.process(command);
+        wash.process(command);
 
         // write the command to the history
         // @todo: probably need some kind of error write here

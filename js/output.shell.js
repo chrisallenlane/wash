@@ -8,8 +8,8 @@ shell.output = {
 
     // writes to the shell output
     write: function(data, out_class){
-        var out_class = (out_class == null) ? '' : out_class ;
         shell.debug.log('shell.output.write');
+        var out_class = (out_class == null) ? '' : out_class ;
         $(shell.elements.output).append('<div class="' + out_class + '">' + data + '</div>');
     },
 }
