@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // configure debugging
-    shell.debug.enabled = config.debug;
+    shell.debug.enabled = false;
     
     // draw the shell
     shell.draw(); 
