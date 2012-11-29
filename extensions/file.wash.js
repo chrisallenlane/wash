@@ -15,14 +15,8 @@ wash.file = {
 
     // downloads a file
     down: function(args){
-        console.log('down');
-
-        // buffer the previous connection protocol, because we're necessarily
-        // going to have to switch to GET for a moment
-        var old_request_type = wash.connection.request_type;
-
-        // alert the user if we're switching to GET from another protocol
-        if(old_request_type != 'get'){
+        // alert the user if we're switching to GET from another request type
+        if(wash.connection.request_type != 'get'){
             var msg = "In order to download a file, a GET request must necessarily " +
                       "be made against the target server. Continue?";
             
@@ -39,8 +33,5 @@ wash.file = {
 
         // download the file
         window.location.href = url;
-
-        // switch back to the previous protocol
-        wash.connection.request_type = old_request_type;
     },
 }
