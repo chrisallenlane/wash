@@ -5,22 +5,22 @@ wash.file = {
         console.log('up');
 
         // assemble the command to send to the trojan
-        wash.command.obj.action = 'payload_blah';
-        wash.command.obj.cmd    = '';
-        wash.command.obj.args   = {one: 1, two: 2} ;
+        wash.command.action = 'payload_blah';
+        wash.command.cmd    = '';
+        wash.command.args   = {one: 1, two: 2} ;
 
         // send the request upstream
-        wash.command.send();
+        wash.send_and_receive();
     },
 
     down: function(){
         console.log('down');
         // assemble the command to send to the trojan
-        wash.command.obj.action = 'payload_laser';
-        wash.command.obj.cmd    = '';
-        wash.command.obj.args   = {one: 1, two: 2} ;
+        wash.command.action = 'payload_laser';
+        wash.command.cmd    = '';
+        wash.command.args   = {one: 1, two: 2} ;
 
         // send the request upstream
-        wash.command.send();
+        wash.send_and_receive();
     },
 }
