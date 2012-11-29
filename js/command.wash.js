@@ -3,19 +3,6 @@ wash.command = {
     // buffer the object that will be encrypted and sent to the trojan
     obj: new Command(),
 
-    // encapsulates cryptography
-    crypto: {
-        // encrypts a command before sending to the trojan
-        encrypt: function(){
-            return true;
-        },
-
-        // decrypts a command before sending to the trojan
-        decrypt: function(){
-            return true;
-        },
-    },
-
     // processes commands on the wash prompt
     process: function(command){
         // parse out the wash action
