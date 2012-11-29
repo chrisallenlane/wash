@@ -3,6 +3,7 @@ shell.prompt = {
 
     // track command mode
     mode: {
+        // I really don't like this whole "mode" thing
         state: 'shell',
 
         // gets the prompt mode

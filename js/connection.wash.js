@@ -1,4 +1,3 @@
-// @note: there is some problematic overlap between this file and target.shell.jsjJ:w
 // manage connections
 wash.connection = {
     // @todo: I'm hard-coding these while debugging

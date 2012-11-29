@@ -3,7 +3,6 @@ shell.output = {
     // clears the shell output
     clear: function(){
         shell.debug.log('shell.output.clear');
-        // @todo: don't actually clear: just scroll
         $(shell.elements.output).text('');
     },
 
