@@ -13,9 +13,7 @@ var wash = {
             try{
                 eval(command);
             }catch(e){
-                wash.response.prompt_context = shell.prompt.context.get();
-                wash.response.output         = 'wash error: Invalid command.'
-                shell.output.write(wash.response.output , 'wash_error');
+                shell.output.write('wash error: Invalid command.', 'output wash_error');
             }
         }
         
@@ -38,8 +36,8 @@ var wash = {
         }).done(function(response){
             wash.response = JSON.parse(response);
             var output_class = 'blah';
-            shell.prompt.context.set(wash.response.prompt_context);
             shell.output.write(wash.response.output , 'output ' + output_class);
+            shell.prompt.context.set(wash.response.prompt_context);
         });
     }
 }

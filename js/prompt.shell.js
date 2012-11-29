@@ -79,12 +79,11 @@ shell.prompt = {
         var context = shell.prompt.context.get();
         var out     = $('<div/>').text(context + ' ' + command).html();
 
-        // process the command
-        wash.process(command);
-
-        // write the command to the history
         // @todo: probably need some kind of error write here
         shell.output.write(out, shell.prompt.mode.get());
+
+        // process the command
+        wash.process(command);
 
         // add the command to the command history
         shell.history.add(command);
