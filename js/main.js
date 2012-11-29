@@ -23,7 +23,7 @@ $(document).ready(function() {
     $('#terminal').click(function(){ shell.prompt.focus() });
 
     // automatically update the connection parameters when they are changed
-    $('#target input, #target select').change(function(obj){
+    $('#connection input, #connection select').change(function(obj){
         wash.connection.set(this.id, this.value);
     });
     

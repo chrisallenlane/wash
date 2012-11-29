@@ -6,6 +6,7 @@ var shell = {
     // map elements to their jQuery selectors to facilitate loose-coupling
     // between the logic and layout
     elements: {
+        connection     : ('#connection'),
         inner_shell    : ('#inner_shell'),
         output         : ('#output'),
         password       : ('#password'),
@@ -16,7 +17,6 @@ var shell = {
         shell          : ('#shell'),
         ssl            : ('#ssl'),
         status         : ('#status'),
-        target         : ('#target'),
         terminal       : ('#terminal'),
         url            : ('#url'),
     },
@@ -27,9 +27,9 @@ var shell = {
 
         // calculate the appropriate terminal height
         var window_height = $(window).innerHeight();
-        var target_height = ($(this.elements.target).is(':visible')) ? $(this.elements.target).height() + (this.padding / 2) : 0 ;
+        var connection_height = ($(this.elements.connection).is(':visible')) ? $(this.elements.connection).height() + (this.padding / 2) : 0 ;
         var status_height = $(this.elements.status).height();
-        var terminal_height = window_height - target_height - status_height - (this.padding * 6);
+        var terminal_height = window_height - connection_height - status_height - (this.padding * 6);
 
         $(this.elements.terminal)
             .css('height', terminal_height)

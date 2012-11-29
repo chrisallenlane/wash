@@ -4,9 +4,9 @@
 // @note @kludge: there's some redundancy between here and key-monitor.js that I
 // need to remove later. This is really inelegant currently. 
 
-// ctrl+h: toggles target bar visibility
+// ctrl+h: toggles connection bar visibility
 Mousetrap.bind(['command+h', 'ctrl+h'], function(e) {
-    shell.target.toggle();
+    shell.connection.toggle();
     return false;
 });
 

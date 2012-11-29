@@ -45,7 +45,7 @@ var key_monitor = {
 
         // watch for ctrl+h
         if(this.state.control && e.keyCode == this.keycodes.char.h){
-            shell.target.toggle();
+            shell.connection.toggle();
             event.preventDefault();
         }
 
