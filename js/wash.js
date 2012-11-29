@@ -2,7 +2,7 @@
 var wash = {
 
     // store the version number (sometimes this is handy)
-    version: '1.0.0',
+    version: '0.5.0',
 
     // processes commands on the wash prompt
     process: function(command){
