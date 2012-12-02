@@ -82,10 +82,6 @@ shell.prompt = {
         // add the command to the command history
         shell.history.add(command);
 
-        // clear command prompt and reset its mode
-        shell.prompt.mode.set('shell');
-        shell.prompt.clear();
-
         // process the command
         wash.process(command);
     },

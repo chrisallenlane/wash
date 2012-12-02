@@ -36,8 +36,9 @@ var wash = {
         }).done(function(response){
             wash.response = JSON.parse(response);
             shell.prompt.context.set(wash.response.prompt_context);
-            shell.output.write(wash.response.prompt_context);
+            shell.output.write(wash.response.prompt_context + ' ' + shell.prompt.get());
             shell.output.write(wash.response.output, 'output');
+            shell.prompt.clear();
         });
     }
 }

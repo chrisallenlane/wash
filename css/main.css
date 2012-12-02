@@ -6,6 +6,5 @@ body{color:white;font-size:small;font-family:arial;background-color:slategray;li
 #shell #terminal{background-color:#000000;border-radius:5px;overflow:auto;padding:10px;}#shell #terminal #output{overflow:auto;}#shell #terminal #output div.wash{color:lightgreen;}
 #shell #terminal #output div.wash_error{color:salmon;}
 #shell #terminal pre{display:inline;margin:0;padding:0;}#shell #terminal pre div.output{color:silver;}
-#shell #terminal #prompt_context{margin-right:1em;}
-#shell #terminal #prompt{background-color:transparent;border:none;color:#ffffff;display:inline;font-family:"Courier New";font-size:small;margin:0;padding:0;}#shell #terminal #prompt:focus{outline:none;outline-width:0;}
+#shell #terminal #prompt{background-color:transparent;border:none;color:#ffffff;font-family:monospace;font-size:small;margin:0;outline:none;outline-width:0;padding:0;}
 #shell #status{background-color:#000000;border-radius:5px;font-size:x-small;margin-top:5px;padding:5px;}
