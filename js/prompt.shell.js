@@ -79,18 +79,15 @@ shell.prompt = {
         var context = shell.prompt.context.get();
         var out     = $('<div/>').text(context + ' ' + command).html();
 
-        // @todo: probably need some kind of error write here
-        shell.output.write(out, shell.prompt.mode.get());
-
-        // process the command
-        wash.process(command);
-
         // add the command to the command history
         shell.history.add(command);
 
         // clear command prompt and reset its mode
-        shell.prompt.clear();
         shell.prompt.mode.set('shell');
+        shell.prompt.clear();
+
+        // process the command
+        wash.process(command);
     },
 
     // puts focus on the prompt box

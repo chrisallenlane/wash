@@ -15,7 +15,9 @@ shell.output = {
         var out_class = (out_class == null) ? '' : out_class ;
 
         // append to the appropriate div
-        shell.elements.output.append('<div class="' + out_class + '">' + out + '</div>');
+        var buffer    = '<div class="' + out_class + '">' + out + '</div>';
+        shell.elements.output.append(buffer);
+
         // autoscroll to the bottom of the output div
         shell.elements.terminal.scrollTop(shell.elements.terminal.prop('scrollHeight'));
     },

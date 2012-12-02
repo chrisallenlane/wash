@@ -29,10 +29,10 @@ var shell = {
         shell.debug.log('shell.draw');
 
         // calculate the appropriate terminal height
-        var window_height = $(window).innerHeight();
+        var window_height     = $(window).innerHeight();
         var connection_height = (this.elements.connection.is(':visible')) ? this.elements.connection.height() + (this.padding / 2) : 0 ;
-        var status_height = this.elements.status.height();
-        var terminal_height = window_height - connection_height - status_height - (this.padding * 6);
+        var status_height     = this.elements.status.height();
+        var terminal_height   = window_height - connection_height - status_height - (this.padding * 5.5);
 
         this.elements.terminal
             .css('height', terminal_height)
