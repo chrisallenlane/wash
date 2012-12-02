@@ -8,3 +8,6 @@ wash.remap = {};
 
 // turn off highlighting in `cal` - it will display weirdly in the wash output
 wash.remap['cal'] = 'cal -h';
+
+// run top in batch mode with a single iteration
+wash.remap['top'] = 'top -n1 -b';
