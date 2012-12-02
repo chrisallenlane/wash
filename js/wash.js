@@ -35,7 +35,7 @@ var wash = {
             data : wash.command,
         }).done(function(response){
             wash.response = JSON.parse(response);
-            shell.output.write(wash.response.output);
+            shell.output.write(wash.response.output, 'output');
             shell.prompt.context.set(wash.response.prompt_context);
         });
     }
