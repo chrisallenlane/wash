@@ -19,6 +19,10 @@ var wash = {
         
         // if the prompt is not in wash mode, default to shell action
         else {
+
+            // listen for re-mapped commands
+            if(wash.remap[command] != null){ command = wash.remap[command]; }
+
             wash.command.action = 'shell';
             wash.command.cmd    = command;
             //wash.command.crypto.encrypt();
