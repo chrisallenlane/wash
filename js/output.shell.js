@@ -16,8 +16,7 @@ shell.output = {
 
         // append to the appropriate div
         shell.elements.output.append('<div class="' + out_class + '">' + out + '</div>');
-        // autoscroll to the bottom of the div when overflowing (to more faithfully
-        // emulate a terminal's behavior)
-        shell.elements.terminal.scrollTop(10000000000000);
+        // autoscroll to the bottom of the output div
+        shell.elements.terminal.scrollTop(shell.elements.terminal.prop('scrollHeight'));
     },
 }
