@@ -9,7 +9,7 @@ var wash = {
         // parse out the wash action
         if(shell.prompt.mode.get() == 'wash'){
             // process wash commands as pure JavaScript. This allows for
-            // some tremendous extensibility
+            // tremendous extensibility
             try{
                 eval(command);
             }catch(e){
@@ -31,12 +31,11 @@ var wash = {
         // make the AJAX request to the trojan
         $.ajax({
             type : wash.connection.request_type,
-            url  : wash.connection.protocol + '://' + wash.connection.url,
+            url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
             data : wash.command,
         }).done(function(response){
             wash.response = JSON.parse(response);
-            var output_class = 'blah';
-            shell.output.write(wash.response.output , 'output ' + output_class);
+            shell.output.write(wash.response.output);
             shell.prompt.context.set(wash.response.prompt_context);
         });
     }

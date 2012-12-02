@@ -1,4 +1,10 @@
+/**
+ * Initialize the application when the document has finished loading
+ */
 $(document).ready(function() {
+    // initialize the shell members
+    shell.init();
+
     // configure debugging
     shell.debug.enabled = false;
     
@@ -9,7 +15,7 @@ $(document).ready(function() {
     $(window).resize(function(){shell.draw()});
 
     // bind to the main form
-    $(shell.elements.terminal).bind('submit', function(){
+    shell.elements.terminal.bind('submit', function(){
         shell.prompt.enter();
         return false;
     });

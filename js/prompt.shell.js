@@ -19,12 +19,12 @@ shell.prompt = {
 
             // @todo: decouple these colors
             if(mode === 'wash'){
-                $(shell.elements.prompt).css('color', 'lightgreen');
-                $(shell.elements.prompt_context).css('color', 'lightgreen');
+                shell.elements.prompt.css('color', 'lightgreen');
+                shell.elements.prompt_context.css('color', 'lightgreen');
             }
             else{
-                $(shell.elements.prompt).css('color', 'white');
-                $(shell.elements.prompt_context).css('color', 'white');
+                shell.elements.prompt.css('color', 'white');
+                shell.elements.prompt_context.css('color', 'white');
             }
         },
 
@@ -36,19 +36,19 @@ shell.prompt = {
         // clears the prompt context
         clear: function(){
             shell.debug.log('shell.prompt.context.clear');
-            $(shell.elements.prompt_context).text('');
+            shell.elements.prompt_context.text('');
         },
 
         // gets the prompt context
         get: function(){
             shell.debug.log('shell.prompt.context.get');
-            return $(shell.elements.prompt_context).text();
+            return shell.elements.prompt_context.text();
         },
         
         // sets the prompt context
         set: function(data){
             shell.debug.log('shell.prompt.context.set');
-            $(shell.elements.prompt_context).text(data).text();
+            shell.elements.prompt_context.text(data).text();
         },
 
     },
@@ -56,7 +56,7 @@ shell.prompt = {
     // clears the command prompt
     clear: function(){
         shell.debug.log('shell.prompt.clear');
-        $(shell.elements.prompt).val('');
+        shell.elements.prompt.val('');
         // @note @kludge: is this elegant?
         shell.prompt.draw();
     },
@@ -64,10 +64,10 @@ shell.prompt = {
     // draws (mostly sizes) the command prompt
     draw: function(){
         shell.debug.log('shell.prompt.draw');
-        var terminal_width       = $(shell.elements.terminal).width() - shell.padding;
-        var prompt_context_width = $(shell.elements.prompt_context).width();
+        var terminal_width       = shell.elements.terminal.width() - shell.padding;
+        var prompt_context_width = shell.elements.prompt_context.width();
         var prompt_width         = terminal_width - prompt_context_width - (shell.padding * 2);
-        $(shell.elements.prompt).css('width', prompt_width);
+        shell.elements.prompt.css('width', prompt_width);
     },
 
     // enters a command
@@ -95,18 +95,18 @@ shell.prompt = {
 
     // puts focus on the prompt box
     focus: function(){
-        $(shell.elements.prompt).focus();
+        shell.elements.prompt.focus();
     },
 
     // gets the command prompt value
     get: function(){
         shell.debug.log('shell.prompt.get');
-        return $(shell.elements.prompt).val().trim();
+        return shell.elements.prompt.val().trim();
     },
 
     // sets the command prompt value
     set: function(data){
         shell.debug.log('shell.prompt.set');
-        $(shell.elements.prompt).val(data);
+        shell.elements.prompt.val(data);
     },
 }

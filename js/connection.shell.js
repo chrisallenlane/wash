@@ -3,7 +3,7 @@ shell.connection = {
     // hides the connection bar
     hide: function(){
         shell.debug.log('shell.connection.hide');
-        $(shell.elements.connection).fadeOut(function(){
+        shell.elements.connection.fadeOut(function(){
             shell.status.set('connection bar hidden. Press Ctrl+h to unhide.');
             shell.draw();
         });
@@ -12,7 +12,7 @@ shell.connection = {
     // un-hides the connection bar
     show: function(){
         shell.debug.log('shell.connection.show');
-        $(shell.elements.connection).fadeIn(function(){
+        shell.elements.connection.fadeIn(function(){
             shell.status.set('connection bar revealed. Press Ctrl+h to hide.');
         });
     },
@@ -20,7 +20,7 @@ shell.connection = {
     // toggles connection bar visibility
     toggle: function(){
         shell.debug.log('shell.connection.toggle');
-        if($(shell.elements.connection).is(':visible')){
+        if(shell.elements.connection.is(':visible')){
             shell.connection.hide();
             shell.draw();
         } else {
