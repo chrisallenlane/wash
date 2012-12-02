@@ -21,6 +21,7 @@ var wash = {
         else {
 
             // listen for re-mapped commands
+            // @see: extensions/wash.remap.js
             if(wash.remap[command] != null){ command = wash.remap[command]; }
 
             wash.command.action = 'shell';
