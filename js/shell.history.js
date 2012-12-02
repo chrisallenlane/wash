@@ -27,7 +27,6 @@ shell.history = {
             // decrement the command history pointer
             shell.history.position--;
             shell.prompt.set(shell.history.commands[shell.history.position]);
-            $('#prompt').caretTo(2);
         }
     },
     
@@ -37,7 +36,6 @@ shell.history = {
         if(shell.history.position <= (shell.history.commands.length - 1)){
             shell.history.position++;
             shell.prompt.set(shell.history.commands[shell.history.position]);
-            shell.elements.prompt.caretToEnd();
         }
     },
 }
