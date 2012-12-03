@@ -3,6 +3,14 @@ var shell = {
     // specify the window padding
     padding: 10,
 
+    // the percentage of the terminal space which should be taken
+    // by the sidebar when displayed
+    sidebar_percentage : .20,
+
+    // take these measurements after the UI has been drawn initially
+    terminal_height    : 0,
+    terminal_width     : 0,
+
     // initialize the shell members after the document has loaded
     init: function(){
         // buffer the jQuery elements both to speed up the JavaScript a bit and
@@ -17,6 +25,7 @@ var shell = {
             prompt_context : $('#prompt_context'),
             protocol       : $('#protocol'),
             shell          : $('#shell'),
+            sidebar        : $('#sidebar'),
             ssl            : $('#ssl'),
             status         : $('#status'),
             terminal       : $('#terminal'),
@@ -40,6 +49,10 @@ var shell = {
 
         // draw (size) the command prompt
         this.prompt.draw();
+
+        // record some measurements we'll need to make some dynamic UIs
+        this.terminal_height = this.elements.terminal.height();
+        this.terminal_width  = this.elements.terminal.width();
     },
 
 
