@@ -40,17 +40,17 @@ wash.mysql = {
 
         // buffer the previous process command - this is where the real "magic"
         // happens that makes this work
-        //wash.mysql.old_objects.process_command = wash.process; 
-        wash.mysql.old_objects.process_command = jQuery.extend(true, {}, wash.process); // deep copy
+        wash.mysql.old_objects.process_command = wash.process; 
 
         // keep the mysql command history separate from the main history
         // (I'm just buffering the whole damn thing here, methods and all)
-        wash.mysql.old_objects.history = jQuery.extend(true, {}, shell.history); // deep copy
+        wash.mysql.old_objects.history = $.extend(true, {}, shell.history); // deep copy
         shell.history.reset();
 
         // now, write a new function to process commands
         wash.process = function(command){
             // buffer the raw SQL command
+            console.log('mysql process');
             wash.mysql.cmd = command;
 
             // parse out the wash action
