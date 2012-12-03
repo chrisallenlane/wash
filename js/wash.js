@@ -11,6 +11,7 @@ var wash = {
             // process wash commands as pure JavaScript. This allows for
             // tremendous extensibility
             try{
+                shell.output.write(command, 'output wash');
                 eval(command);
             }catch(e){
                 shell.output.write('wash error: Invalid command.', 'output wash_error');
