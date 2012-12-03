@@ -7,7 +7,18 @@
 wash.remap = {};
 
 // turn off highlighting in `cal` - it will display weirdly in the wash output
-wash.remap['cal'] = 'cal -h';
+wash.remap['cal'] = {
+    command: 'cal -h',
+    callback: function(){
+        shell.status.set('`cal` re-mapped to `' + this.command + '`.');
+    },
+}
 
 // run top in batch mode with a single iteration
-wash.remap['top'] = 'top -n1 -b';
+wash.remap['top'] = {
+    command: 'top -n1 -b',
+    callback: function(){
+        shell.status.set('`top` re-mapped to `' + this.command + '`.');    
+    },
+}
+
