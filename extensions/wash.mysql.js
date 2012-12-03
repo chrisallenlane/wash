@@ -50,7 +50,6 @@ wash.mysql = {
         // now, write a new function to process commands
         wash.process = function(command){
             // buffer the raw SQL command
-            console.log('mysql process');
             wash.mysql.cmd = command;
 
             // parse out the wash action
