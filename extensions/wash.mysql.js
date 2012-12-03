@@ -83,6 +83,9 @@ wash.mysql = {
         $('body').animate({ backgroundColor : '#708090' }, 500);
         shell.status.set('Terminating mysql emulation.');
         shell.prompt.context.set(wash.mysql.old_objects.prompt);
+
+        // restore the old process function
+        wash.process = wash.mysql.old_objects.process_command;
     },
 
     // dumps a mysql database
