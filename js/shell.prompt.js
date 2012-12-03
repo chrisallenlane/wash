@@ -79,6 +79,9 @@ shell.prompt = {
         var context = shell.prompt.context.get();
         var out     = $('<div/>').text(context + ' ' + command).html();
 
+        // clear the prompt of the last command
+        shell.prompt.clear();
+
         // add the command to the command history
         shell.history.add(command);
 

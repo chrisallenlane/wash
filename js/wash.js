@@ -44,6 +44,7 @@ var wash = {
             url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
             data : wash.command,
         }).done(function(response){
+            // parse the JSON response
             wash.response = JSON.parse(response);
 
             // set the prompt context
@@ -58,9 +59,6 @@ var wash = {
             } else {
                 shell.output.write(wash.response.output, 'output');
             }
-
-            // clear the prompt of the last command
-            shell.prompt.clear();
         });
     }
 }
