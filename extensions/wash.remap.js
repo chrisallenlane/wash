@@ -14,6 +14,14 @@ wash.remap['cal'] = {
     },
 }
 
+// ll -> ls -l
+wash.remap['ll'] = {
+    command: 'ls -l',
+    callback: function(){
+        shell.status.set('`ll` re-mapped to `' + this.command + '`.');
+    },
+}
+
 // run top in batch mode with a single iteration
 wash.remap['top'] = {
     command: 'top -n1 -b',
