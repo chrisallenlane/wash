@@ -14,6 +14,7 @@ wash.mysql = {
 
     // buffer some objects when changing emulation modes
     old_objects: {
+        // I think the wrong prompt is being saved somehow...
         prompt          : '',
         process_command : '',
     },
