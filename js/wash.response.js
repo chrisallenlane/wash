@@ -1,5 +1,5 @@
 wash.response = {
-    prompt_context : '',
-    output         : '',
-    errors         : '',
+    prompt_context : null,
+    output         : null,
+    error          : null,
 }
