@@ -17,6 +17,8 @@ wash.mysql = {
 
     // this will begin an emulation of a mysql terminal
     connect: function(connection_parameters){
+        console.log('mysql connect');
+
         // visually signify that we're entering an emulated session
         $('body').animate({ backgroundColor : '#E97B00' }, 500);
         shell.status.set('Emulating mysql client.');
@@ -44,23 +46,24 @@ wash.mysql = {
             
             // if the prompt is not in wash mode, default to mysql action
             else {
-                console.log('blah');
+                // @todo: remember to escape quotations here
+                // command = ...
+                 
                 // emulate the mysql console just by running queries through the 
                 // command line
                 var cmd = '';
-                cmd += "mysql -h'localhost' "; 
-                cmd += "-u'root' "; 
-                cmd += "-p'root' "; 
-                cmd += "chrisallenlane "; 
-                //cmd += "-e \"" + command + "\"; 
-
-                alert(cmd);
+                cmd += "mysql -h'" + wash.mysql.connection.host     + "' ";
+                cmd += "-u'"       + wash.mysql.connection.username + "' ";
+                cmd += "-p'"       + wash.mysql.connection.password + "' ";
+                cmd += wash.mysql.connection.database               + " "; 
+                cmd += "-e '"      + command                        + "'"; 
 
                 // fire the command off to the trojan
-                wash.action = 'shell';
-                wash.cmd    = cmd;
+                wash.command.action = 'shell';
+                wash.command.cmd    = cmd;
                 wash.send_and_receive();
             }
+        };
     },
 
     // disconnects from the terminal emulation
