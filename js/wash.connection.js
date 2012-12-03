@@ -10,6 +10,7 @@ wash.connection = {
 
     // loads a saved connection
     load: function(){
+        shell.sidebar.show();
         console.log('TODO: implement this.');
     },
 
