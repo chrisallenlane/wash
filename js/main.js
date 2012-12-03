@@ -2,6 +2,9 @@
  * Initialize the application when the document has finished loading
  */
 $(document).ready(function() {
+    // initialize the permanent storage
+    wash.permastore.init();
+
     // initialize the shell members
     shell.init();
 
