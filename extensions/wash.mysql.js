@@ -96,27 +96,13 @@ wash.mysql = {
     },
 
     // dumps a mysql database
-    dump: function(connection_parameters){
-        // update the connection parameters, if necessary
-        if(connection_parameters != null){
-            wash.mysql.use(connection_parameters);
-        }
-
+    dump: function(params){
         // assemble the dump command
         var cmd = 'mysqldump ';
         cmd += "-u'" +  wash.mysql.connection.username +  "' ";
         cmd += "-p'" +  wash.mysql.connection.password +  "' ";
         cmd += wash.mysql.connection.database          +  " "; 
-
-        /*
-        // @todo: this is borked for some reason
-        // must have to do with a failure to auto-vivity this .outfile object,
-        // but I'm not sure what else I can do here...
-        // pipe to an outfile if specified
-        if(connection_parameters.outfile != ''){
-            cmd += "> " + connection_parameters.outfile;
-        }
-        */
+        cmd += "> "  + params.outfile;
 
         // fire the command off to the trojan
         wash.command.action = 'shell';

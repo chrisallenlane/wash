@@ -14,6 +14,14 @@ wash.remap['cal'] = {
     },
 }
 
+// la -> ls -a
+wash.remap['la'] = {
+    command: 'ls -a',
+    callback: function(){
+        shell.status.set('`la` re-mapped to `' + this.command + '`.');
+    },
+}
+
 // ll -> ls -l
 wash.remap['ll'] = {
     command: 'ls -l',
