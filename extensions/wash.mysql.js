@@ -28,11 +28,10 @@ wash.mysql = {
         wash.mysql.connection.database = connection_parameters.database;
 
         // get the mysql version information
-        var version_info = wash.mysql.get_version();
+        wash.mysql.get_version();
 
         // visually signify that we're entering an emulated session
         $('body').animate({ backgroundColor : '#E97B00' }, 500);
-        shell.status.set('Emulating mysql client. (' + version_info + ')');
 
         // buffer the previous session's settings
         wash.mysql.old_objects.prompt = shell.prompt.context.get();
@@ -49,8 +48,6 @@ wash.mysql = {
 
             // parse out the wash action
             if(shell.prompt.mode.get() == 'wash'){
-                // process wash commands as pure JavaScript. This allows for
-                // tremendous extensibility
                 try{
                     shell.output.write(command, 'output wash');
                     eval(command);
@@ -142,10 +139,15 @@ wash.mysql = {
             data : wash.command,
         }).done(function(response){
             // @todo: manage crypto here
+            console.log(response);
         
             // parse the JSON response
             wash.response = JSON.parse(response);
-            return wash.response.output;
+            
+            // set the status bar (this is a bit tightly coupled, but I can't return
+            // this value since AJAX request is being made asynchronously. This
+            // little inelegance shouldn't cause any problems, though.)
+            shell.status.set('Emulating mysql client. (' + wash.response.output + ')');
         });
     },
 
