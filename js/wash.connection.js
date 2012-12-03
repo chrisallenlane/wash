@@ -7,6 +7,8 @@ wash.connection = {
     port         : '80',
     password     : '',
     request_type : 'post',
+    // @todo: implement this later
+    full         : '',
 
     // loads a saved connection
     load: function(){

