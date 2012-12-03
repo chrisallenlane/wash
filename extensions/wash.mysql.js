@@ -6,7 +6,7 @@ wash.mysql = {
         host     : 'localhost',
         username : 'root',
         password : 'root',
-        database : 'chrisallenlane',
+        database : '',
     },
 
     // buffer some objects when changing emulation modes
@@ -18,6 +18,18 @@ wash.mysql = {
     // this will begin an emulation of a mysql terminal
     connect: function(connection_parameters){
         console.log('mysql connect');
+
+        // at least require that connection parameters be set
+        //if(){ }
+
+        // set the connection parameters
+        // @todo: some kind of success-failure detection would be ideal
+        if(connection_parameters.host != null){
+            wash.mysql.connection.host = connection_parameters.host;
+        }
+        wash.mysql.connection.username = connection_parameters.username;
+        wash.mysql.connection.password = connection_parameters.password;
+        wash.mysql.connection.database = connection_parameters.database;
 
         // visually signify that we're entering an emulated session
         $('body').animate({ backgroundColor : '#E97B00' }, 500);
@@ -61,7 +73,7 @@ wash.mysql = {
                 // fire the command off to the trojan
                 wash.command.action = 'shell';
                 wash.command.cmd    = cmd;
-                wash.send_and_receive();
+                wash.mysql.send_and_receive();
             }
         };
     },
@@ -73,8 +85,38 @@ wash.mysql = {
         shell.prompt.context.set(wash.mysql.old_objects.prompt);
     },
 
+    // dumps a mysql database
     dump: function(){
-
+        // "outfile"
     },
 
+    // @see: wash.send_and_receive(). We just need slightly
+    // different functionality here, so I'm re-implementing
+    send_and_receive: function(){
+        // make the AJAX request to the trojan
+        // @todo: manage crypto here
+        $.ajax({
+            type : wash.connection.request_type,
+            url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
+            data : wash.command,
+        }).done(function(response){
+            // @todo: manage crypto here
+        
+            // parse the JSON response
+            wash.response = JSON.parse(response);
+
+            // set the prompt context
+            shell.prompt.context.set('mysql>');
+
+            // output the last command as history
+            shell.output.write(wash.response.prompt_context + ' ' + shell.prompt.get());
+
+            // display output or error, depending on which was received
+            if(wash.response.error != null){
+                shell.output.write(wash.response.error, 'output wash_error');
+            } else {
+                shell.output.write(wash.response.output, 'output');
+            }
+        });
+    },
 }
