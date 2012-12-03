@@ -1,11 +1,6 @@
 // this is the top-level application object
 var wash = {
 
-    // properties for sending communications out to the trojans
-    action : '',
-    args   : {},
-    cmd    : '',
-
     // store the version number (sometimes this is handy)
     version: '0.5.0',
 
@@ -31,7 +26,6 @@ var wash = {
 
             wash.command.action = 'shell';
             wash.command.cmd    = command;
-            //wash.command.crypto.encrypt();
             wash.send_and_receive();
         }
     },
@@ -39,11 +33,14 @@ var wash = {
     // sends a command to the trojan
     send_and_receive: function(){
         // make the AJAX request to the trojan
+        // @todo: manage crypto here
         $.ajax({
             type : wash.connection.request_type,
             url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
             data : wash.command,
         }).done(function(response){
+            // @todo: manage crypto here
+        
             // parse the JSON response
             wash.response = JSON.parse(response);
 
