@@ -63,7 +63,7 @@ wash.mysql = {
                  
                 // emulate the mysql console just by running queries through the 
                 // command line
-                var cmd = 'mysql ';
+                var cmd = 'mysql -t ';
                 cmd += "-u'"       + wash.mysql.connection.username + "' ";
                 cmd += "-p'"       + wash.mysql.connection.password + "' ";
                 cmd += wash.mysql.connection.database               + " "; 
