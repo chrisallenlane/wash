@@ -139,7 +139,6 @@ wash.mysql = {
             data : wash.command,
         }).done(function(response){
             // @todo: manage crypto here
-            console.log(response);
         
             // parse the JSON response
             wash.response = JSON.parse(response);
