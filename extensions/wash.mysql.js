@@ -15,8 +15,9 @@ wash.mysql = {
     // buffer some objects when changing emulation modes
     old_objects: {
         // I think the wrong prompt is being saved somehow...
+        history         : {},
+        process_command : {},
         prompt          : '',
-        process_command : '',
     },
 
     // this will begin an emulation of a mysql terminal
@@ -39,7 +40,13 @@ wash.mysql = {
 
         // buffer the previous process command - this is where the real "magic"
         // happens that makes this work
-        wash.mysql.old_objects.process_command = wash.process; 
+        //wash.mysql.old_objects.process_command = wash.process; 
+        wash.mysql.old_objects.process_command = jQuery.extend(true, {}, wash.process); // deep copy
+
+        // keep the mysql command history separate from the main history
+        // (I'm just buffering the whole damn thing here, methods and all)
+        wash.mysql.old_objects.history = jQuery.extend(true, {}, shell.history); // deep copy
+        shell.history.reset();
 
         // now, write a new function to process commands
         wash.process = function(command){
@@ -90,6 +97,9 @@ wash.mysql = {
 
         // restore the old prompt
         shell.prompt.context.set(wash.mysql.old_objects.prompt);
+
+        // restore the old history
+        shell.history = wash.mysql.old_objects.history;
 
         // restore the old process function
         wash.process = wash.mysql.old_objects.process_command;
