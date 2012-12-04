@@ -55,7 +55,6 @@ wash.mysql = {
             // parse out the wash action
             if(shell.prompt.mode.get() == 'wash'){
                 try{
-                    shell.output.write(command, 'output wash');
                     eval(command);
                 }catch(e){
                     shell.output.write('wash error: Invalid command.', 'output wash_error');

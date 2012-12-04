@@ -4,7 +4,7 @@ wash.evade = {
     // monitor bash_history, maybe?
 
     // deletes the trojan and associated files from the target server
-    destroy_self: function(){
+    autodestruct: function(){
 
     }
 

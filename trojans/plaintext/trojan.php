@@ -188,11 +188,11 @@ class Trojan{
     }
 
     # fire mah layzor
-    public function payload_laser($args){
+    public function payload_test_payload($args){
         # assemble a response
         $this->response = array(
-            'error'          => 'wash error: This is some error text',
-            'output'         => 'Laser fired!!1',
+            //'error'          => 'wash error: This is some error text',
+            'output'         => 'This is the payload output.',
             'prompt_context' => $this->prompt_context,
         );
 
