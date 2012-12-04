@@ -14,7 +14,6 @@ wash.mysql = {
 
     // buffer some objects when changing emulation modes
     old_objects: {
-        // I think the wrong prompt is being saved somehow...
         history         : {},
         process_command : {},
         prompt          : '',
@@ -80,10 +79,18 @@ wash.mysql = {
                 cmd += wash.mysql.connection.database               + " "; 
                 cmd += "-e '"      + command                        + "'"; 
 
-                // fire the command off to the trojan
+                // communicate with the trojan
                 wash.command.action = 'shell';
                 wash.command.cmd    = cmd;
-                wash.mysql.send_and_receive();
+                wash.net.send(function(){  
+                    // display the output
+                    shell.prompt.context.set('mysql>');
+                    shell.output.write(wash.mysql.cmd);
+
+                    // display output or error, depending on which was received
+                    if(wash.response.error != null){ shell.output.write(wash.response.error, 'output wash_error'); }
+                    else { shell.output.write(wash.response.output, 'output'); }
+                });
             }
         };
     },
@@ -113,10 +120,18 @@ wash.mysql = {
         cmd += wash.mysql.connection.database          +  " "; 
         cmd += "> "  + params.outfile;
 
-        // fire the command off to the trojan
+        // communicate with the trojan
         wash.command.action = 'shell';
         wash.command.cmd    = cmd;
-        wash.mysql.send_and_receive();
+        wash.net.send(function(){  
+            // display the output
+            shell.prompt.context.set('mysql>');
+            shell.output.write(wash.mysql.cmd);
+
+            // display output or error, depending on which was received
+            if(wash.response.error != null){ shell.output.write(wash.response.error, 'output wash_error'); }
+            else { shell.output.write(wash.response.output, 'output'); }
+        });
     },
 
     // returns mysql client version information
@@ -125,53 +140,8 @@ wash.mysql = {
         wash.command.action = 'shell';
         wash.command.cmd    = 'mysql -V';
         wash.command.args   = {} ;
-
-        // make the AJAX request to the trojan
-        // @todo: manage crypto here
-        $.ajax({
-            type : wash.connection.request_type,
-            url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
-            data : wash.command,
-        }).done(function(response){
-            // @todo: manage crypto here
-        
-            // parse the JSON response
-            wash.response = JSON.parse(response);
-            
-            // set the status bar (this is a bit tightly coupled, but I can't return
-            // this value since AJAX request is being made asynchronously. This
-            // little inelegance shouldn't cause any problems, though.)
+        wash.net.send(function(){  
             shell.status.set('Emulating mysql client. (' + wash.response.output + ')');
-        });
-    },
-
-    // @see: wash.send_and_receive(). We just need slightly
-    // different functionality here, so I'm re-implementing
-    send_and_receive: function(){
-        // make the AJAX request to the trojan
-        // @todo: manage crypto here
-        $.ajax({
-            type : wash.connection.request_type,
-            url  : wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
-            data : wash.command,
-        }).done(function(response){
-            // @todo: manage crypto here
-        
-            // parse the JSON response
-            wash.response = JSON.parse(response);
-
-            // set the prompt context
-            shell.prompt.context.set('mysql>');
-
-            // output the last command as history
-            shell.output.write(wash.mysql.cmd);
-
-            // display output or error, depending on which was received
-            if(wash.response.error != null){
-                shell.output.write(wash.response.error, 'output wash_error');
-            } else {
-                shell.output.write(wash.response.output, 'output');
-            }
         });
     },
 
