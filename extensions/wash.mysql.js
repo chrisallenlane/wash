@@ -84,11 +84,6 @@ wash.mysql = {
                 wash.command.cmd    = cmd;
                 wash.net.send(function(){  
                     // display the output
-                    shell.prompt.context.set('mysql>');
-                    shell.prompt.draw();
-                    shell.output.write('mysql> ' + wash.mysql.cmd);
-
-                    // display output or error, depending on which was received
                     if(wash.response.error != null){ shell.output.write(wash.response.error, 'output wash_error'); }
                     else { shell.output.write(wash.response.output, 'output'); }
                 });
@@ -127,11 +122,6 @@ wash.mysql = {
         wash.command.action = 'shell';
         wash.command.cmd    = cmd;
         wash.net.send(function(){  
-            // display the output
-            shell.prompt.context.set('mysql>');
-            shell.prompt.draw();
-            shell.output.write('mysql> ' + wash.mysql.cmd);
-
             // display output or error, depending on which was received
             if(wash.response.error != null){ shell.output.write(wash.response.error, 'output wash_error'); }
             else { shell.output.write(wash.response.output, 'output'); }
