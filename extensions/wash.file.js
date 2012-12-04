@@ -54,8 +54,9 @@ wash.file = {
         }
 
         // assemble the URL for the file download
-        var url = wash.connection.protocol + '://';
         // @todo @bug: deal with the port here
+        var url = wash.connection.protocol + '://';
+        url += wash.connection.domain;
         url += wash.connection.url + '?';
         url += 'args[file]=' + args.file + '&';
         url += 'action=payload_file_down';
