@@ -1,10 +1,14 @@
+a{text-decoration:none;color:skyblue;}a:hover{text-decoration:underline;}
 body{color:white;font-size:small;font-family:arial;background-color:slategray;line-height:1.5;margin:0;padding:0;}body p.warning{background-color:darkred;border-radius:5px;font-weight:bold;padding:10px;text-align:center;}
 #shell{margin:10px auto;width:99%;}#shell #connection{padding-bottom:5px;}#shell #connection input,#shell #connection select{background-color:#000000;border:none;border-radius:5px;color:#ffffff;margin-right:2.5px;padding:5px;}#shell #connection input option,#shell #connection select option{color:#000000;}
 #shell #connection #password{max_width:100px;width:33%;}
 #shell #connection #port{color:#ffffff;width:70px;}
 #shell #connection #url{width:33%;max_width:100px;}
+#shell #sidebar{background-color:black;border-radius:5px;display:none;float:right;overflow:auto;padding:10px;}#shell #sidebar h2{font-size:small;margin:0;padding:0;}
+#shell #sidebar h3{font-size:x-small;margin:0;padding:0;}
 #shell #terminal{background-color:#000000;border-radius:5px;overflow:auto;padding:10px;}#shell #terminal #output{overflow:auto;}#shell #terminal #output div.wash{color:lightgreen;}
 #shell #terminal #output div.wash_error{color:salmon;}
+#shell #terminal #output div.wash_info{color:lightgreen;}
 #shell #terminal pre{display:inline;margin:0;padding:0;}#shell #terminal pre div.output{color:silver;}
 #shell #terminal #prompt{background-color:transparent;border:none;color:#ffffff;font-family:monospace;font-size:small;margin:0;outline:none;outline-width:0;padding:0;}
-#shell #status{background-color:#000000;border-radius:5px;font-size:x-small;margin-top:5px;padding:5px;}
+#shell #status{background-color:#000000;border-radius:5px;clear:both;font-size:x-small;margin-top:5px;padding:5px;}

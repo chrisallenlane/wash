@@ -15,7 +15,8 @@ wash.file = {
         }
 
         // aggregate the HTML
-        var html = "<p>Select files to upload:</p>" +
+        var html = "<h2>Upload Files</h2>" + 
+        "<p>Select files to upload:</p>" +
         "<form id='wash_file_up' enctype='multipart/form-data' onsubmit='javascript:return wash.file.upload()'>" + 
             "<input type='file' name='files[]' multiple>" + 
             "<input type='hidden' name='action' value='payload_file_up'>" + 
