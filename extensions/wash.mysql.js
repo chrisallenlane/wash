@@ -4,6 +4,7 @@ wash.mysql = {
 
     // buffer the raw SQL command for later use
     cmd: '',
+    prompt: 'mysql>',
 
     // buffer the database connection parameters
     connection: {
@@ -35,7 +36,7 @@ wash.mysql = {
 
         // buffer the previous session's settings
         wash.mysql.old_objects.prompt = shell.prompt.context.get();
-        shell.prompt.context.set('mysql>');
+        shell.prompt.context.set(this.prompt);
 
         // buffer the previous process command - this is where the real "magic"
         // happens that makes this work
