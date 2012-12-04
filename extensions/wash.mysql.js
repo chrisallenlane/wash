@@ -85,6 +85,7 @@ wash.mysql = {
                 wash.net.send(function(){  
                     // display the output
                     shell.prompt.context.set('mysql>');
+                    shell.prompt.draw();
                     shell.output.write(wash.mysql.cmd);
 
                     // display output or error, depending on which was received
@@ -97,18 +98,20 @@ wash.mysql = {
 
     // disconnects from the terminal emulation
     disconnect: function(){
-        // animate back to the default terminal
-        $('body').animate({ backgroundColor : '#708090' }, 500);
         shell.status.set('Terminating mysql emulation.');
 
-        // restore the old prompt
-        shell.prompt.context.set(wash.mysql.old_objects.prompt);
+        // animate back to the default terminal colors
+        $('body').animate({ backgroundColor : '#708090' }, 500);
 
         // restore the old history
         shell.history = wash.mysql.old_objects.history;
 
         // restore the old process function
         wash.process = wash.mysql.old_objects.process_command;
+
+        // restore the old prompt
+        shell.prompt.context.set(wash.mysql.old_objects.prompt);
+        shell.prompt.draw();
     },
 
     // dumps a mysql database
@@ -126,6 +129,7 @@ wash.mysql = {
         wash.net.send(function(){  
             // display the output
             shell.prompt.context.set('mysql>');
+            shell.prompt.draw();
             shell.output.write(wash.mysql.cmd);
 
             // display output or error, depending on which was received
