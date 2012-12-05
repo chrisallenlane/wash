@@ -27,6 +27,7 @@
 
         <script src='lib/js/shell.js'></script>
         <script src='lib/js/shell.connection.js'></script>
+        <script src='lib/js/shell.editor.js'></script>
         <script src='lib/js/shell.history.js'></script>
         <script src='lib/js/shell.output.js'></script>
         <script src='lib/js/shell.prompt.js'></script>
@@ -96,6 +97,13 @@
             <div id='status'>
                 <span>Status text can go here.</span>
             </div>
+        </div>
+
+        <!-- editor window -->
+        <div id='editor_outer'>
+            <div id='editor'></div>
+            <button id='editor_save'>Save</button>
+            <button id='editor_cancel'>Cancel</button>
         </div>
     </body>
 </html>
