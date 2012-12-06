@@ -38,3 +38,16 @@ wash.remap['top'] = {
     },
 }
 
+// run top in batch mode with a single iteration
+wash.remap['feh'] = {
+    command: false,
+    callback: function(command){
+        // spice the filename out of the command
+        var parts    = command.split(' ');
+        var filename = parts[1];
+        // macro the image viewer
+        wash.image.view({file: filename});
+        shell.status.set('`feh` re-mapped to `wash.image.view()`.');    
+    },
+}
+
