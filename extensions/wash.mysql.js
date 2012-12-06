@@ -93,7 +93,7 @@ wash.mysql = {
 
     // disconnects from the terminal emulation
     disconnect: function(){
-        shell.status.set('Terminating mysql emulation.');
+        shell.status.set('MySQL emulation terminated.');
 
         // animate back to the default terminal colors
         $('body').animate({ backgroundColor : '#708090' }, 500);
@@ -135,7 +135,7 @@ wash.mysql = {
         wash.command.cmd    = 'mysql -V';
         wash.command.args   = {} ;
         wash.net.send(function(){  
-            shell.status.set('Emulating mysql client. (' + wash.response.output + ')');
+            shell.status.set('Emulating MySQL client. (' + wash.response.output + ')');
         });
     },
 
