@@ -35,17 +35,20 @@ wash.file = {
         // buffer the name of the file being read
         // @bug: the write functionality will break if you cd around
         // while the file is being edited
-        wash.file.edit_file = args.file;
+
+        // wash.file.edit_file = args.file;
 
         // read the contents of the file
         wash.command.action = 'payload_file_read';
         wash.command.args   = args;
         wash.net.get(function(response){
             // unpack the response object from the trojan
-            json = JSON.parse(response);
+            json                = JSON.parse(response);
+            wash.file.edit_file = json.output.file;
+            console.log(wash.file.edit_file);
 
             // then load the file contents into the editor
-            editor.setValue(json.output);
+            editor.setValue(json.output.output);
             shell.editor.show();
         });
     }, 

