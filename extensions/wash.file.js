@@ -1,6 +1,45 @@
 // Here we pop open the wash object once again to patch in some tailored
 // functionality.
 wash.file = {
+
+    // downloads a file
+    down: function(args){
+        // alert the user if we're switching to GET from another request type
+        if(wash.connection.request_type != 'get'){
+            var msg = "In order to download a file, a GET request must necessarily " +
+                      "be made against the target server. Continue?";
+            
+            // cancel if the user is unwilling to change request types
+            if(!confirm(msg)){ return false; }
+        }
+
+        // assemble the URL for the file download
+        // @todo @bug: deal with the port here
+        var url = wash.connection.protocol + '://';
+        url += wash.connection.domain;
+        url += wash.connection.url + '?';
+        url += 'args[file]=' + args.file + '&';
+        url += 'action=payload_file_down';
+
+        // download the file
+        window.location.href = url;
+    },
+
+    // edits a file on the server
+    edit: function(args){
+        // first, read the contents of the file
+        wash.command.action = 'payload_file_read';
+        wash.command.args   = args;
+        wash.net.get(function(response){
+            // unpack the response object from the trojan
+            json = JSON.parse(response);
+
+            // then load the file contents into the editor
+            editor.setValue(json.output);
+            shell.editor.show();
+        });
+    }, 
+
     // uploads files to the target server
     up: function(){
         console.log('up');
@@ -41,28 +80,5 @@ wash.file = {
 
         // prevent the form from actually submitting
         return false;
-    },
-
-    // downloads a file
-    down: function(args){
-        // alert the user if we're switching to GET from another request type
-        if(wash.connection.request_type != 'get'){
-            var msg = "In order to download a file, a GET request must necessarily " +
-                      "be made against the target server. Continue?";
-            
-            // cancel if the user is unwilling to change request types
-            if(!confirm(msg)){ return false; }
-        }
-
-        // assemble the URL for the file download
-        // @todo @bug: deal with the port here
-        var url = wash.connection.protocol + '://';
-        url += wash.connection.domain;
-        url += wash.connection.url + '?';
-        url += 'args[file]=' + args.file + '&';
-        url += 'action=payload_file_down';
-
-        // download the file
-        window.location.href = url;
     },
 }
