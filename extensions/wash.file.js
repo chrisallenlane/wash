@@ -19,7 +19,7 @@ wash.file = {
         // @todo @bug: deal with the port here
         var url = wash.connection.protocol + '://';
         url += wash.connection.domain;
-        url += wash.connection.url + '?';
+        url += wash.connection.path + '?';
         url += 'args[file]=' + args.file + '&';
         url += 'action=payload_file_down';
 
@@ -84,7 +84,7 @@ wash.file = {
     upload: function(){
         $.post(
             // @todo: support custom ports later
-            wash.connection.protocol + '://' + wash.connection.domain + wash.connection.url,
+            wash.connection.protocol + '://' + wash.connection.domain + wash.connection.path,
             $('#wash_file_up').serializeArray(),
             function(response){
                 console.log(response);

@@ -43,7 +43,7 @@ wash.remap['feh'] = {
     command: false,
     callback: function(command){
         // extract the filename from the command
-        var filename    = command.substring(command.indexOf(' ') + 1);
+        var filename = command.substring(command.indexOf(' ') + 1);
         // macro the image viewer
         wash.image.view({file: filename});
         shell.status.set('`feh` re-mapped to `wash.image.view()`.');    
@@ -55,7 +55,7 @@ wash.remap['vim'] = {
     command: false,
     callback: function(command){
         // extract the filename from the command
-        var filename    = command.substring(command.indexOf(' ') + 1);
+        var filename = command.substring(command.indexOf(' ') + 1);
         // macro the image viewer
         wash.file.edit({file: filename});
         shell.status.set('`vim` re-mapped to `wash.file.edit()`.');    
@@ -66,3 +66,23 @@ wash.remap['emacs'] = wash.remap['vim'];
 wash.remap['nano']  = wash.remap['vim'];
 wash.remap['pico']  = wash.remap['vim'];
 
+// map a download macro
+wash.remap['download'] = {
+    command: false,
+    callback: function(command){
+        var filename = command.substring(command.indexOf(' ') + 1);
+        wash.file.down({file: filename});
+        shell.status.set('`download` re-mapped to `wash.file.down()`.');    
+    },
+}
+wash.remap['dl'] = wash.remap['download'];
+
+// map an upload macro
+wash.remap['upload'] = {
+    command: false,
+    callback: function(){
+        wash.file.up();
+        shell.status.set('`upload` re-mapped to `wash.file.up()`.');    
+    },
+}
+wash.remap['up'] = wash.remap['upload'];
