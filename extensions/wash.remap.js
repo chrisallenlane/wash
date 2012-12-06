@@ -38,16 +38,31 @@ wash.remap['top'] = {
     },
 }
 
-// run top in batch mode with a single iteration
+// emulate the feh image viewer
 wash.remap['feh'] = {
     command: false,
     callback: function(command){
-        // spice the filename out of the command
-        var parts    = command.split(' ');
-        var filename = parts[1];
+        // extract the filename from the command
+        var filename    = command.substring(command.indexOf(' ') + 1);
         // macro the image viewer
         wash.image.view({file: filename});
         shell.status.set('`feh` re-mapped to `wash.image.view()`.');    
     },
 }
+
+// emulate a text editor
+wash.remap['vim'] = {
+    command: false,
+    callback: function(command){
+        // extract the filename from the command
+        var filename    = command.substring(command.indexOf(' ') + 1);
+        // macro the image viewer
+        wash.file.edit({file: filename});
+        shell.status.set('`vim` re-mapped to `wash.file.edit()`.');    
+    },
+}
+// alias some common editors
+wash.remap['emacs'] = wash.remap['vim'];
+wash.remap['nano']  = wash.remap['vim'];
+wash.remap['pico']  = wash.remap['vim'];
 
