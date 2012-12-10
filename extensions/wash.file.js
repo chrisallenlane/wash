@@ -2,8 +2,6 @@
 // functionality.
 wash.file = {
 
-    edit_file: '',
-
     // downloads a file
     down: function(args){
         // alert the user if we're switching to GET from another request type
@@ -27,31 +25,10 @@ wash.file = {
         window.location.href = url;
     },
 
-    // edits a file on the server
-    edit: function(args){
-        // clear the editor
-        editor.setValue('');
-
-        // buffer the name of the file being read
-        // @bug: the write functionality will break if you cd around
-        // while the file is being edited
-
-        // wash.file.edit_file = args.file;
-
-        // read the contents of the file
-        wash.command.action = 'payload_file_read';
-        wash.command.args   = args;
-        wash.net.get(function(response){
-            // unpack the response object from the trojan
-            json                = JSON.parse(response);
-            wash.file.edit_file = json.output.file;
-            console.log(wash.file.edit_file);
-
-            // then load the file contents into the editor
-            editor.setValue(json.output.output);
-            shell.editor.show();
-        });
-    }, 
+    // helper function that retrieves a file extensions
+    get_extension: function(filename){
+        return filename.substr((filename.lastIndexOf('.')) + 1);
+    },
 
     // uploads files to the target server
     up: function(){

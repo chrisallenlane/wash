@@ -57,7 +57,7 @@ wash.remap['vim'] = {
         // extract the filename from the command
         var filename = command.substring(command.indexOf(' ') + 1);
         // macro the image viewer
-        wash.file.edit({file: filename});
+        shell.editor.edit({file: filename});
         shell.status.set('`vim` re-mapped to `wash.file.edit()`.');    
     },
 }
