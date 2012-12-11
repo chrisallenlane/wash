@@ -14,6 +14,15 @@ wash.remap['cal'] = {
     },
 }
 
+// help
+wash.remap['help'] = {
+    command: false,
+    callback: function(){
+        wash.help();
+        shell.status.set('`help` re-mapped to `wash.help()`.');
+    },
+}
+
 // la -> ls -a
 wash.remap['la'] = {
     command: 'ls -a',
