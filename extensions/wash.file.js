@@ -7,7 +7,11 @@ wash.file = {
         // push the help objects onto the array
         var help_objects = [];
         help_objects.push({
-            command : "wash.file.down({file: 'the-file.txt'})",
+            command : "wash.file.help()",
+            text    : "Displays the help commands for the wash.file object.",
+        })
+        help_objects.push({
+            command : "wash.file.down({file: 'file.txt'})",
             text    : "Downloads the specified file.",
         })
         help_objects.push({

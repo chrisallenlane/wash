@@ -6,6 +6,36 @@ wash.mysql = {
     cmd: '',
     prompt: 'mysql>',
 
+    // the help text
+    help: function(args){
+        // push the help objects onto the array
+        var help_objects = [];
+        help_objects.push({
+            command : "wash.mysql.help()",
+            text    : "Displays the help commands for the wash.mysql object.",
+        })
+        help_objects.push({
+            command : "wash.mysql.connect({username: 'user', password: 'pass', database: 'db'})",
+            text    : "Connects to the specified MySQL database.",
+        })
+        help_objects.push({
+            command : "wash.mysql.disconnect()",
+            text    : "Disconnects from the connected MySQL database.",
+        })
+        help_objects.push({
+            command : "wash.mysql.dump(username: 'user', password: 'pass', database: 'db', outfile: 'out.sql')",
+            text    : "Dumps the connected MySQL database to a specified outfile.",
+        })
+        help_objects.push({
+            command : "wash.mysql.use({username: 'user', password: 'pass', database: 'db'})",
+            text    : "USEs the database specified. Can be used to switch database connections.",
+        })
+
+        // output or return the help objects appropriately
+        if(args != null && args.return === true){ return help_objects; }
+        else { wash.help_display(help_objects); }
+    },
+
     // buffer the database connection parameters
     connection: {
         username : 'root',
