@@ -12,6 +12,8 @@ namespace :trojan do
 
     desc "Compiles the trojan into a minified and obfuscated form."
     task :compile do
+        # `php -f ./lib/build/minify.php ./trojans/plaintext/trojan.php > ./trojans/obfuscated/t.php`
+        puts `php -f ./lib/build/minify.php ./trojans/plaintext/trojan.php`
 
 
     end

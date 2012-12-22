@@ -10,13 +10,17 @@ $remap     = array();
 
 # do not remap certain variables
 $tokens_to_ignore = array(
+    '$_FILES'     => 'true',
     '$_GET'       => 'true',
     '$_POST'      => 'true',
     '$_REQUEST'   => 'true',
     '$_SESSION'   => 'true',
+    '$this'       => 'true',
     '__construct' => 'true',
     'false'       => 'true',
     'null'        => 'true',
+    'parent'      => 'true',
+    'self'        => 'true',
     'true'        => 'true',
     'undefined'   => 'true',
 );
@@ -69,7 +73,7 @@ foreach ($tokens as $index => $token) {
             }
 
             # buffer the text while stripping whitespace (but not completely)
-            $text    = trim($text);
+            //$text    = trim($text);
             $buffer .= ($text == '') ? ' ' : $text ;
         }
     }
@@ -79,12 +83,15 @@ foreach ($tokens as $index => $token) {
 # compressions
 
 # allow no more than 1 space between tokens
+/*
 $buffer = preg_replace('/\s\s+/', ' ', $buffer);
 
 # remove spaces surrounding tokenizing characters
 $buffer = preg_replace('/;\s/', ';', $buffer);
 $buffer = preg_replace('/\}\s/', '}', $buffer);
 $buffer = preg_replace('/\s\{/', '{', $buffer);
+*/
 
 # output the result
-echo $buffer;
+//echo $buffer;
+print_r($remap);
