@@ -73,7 +73,7 @@ foreach ($tokens as $index => $token) {
             }
 
             # buffer the text while stripping whitespace (but not completely)
-            //$text    = trim($text);
+            $text    = trim($text);
             $buffer .= ($text == '') ? ' ' : $text ;
         }
     }
@@ -83,15 +83,13 @@ foreach ($tokens as $index => $token) {
 # compressions
 
 # allow no more than 1 space between tokens
-/*
 $buffer = preg_replace('/\s\s+/', ' ', $buffer);
 
 # remove spaces surrounding tokenizing characters
 $buffer = preg_replace('/;\s/', ';', $buffer);
 $buffer = preg_replace('/\}\s/', '}', $buffer);
 $buffer = preg_replace('/\s\{/', '{', $buffer);
-*/
 
 # output the result
-//echo $buffer;
-print_r($remap);
+echo $buffer;
+//print_r($remap);
