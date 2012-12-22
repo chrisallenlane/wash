@@ -7,3 +7,13 @@ namespace :less do
     end
 
 end
+
+namespace :trojan do
+
+    desc "Compiles the trojan into a minified and obfuscated form."
+    task :compile do
+
+
+    end
+
+end
