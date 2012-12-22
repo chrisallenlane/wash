@@ -132,14 +132,20 @@ wash.sqlite3 = {
     },
 
     // dumps a sqlite3 database
-    /*
     dump: function(params){
+        // make it possible to dump a database without first connecting to it
+        if(params.file != null){ var database = params.file; }
+        else { var database = wash.sqlite3.connection.file; }
+
+        // use a default outfile if one is not specified
+        if(params.outfile != null){ var outfile = params.outfile; }
+        else { var outfile = 'sqlite3-dump.sql'; }
+
         // assemble the dump command
-        var cmd = 'sqlite3dump ';
-        cmd += "-u'" +  wash.sqlite3.connection.username +  "' ";
-        cmd += "-p'" +  wash.sqlite3.connection.password +  "' ";
-        cmd += wash.sqlite3.connection.database          +  " "; 
-        cmd += "> "  + params.outfile;
+        var cmd = 'sqlite3 -batch ';
+        cmd += database;
+        cmd += " .dump"; 
+        cmd += " > " + outfile;
 
         // communicate with the trojan
         wash.command.action = 'shell';
@@ -150,7 +156,6 @@ wash.sqlite3 = {
             else { shell.output.write(wash.response.output, 'output'); }
         });
     },
-    */
 
     // returns sqlite3 client version information
     get_version: function(){
