@@ -23,14 +23,16 @@ $tokens_to_ignore = array(
 
 # ----------------------------------------------------------------------------
 # load the PHP source file
-//$source = file_get_contents('../../trojans/plaintext/trojan.php');
 $source = file_get_contents($argv[1]);
 $tokens = token_get_all($source);
+
+# buffer the minified source
+$buffer = '';
 
 # iterate over the tokens
 foreach ($tokens as $index => $token) {
     // simple 1-character token
-    if (is_string($token)) { echo $token; }
+    if (is_string($token)) { $buffer .= $token; }
    
     else {
         # extract the token information
@@ -66,9 +68,23 @@ foreach ($tokens as $index => $token) {
                 }
             }
 
-            # echo the text while stripping whitespace (but not completely)
-            $text = trim($text);
-            echo ($text == '') ? ' ' : $text ;
+            # buffer the text while stripping whitespace (but not completely)
+            $text    = trim($text);
+            $buffer .= ($text == '') ? ' ' : $text ;
         }
     }
 }
+
+# now that the new source has been minified and buffered, make a few final
+# compressions
+
+# allow no more than 1 space between tokens
+$buffer = preg_replace('/\s\s+/', ' ', $buffer);
+
+# remove spaces surrounding tokenizing characters
+$buffer = preg_replace('/;\s/', ';', $buffer);
+$buffer = preg_replace('/\}\s/', '}', $buffer);
+$buffer = preg_replace('/\s\{/', '{', $buffer);
+
+# output the result
+echo $buffer;
