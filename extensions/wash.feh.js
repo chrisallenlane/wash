@@ -1,4 +1,4 @@
-wash.image = {
+wash.feh = {
 
     view: function(args){
         // alert the user if we're switching to GET from another request type
@@ -16,7 +16,8 @@ wash.image = {
         url += wash.connection.domain;
         url += wash.connection.path + '?';
         url += 'args[file]=' + args.file + '&';
-        url += 'action=payload_image_view';
+        url += 'args[password]=' + wash.connection.password + '&';
+        url += 'action=payload_image_view' + '&';
 
         // view the file
         window.open(url);

@@ -54,7 +54,7 @@ wash.remap['feh'] = {
         // extract the filename from the command
         var filename = command.substring(command.indexOf(' ') + 1);
         // macro the image viewer
-        wash.image.view({file: filename});
+        wash.feh.view({file: filename});
         shell.status.set('`feh` re-mapped to `wash.image.view()`.');    
     },
 }
