@@ -20,11 +20,11 @@ function minify($file){
     # @note: all custom payload names must be added to this list. Otherwise,
     # they will not be invokable from the wash interface.
     $tokens_to_ignore = array(
-        '$_files'            => 'true',
-        '$_get'              => 'true',
-        '$_post'             => 'true',
-        '$_request'          => 'true',
-        '$_session'          => 'true',
+        '$_FILES'            => 'true',
+        '$_GET'              => 'true',
+        '$_POST'             => 'true',
+        '$_REQUEST'          => 'true',
+        '$_SESSION'          => 'true',
         '$this'              => 'true',
         '__construct'        => 'true',
         'false'              => 'true',
@@ -35,6 +35,7 @@ function minify($file){
         'payload_file_up'    => 'true',
         'payload_file_view'  => 'true',
         'payload_file_write' => 'true',
+        'payload_image_view' => 'true',
         'self'               => 'true',
         'true'               => 'true',
         'undefined'          => 'true',
@@ -129,6 +130,7 @@ function minify($file){
     # unnecessary remaining whitespace
 
     # allow no more than 1 space between tokens
+    /*
     $buffer = preg_replace('/\s\s+/', ' ' , $buffer);
 
     # remove spaces surrounding tokenizing characters
@@ -137,6 +139,9 @@ function minify($file){
     $buffer = preg_replace('/\s\}/' , '}' , $buffer);
     $buffer = preg_replace('/\(\s/' , '(' , $buffer);
     $buffer = preg_replace('/\s\)/' , ')' , $buffer);
+    */
+
+    file_put_contents('/home/chris/Source/www/projects/wash/trojans/obfuscated/debug.php', $buffer);
 
     # output the result
     return $buffer;
