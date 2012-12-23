@@ -24,7 +24,7 @@ wash.sqlite3 = {
         })
         /* @todo */
         help_objects.push({
-            command : "wash.sqlite3.dump(username: 'user', password: 'pass', database: 'db', outfile: 'out.sql')",
+            command : "wash.sqlite3.dump(file: 'file.db', outfile: 'out.sql')",
             text    : "Dumps the connected sqlite3 database to a specified outfile.",
         })
 
@@ -102,8 +102,10 @@ wash.sqlite3 = {
                 cmd += " '" + command + "'"; 
 
                 // communicate with the trojan
-                wash.command.action = 'shell';
-                wash.command.cmd    = cmd;
+                wash.command.action        = 'shell';
+                wash.command.cmd           = cmd;
+                wash.command.args.password = wash.connection.password;
+
                 wash.net.send(function(){  
                     // display the output
                     if(wash.response.error != null){ shell.output.write(wash.response.error, 'output wash_error'); }

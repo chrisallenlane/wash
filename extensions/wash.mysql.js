@@ -110,8 +110,10 @@ wash.mysql = {
                 cmd += "-e '"      + command                        + "'"; 
 
                 // communicate with the trojan
-                wash.command.action = 'shell';
-                wash.command.cmd    = cmd;
+                wash.command.action        = 'shell';
+                wash.command.cmd           = cmd;
+                wash.command.args.password = wash.connection.password;
+
                 wash.net.send(function(){  
                     // display the output
                     if(wash.response.error != null){ shell.output.write(wash.response.error, 'output wash_error'); }
