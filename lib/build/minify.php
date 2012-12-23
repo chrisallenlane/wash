@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * I'm pretty sure this somewhat naive obfuscator won't work in all cases,
+ * but it seems to be working well enough for my purposes here. (I think it
+ * it will fail if asked to minify a file containing more than one class, 
+ * though.)
+ */
+
 # promote compatibility between PHP 4 and 5
 if (!defined('T_ML_COMMENT')) { define('T_ML_COMMENT', T_COMMENT); }
 else { define('T_DOC_COMMENT', T_ML_COMMENT); }
@@ -114,14 +121,14 @@ foreach ($tokens as $index => $token) {
 # unnecessary remaining whitespace
 
 # allow no more than 1 space between tokens
-$buffer = preg_replace('/\s\s+/', ' ', $buffer);
+$buffer = preg_replace('/\s\s+/', ' ' , $buffer);
 
 # remove spaces surrounding tokenizing characters
-/*
-$buffer = preg_replace('/;\s/', ';', $buffer);
-$buffer = preg_replace('/\}\s/', '}', $buffer);
-$buffer = preg_replace('/\s\{/', '{', $buffer);
-*/
+$buffer = preg_replace('/;\s/'  , ';' , $buffer);
+$buffer = preg_replace('/\{\s/' , '{' , $buffer);
+$buffer = preg_replace('/\s\}/' , '}' , $buffer);
+$buffer = preg_replace('/\(\s/' , '(' , $buffer);
+$buffer = preg_replace('/\s\)/' , ')' , $buffer);
 
 # output the result
 echo $buffer;
