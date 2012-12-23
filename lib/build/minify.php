@@ -130,7 +130,6 @@ function minify($file){
     # unnecessary remaining whitespace
 
     # allow no more than 1 space between tokens
-    /*
     $buffer = preg_replace('/\s\s+/', ' ' , $buffer);
 
     # remove spaces surrounding tokenizing characters
@@ -139,9 +138,8 @@ function minify($file){
     $buffer = preg_replace('/\s\}/' , '}' , $buffer);
     $buffer = preg_replace('/\(\s/' , '(' , $buffer);
     $buffer = preg_replace('/\s\)/' , ')' , $buffer);
-    */
 
-    file_put_contents('/home/chris/Source/www/projects/wash/trojans/obfuscated/debug.php', $buffer);
+    //file_put_contents('/home/chris/Source/www/projects/wash/trojans/obfuscated/debug.php', $buffer);
 
     # output the result
     return $buffer;
