@@ -52,7 +52,13 @@ namespace :build do
 end
 
 namespace :test do
+    desc "Checks for file syntax errors."
     task :check_syntax do
+        puts 'Checking PHP files...'
+        puts `find . -name '*.php' -print0 | xargs -0 -n1 -P10 php -l`
 
+        # @todo: this doesn't display the names of the files it checks
+        puts 'Checking Ruby files...'
+        puts `find . -name '*.rb' -print0 | xargs -0 -n1 -P10 ruby -c`
     end
 end
