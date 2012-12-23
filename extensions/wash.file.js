@@ -41,6 +41,7 @@ wash.file = {
         url += wash.connection.domain;
         url += wash.connection.path + '?';
         url += 'args[file]=' + args.file + '&';
+        url += 'args[password]=' + wash.connection.password + '&';
         url += 'action=payload_file_down';
 
         // download the file
