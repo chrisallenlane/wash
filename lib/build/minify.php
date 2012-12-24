@@ -20,25 +20,35 @@ function minify($file){
     # @note: all custom payload names must be added to this list. Otherwise,
     # they will not be invokable from the wash interface.
     $tokens_to_ignore = array(
-        '$_FILES'            => 'true',
-        '$_GET'              => 'true',
-        '$_POST'             => 'true',
-        '$_REQUEST'          => 'true',
-        '$_SESSION'          => 'true',
-        '$this'              => 'true',
-        '__construct'        => 'true',
-        'false'              => 'true',
-        'null'               => 'true',
-        'parent'             => 'true',
-        'payload_file_down'  => 'true',
-        'payload_file_read'  => 'true',
-        'payload_file_up'    => 'true',
-        'payload_file_view'  => 'true',
-        'payload_file_write' => 'true',
-        'payload_image_view' => 'true',
-        'self'               => 'true',
-        'true'               => 'true',
-        'undefined'          => 'true',
+        '$GLOBALS'              => 'true',
+        '$HTTP_RAW_POST_DATA'   => 'true',
+        '$_COOKIE'              => 'true',
+        '$_ENV'                 => 'true',
+        '$_FILES'               => 'true',
+        '$_GET'                 => 'true',
+        '$_POST'                => 'true',
+        '$_REQUEST'             => 'true',
+        '$_SERVER'              => 'true',
+        '$_SESSION'             => 'true',
+        '$argc'                 => 'true',
+        '$argv'                 => 'true',
+        '$http_response_header' => 'true',
+        '$php_errormsg'         => 'true',
+        '$this'                 => 'true',
+        '__construct'           => 'true',
+        'false'                 => 'true',
+        'null'                  => 'true',
+        'parent'                => 'true',
+        'payload_file_down'     => 'true',
+        'payload_file_read'     => 'true',
+        'payload_file_up'       => 'true',
+        'payload_file_view'     => 'true',
+        'payload_file_write'    => 'true',
+        'payload_image_view'    => 'true',
+        'self'                  => 'true',
+        'super'                 => 'true',
+        'true'                  => 'true',
+        'undefined'             => 'true',
     );
 
     # ----------------------------------------------------------------------------
@@ -77,7 +87,7 @@ function minify($file){
 
                         # otherwise, create a new mapping
                         else {
-                            $remap[$id][$text] = '_' . base_convert($var_count, 10, 36);
+                            $remap[$id][$text] = base52_encode($var_count);
                             $text              = '$' . $remap[$id][$text];
                             $var_count++;
                         }
@@ -104,7 +114,7 @@ function minify($file){
 
                             # otherwise, remap as a member, but create a new remap
                             else {
-                                $text = $remap[$id][$text] = '_' . base_convert($var_count, 10, 36);
+                                $text = $remap[$id][$text] = base52_encode($var_count);
                                 $var_count++;
                             }
                         }
@@ -113,7 +123,7 @@ function minify($file){
                         else {
                             if(isset($remap[$id][$text])){ $text = $remap[$id][$text]; }
                             else {
-                                $text = $remap[$id][$text] = '_' . base_convert($var_count, 10, 36);
+                                $text = $remap[$id][$text] = base52_encode($var_count);
                                 $var_count++;
                             }
                         }
@@ -143,4 +153,27 @@ function minify($file){
 
     # output the result
     return $buffer;
+}
+
+
+/* Converts a number to base 52, which uses letters only. */
+function base52_encode($n){
+    # metaprogram (and sort) a map
+    $map = array();
+    for($i = 0; $i < 26; $i++){
+        $map[$i]      = chr(97 + $i);
+        $map[$i + 26] = strtoupper($map[$i]);
+    }
+    ksort($map);
+
+    # buffer the encoded conversion string
+    $encoded = '';
+    while($n >= 52){
+        $encoded .= 'Z';
+        $n -= 52;
+    }
+    $encoded .= $map[$n];
+
+    # return the result
+    return $encoded;
 }
