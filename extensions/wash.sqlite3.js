@@ -92,14 +92,13 @@ wash.sqlite3 = {
             
             // if the prompt is not in wash mode, default to sqlite3 action
             else {
-                // @todo: remember to escape quotations here
-                // command = ...
-                 
-                // emulate the sqlite3 console just by running queries through the 
-                // command line
+                // escape quotations
+                command = command.replace(/["]/g, '\\"');
+
+                // emulate the console by running queries through the shell
                 var cmd = 'sqlite3 -batch ';
                 cmd += wash.sqlite3.connection.file;
-                cmd += " '" + command + "'"; 
+                cmd += ' "' + command + '"'; 
 
                 // communicate with the trojan
                 wash.command.action        = 'shell';

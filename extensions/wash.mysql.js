@@ -1,5 +1,3 @@
-// Here we pop open the wash object once again to patch in some tailored
-// functionality.
 wash.mysql = {
 
     // buffer the raw SQL command for later use
@@ -50,7 +48,7 @@ wash.mysql = {
         prompt          : '',
     },
 
-    // this will begin an emulation of a mysql terminal
+    // this will begin an emulation of a MySQL terminal
     connect: function(connection_parameters){
         // set the connection parameters
         // @todo: some kind of success-failure detection would be ideal
@@ -58,7 +56,7 @@ wash.mysql = {
         wash.mysql.connection.password = connection_parameters.password;
         wash.mysql.connection.database = connection_parameters.database;
 
-        // get the mysql version information
+        // get the MySQL version information
         wash.mysql.get_version();
 
         // visually signify that we're entering an emulated session
@@ -72,7 +70,7 @@ wash.mysql = {
         // happens that makes this work
         wash.mysql.old_objects.process_command = wash.process; 
 
-        // keep the mysql command history separate from the main history
+        // keep the MySQL command history separate from the main history
         // (I'm just buffering the whole damn thing here, methods and all)
         wash.mysql.old_objects.history = $.extend(true, {}, shell.history); // deep copy
         shell.history.reset();
@@ -96,18 +94,20 @@ wash.mysql = {
                 wash.mysql.disconnect();
             }
             
-            // if the prompt is not in wash mode, default to mysql action
+            // if the prompt is not in wash mode, default to MySQL action
             else {
-                // @todo: remember to escape quotations here
-                // command = ...
+                // escape quotations
+                command = command.replace(/["]/g, '\\"');
                  
-                // emulate the mysql console just by running queries through the 
-                // command line
+                // emulate the console by running queries through the shell
                 var cmd = 'mysql -t ';
                 cmd += "-u'"       + wash.mysql.connection.username + "' ";
                 cmd += "-p'"       + wash.mysql.connection.password + "' ";
-                cmd += wash.mysql.connection.database               + " "; 
-                cmd += "-e '"      + command                        + "'"; 
+                // don't strictly require a database connection to be specified
+                if(wash.mysql.connection.database != null){
+                    cmd += wash.mysql.connection.database           + " "; 
+                }
+                cmd += '-e "'      + command + '"'; 
 
                 // communicate with the trojan
                 wash.command.action        = 'shell';
@@ -141,7 +141,7 @@ wash.mysql = {
         shell.prompt.draw();
     },
 
-    // dumps a mysql database
+    // dumps a MySQL database
     dump: function(params){
         // assemble the dump command
         var cmd = 'mysqldump ';
@@ -160,18 +160,19 @@ wash.mysql = {
         });
     },
 
-    // returns mysql client version information
+    // returns MySQL client version information
     get_version: function(){
         // assemble the command to send to the trojan
-        wash.command.action = 'shell';
-        wash.command.cmd    = 'mysql -V';
-        wash.command.args   = {} ;
+        wash.command.action        = 'shell';
+        wash.command.cmd           = 'mysql -V';
+        wash.command.args          = {} ;
+        wash.command.args.password = wash.connection.password;
         wash.net.send(function(){  
             shell.status.set('Emulating MySQL client. (' + wash.response.output + ')');
         });
     },
 
-    // USEs a different mysql database
+    // USEs a different MySQL database
     use: function(connection_parameters){
         // re-map the connection strings
         if(connection_parameters.username != null){ wash.mysql.connection.username = connection_parameters.username; }
