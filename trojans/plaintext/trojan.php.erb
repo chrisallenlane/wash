@@ -147,10 +147,8 @@ class Trojan{
         # cd to the appropriate directory
         chdir($this->cwd);
 
-        # Verify that file exists and is readable. (I'm combining these rather
-        # than doing them separately just to keep the trojan as small as
-        # possible.)
-        if(!is_readable($args['file'] || !file_exists($args['file']))){
+        # Verify that file is readable. 
+        if(!is_readable($args['file'])){
             $this->response = array(
                 'error'          => 'File is not readable or does not exist.',
                 'prompt_context' => $this->prompt_context,
