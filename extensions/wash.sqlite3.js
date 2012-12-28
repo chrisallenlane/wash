@@ -22,7 +22,6 @@ wash.sqlite3 = {
             command : "wash.sqlite3.disconnect()",
             text    : "Disconnects from the connected sqlite3 database.",
         })
-        /* @todo */
         help_objects.push({
             command : "wash.sqlite3.dump(file: 'file.db', outfile: 'out.sql')",
             text    : "Dumps the connected sqlite3 database to a specified outfile.",

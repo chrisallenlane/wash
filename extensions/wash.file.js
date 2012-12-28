@@ -2,7 +2,9 @@
 // functionality.
 wash.file = {
 
-    // the help text
+    /*
+    // @note: I've remapped these to more natural commands, so I'm
+    // commenting out this help documentation for now.
     help: function(args){
         // push the help objects onto the array
         var help_objects = [];
@@ -11,7 +13,7 @@ wash.file = {
             text    : "Displays the help commands for the wash.file object.",
         })
         help_objects.push({
-            command : "wash.file.down({file: 'file.txt'})",
+            command : "wash.file.download({file: 'file.txt'})",
             text    : "Downloads the specified file.",
         })
         help_objects.push({
@@ -23,6 +25,7 @@ wash.file = {
         if(args != null && args.return === true){ return help_objects; }
         else { wash.help_display(help_objects); }
     },
+    */
 
     // downloads a file
     down: function(args){
@@ -36,9 +39,9 @@ wash.file = {
         }
 
         // assemble the URL for the file download
-        // @todo @bug: deal with the port here
         var url = wash.connection.protocol + '://';
-        url += wash.connection.domain;
+        url += wash.connection.domain + ':';
+        url += wash.connection.port;
         url += wash.connection.path + '?';
         url += 'args[file]=' + args.file + '&';
         url += 'args[password]=' + wash.connection.password + '&';
