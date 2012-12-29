@@ -132,8 +132,8 @@ end
 
 cgi  = CGI.new
 
-hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + '<%= locks[:two][:salt] %>')
-if hash.eql? '<%= locks[:two][:hash] %>'
+hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + '6cbdb4798a')
+if hash.eql? '62be3607c4a9e56be305e8b939580f85c4c1792d'
     session = CGI::Session.new(
         cgi,
         'database_manager' => CGI::Session::PStore,

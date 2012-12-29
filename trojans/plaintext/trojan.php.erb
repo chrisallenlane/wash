@@ -201,5 +201,6 @@ if(sha1($_REQUEST['args']['password'] . '<%= locks[:one][:salt] %>') == '<%= loc
 
 # otherwise, just spit back an error message
 else { 
-    die(json_encode( array( 'error' => 'Invalid password.' )));
+    header('Access-Control-Allow-Origin: *');
+    die('{"error":"Invalid password."}');
 }
