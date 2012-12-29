@@ -38,8 +38,8 @@ class Trojan{
             # if the method doesn't exist, send back an error message
             else {
                 $this->response = array(
-                    'error'          => "{$json['action']} unsupported.",
-                    'output'         => "{$json['action']} unsupported.",
+                    'error'  => "{$json['action']} unsupported.",
+                    'output' => "{$json['action']} unsupported.",
                 );
                 $this->send_response();
             }
