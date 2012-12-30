@@ -19,15 +19,9 @@ require 'erb'
 include ERB::Util
 
 
-namespace :build do
+namespace :trojan do
 
-    desc "Compiles the less into css"
-    task :less do
-        `lessc './lib/css/main.less' > './lib/css/main.css'`
-        puts 'Less compiled.'
-    end
-
-    namespace :trojan do
+    namespace :build do
 
         desc "Compiles the trojan into a minified and obfuscated form."
         task :php do
@@ -77,12 +71,11 @@ end
 
 namespace :test do
     desc "Checks for file syntax errors."
-    task :check_syntax do
+    task :syntax do
         puts 'Checking PHP files...'
-        puts `find . -name '*.php' -print0 | xargs -0 -n1 -P10 php -l`
+        puts `find . -iname '*.php' -print0 | xargs -0 -n1 -P10 php -l`
 
-        # @todo: this doesn't display the names of the files it checks
         puts 'Checking Ruby files...'
-        puts `find . -name '*.rb' -print0 | xargs -0 -n1 -P10 ruby -c`
+        puts `find . -iname '*.rb' -print0 | xargs -0 -n1 -P10 ruby -c`
     end
 end
