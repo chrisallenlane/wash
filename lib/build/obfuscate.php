@@ -7,14 +7,27 @@
  */
 
 # include the minifier
-require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'minify.php';
+# @see: https://github.com/chrisallenlane/tiny-and-weird
+require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'tiny-and-weird.php';
 
 # minify the specified file
-$source = minify($argv[1]);
+$options = array(
+    'remove_whitespace' => true,
+    'tokens_to_ignore'  => array(
+        'payload_file_down',
+        'payload_file_read',
+        'payload_file_up',
+        'payload_file_view',
+        'payload_file_write',
+        'payload_image_view',
+    ),
+);
+$minifier = new TinyAndWeird($options);
+$source   = $minifier->minify($argv[1]);
 
 # strip opening and closing php tags
-$source = ltrim($source, '<?php');
-$source = rtrim($source, '?>');
+$source   = ltrim($source, '<?php');
+$source   = rtrim($source, '?>');
 
 # compress the source
 $deflated = gzcompress($source, 9);
