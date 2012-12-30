@@ -88,12 +88,36 @@ namespace :trojan do
 end
 
 namespace :test do
-    desc "Checks for file syntax errors."
-    task :syntax do
-        puts 'Checking PHP files...'
-        puts `find . -iname '*.php' -print0 | xargs -0 -n1 -P10 php -l`
 
-        puts 'Checking Ruby files...'
-        puts `find . -iname '*.rb' -print0 | xargs -0 -n1 -P10 ruby -c`
+    namespace :lint do
+        desc "Runs all source files through an appropriate linter."
+        task :all do
+            Rake::Task['test:lint:js'].execute
+            Rake::Task['test:lint:php'].execute
+            Rake::Task['test:lint:ruby'].execute
+        end
+
+        desc "Runs JavaScript files through jshint"
+        task :js do
+            puts 'Checking JavaScript files...'
+            js_files = `find . -name vendor -prune -o -name '*.js' | grep -v 'vendor'`.split "\n"
+            js_files.each {|f| puts `jshint #{f}`}
+        end
+
+        desc "Runs PHP files through the linter (php -l)"
+        task :php do
+            puts 'Checking PHP files...'
+            puts `find . -iname '*.php' -print0 | xargs -0 -n1 -P10 php -l`
+        end
+
+        desc "Runs Ruby files through the linter (ruby -wc)"
+        task :ruby do
+            puts 'Checking Ruby files...'
+            puts `find . -iname '*.rb' -print0 | xargs -0 -n1 -P10 ruby -wc`
+        end
+    end
+
+    namespace :suite do
+
     end
 end
