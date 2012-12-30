@@ -1,4 +1,4 @@
-shell.editor = {
+wash.editor = {
 
     // the file currently being edited
     edit_file: '',
@@ -53,21 +53,21 @@ shell.editor = {
             name: 'save',
             bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
             exec: function(editor) {
-                shell.editor.save();
+                wash.editor.save();
             }
         });
         editor.commands.addCommand({
             name: 'quit',
             bindKey: {win: 'Ctrl-Q',  mac: 'Command-Q'},
             exec: function(editor) {
-                shell.editor.quit();
+                wash.editor.quit();
             }
         });
         editor.commands.addCommand({
             name: 'mode',
             bindKey: {win: 'Ctrl-M',  mac: 'Command-M'},
             exec: function(editor) {
-                shell.editor.mode();
+                wash.editor.mode();
             }
         });
     },
@@ -93,12 +93,12 @@ shell.editor = {
 
             // otherwise, launch the editor
             else {
-                shell.editor.edit_file = json.output.file;
+                wash.editor.edit_file = json.output.file;
 
                 // load the file contents into the editor
                 editor.setValue(json.output.output);
-                shell.editor.show();
-                shell.editor.focus();
+                wash.editor.show();
+                wash.editor.focus();
             }
         });
     }, 
@@ -120,9 +120,9 @@ shell.editor = {
     // toggles between the editor and shell views
     mode: function(){
         if(shell.elements.editor.is(':visible')){
-           shell.editor.hide(); 
+           wash.editor.hide(); 
         } else {
-           shell.editor.show(); 
+           wash.editor.show(); 
         }
     },
 
@@ -130,7 +130,7 @@ shell.editor = {
     quit: function(){
         // @todo: implement "unsaved changes" functionality here
         editor.setValue('');
-        shell.editor.hide();
+        wash.editor.hide();
         shell.status.set('Editor closed.');
     },
 
@@ -138,7 +138,7 @@ shell.editor = {
     save: function(){
         wash.command.action        = 'payload_file_write';
         // if the newline is not appended below, bad things seem to happen. See issue #39.
-        wash.command.args          = {file: shell.editor.edit_file, data: editor.getValue() + "\n"};
+        wash.command.args          = {file: wash.editor.edit_file, data: editor.getValue() + "\n"};
         wash.command.args.password = wash.connection.password;
 
         wash.net.send(function(){
@@ -157,9 +157,9 @@ shell.editor = {
             shell.elements.editor.fadeIn('slow');
 
             // enable syntax highlighting based off file extension
-            var extension = wash.file.get_extension(shell.editor.edit_file);
-            if(shell.editor.modes[extension] != null){
-                editor.getSession().setMode('ace/mode/' + shell.editor.modes[extension]);
+            var extension = wash.file.get_extension(wash.editor.edit_file);
+            if(wash.editor.modes[extension] != null){
+                editor.getSession().setMode('ace/mode/' + wash.editor.modes[extension]);
             } 
         
             // give focus to the editor
