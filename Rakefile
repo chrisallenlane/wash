@@ -101,7 +101,7 @@ namespace :test do
         task :js do
             puts 'Checking JavaScript files...'
             js_files = `find . -name vendor -prune -o -name '*.js' | grep -v 'vendor'`.split "\n"
-            js_files.each {|f| puts `jshint #{f}`}
+            js_files.each {|f| puts `jshint --config ./lib/build/jshint-config.json #{f}`}
         end
 
         desc "Runs PHP files through the linter (php -l)"

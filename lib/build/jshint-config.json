@@ -1,0 +1,6 @@
+{
+    "browser"  : true,
+    "evil"     : true,
+    "laxcomma" : true,
+    "unused"   : true
+}
