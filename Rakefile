@@ -21,8 +21,6 @@ include ERB::Util
 namespace :check do
     desc "Checks system dependencies"
     task :dependencies do
-
-        # check for shell dependencies
         puts 'Checking shell dependencies...'
         satisfied = true
         shell_dependencies = %w[ack-grep gem grep jshint nodejs npm php ruby]
