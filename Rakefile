@@ -101,7 +101,12 @@ namespace :test do
         task :js do
             puts 'Checking JavaScript files...'
             js_files = `find . -name vendor -prune -o -name '*.js' | grep -v 'vendor'`.split "\n"
-            js_files.each {|f| puts `jshint --config ./lib/build/jshint-config.json #{f}`}
+            js_files.each do |f|
+                lint_out = `jshint --config ./lib/build/jshint-config.json #{f}`
+                # don't output empty lines which would otherwise be outputted
+                # when a file contains no errors
+                puts lint_out unless lint_out.strip!.to_s.empty?
+            end
         end
 
         desc "Runs PHP files through the linter (php -l)"
