@@ -18,11 +18,21 @@ require 'digest/sha1'
 require 'erb'
 include ERB::Util
 
-
 namespace :check do
     desc "Checks system dependencies"
     task :dependencies do
 
+        # check for shell dependencies
+        puts 'Checking shell dependencies...'
+        satisfied = true
+        shell_dependencies = %w[ack-grep gem grep jshint nodejs npm php ruby]
+        shell_dependencies.each do |d|
+            if `which #{d}`.empty?
+                puts "Missing: shell dependency #{d} is NOT installed." 
+                satisfied = false
+            end
+        end
+        puts "All shell dependencies appear to be satisfied." if satisfied
     end
 
     desc "Searches for todos and such in the source"
