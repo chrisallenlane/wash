@@ -1,7 +1,7 @@
 {
     "name"     : "shell-only",
     "chassis"  : "shell-only",
-    "payloads" : [],
+    "payloads" : ["one", "two", "three"],
 
     "password" : "the-password",
     "salt"     : "the-salt"

