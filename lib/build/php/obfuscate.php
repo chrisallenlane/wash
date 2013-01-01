@@ -11,17 +11,10 @@
 require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'tiny-and-weird.php';
 
 # minify the specified file
-# @todo: I need to decouple this list, probably by implmeneting a regex match
-# exclusion on token names in tiny-and-weird.php
 $options = array(
-    'remove_whitespace' => true,
-    'tokens_to_ignore'  => array(
-        'payload_feh',
-        'payload_file_down',
-        'payload_file_read',
-        'payload_file_up',
-        'payload_file_view',
-        'payload_file_write',
+    'remove_whitespace'  => true,
+    'patterns_to_ignore' => array(
+        '/^payload/',
     ),
 );
 $minifier = new TinyAndWeird($options);

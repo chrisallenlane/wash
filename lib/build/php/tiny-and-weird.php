@@ -4,8 +4,9 @@ class TinyAndWeird{
     # remap and track variable names
     private $b52_map   = array();
     private $options   = array(
-        'tokens_to_ignore'  => array(),
-        'remove_whitespace' => true,
+        'tokens_to_ignore'   => array(),
+        'patterns_to_ignore' => array(),
+        'remove_whitespace'  => true,
     );
     private $remap     = array();
     private $var_count = 0;
@@ -25,6 +26,9 @@ class TinyAndWeird{
         'super'                 => true, 'true'                  => true,
         'undefined'             => true,
     );
+
+    private $patterns_to_ignore = array();
+
 
     /**
      * Initializes the minifier.
@@ -50,6 +54,17 @@ class TinyAndWeird{
         if(!empty($options['tokens_to_ignore'])){
             foreach($options['tokens_to_ignore'] as $token){
                 $this->tokens_to_ignore[$token] = true;
+            }
+        }
+        # add to the list of tokens to ignore
+        if(!empty($options['tokens_to_ignore'])){
+            foreach($options['tokens_to_ignore'] as $token){
+                $this->tokens_to_ignore[$token] = true;
+            }
+        }
+        if(!empty($options['patterns_to_ignore'])){
+            foreach($options['patterns_to_ignore'] as $pattern){
+                $this->patterns_to_ignore[] = $pattern;
             }
         }
     }
@@ -87,17 +102,20 @@ class TinyAndWeird{
                     if($id == T_VARIABLE){
                         # don't remap variables names that will cause problems, like
                         # superglobal names
-                        if(!isset($this->tokens_to_ignore[$text])){
-                            # pre-process the text
-                            $text = str_replace('$', '', $text);
+                        $scope_safe = str_replace('$', '', $text);
 
+                        if(
+                            !isset($this->tokens_to_ignore[$text]) &&
+                            !isset($this->tokens_to_ignore[$scope_safe]) &&
+                            !$this->matches_pattern_to_ignore($scope_safe)
+                        ){
                             # remap the variable name if it has already been set
-                            if(isset($this->remap[$id][$text])){ $text = '$' . $this->remap[$id][$text]; }
+                            if(isset($this->remap[$id][$scope_safe])){ $text = '$' . $this->remap[$id][$scope_safe]; }
 
                             # otherwise, create a new mapping
                             else {
-                                $this->remap[$id][$text] = $this->base52_encode($this->var_count);
-                                $text                    = '$' . $this->remap[$id][$text];
+                                $this->remap[$id][$scope_safe] = $this->base52_encode($this->var_count);
+                                $text                          = '$' . $this->remap[$id][$scope_safe];
                                 $this->var_count++;
                             }
                         }
@@ -108,7 +126,11 @@ class TinyAndWeird{
                         # ignore tokens that have been specified to be ignored, as well
                         # as native php function calls. if we rename the latter, the
                         # application will break.
-                        if(!isset($this->tokens_to_ignore[$text]) && !function_exists($text)){
+                        if(
+                            !function_exists($text) &&
+                            !isset($this->tokens_to_ignore[$text]) &&
+                            !$this->matches_pattern_to_ignore($text)
+                        ){
                             # peek into the previous token
                             list($last_id, $last_token) = $tokens[$index - 1];
                             
@@ -153,6 +175,8 @@ class TinyAndWeird{
             }
         }
 
+        file_put_contents('/tmp/debug.php', $buffer);
+
         # now that the new source has been minified and buffered, strip out any 
         # unnecessary remaining whitespace
         if($this->options['remove_whitespace']){
@@ -168,6 +192,25 @@ class TinyAndWeird{
 
         # return the result
         return $buffer;
+    }
+
+
+    /**
+     * Returns true if $text matches a pattern that should be ignored, or
+     * false otherwise
+     *
+     * @param text $text               The text to test against the patterns
+     */
+    private function matches_pattern_to_ignore($text){
+        # iterate over the patterns that should be ignored
+        foreach($this->patterns_to_ignore as $pattern){
+            if(preg_match($pattern, $text) === 1){
+                # if we reach this point, we've found a match
+                return true;
+            }
+        }
+        # otherwise, we have not
+        return false;
     }
 
     /**
