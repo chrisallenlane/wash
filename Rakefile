@@ -81,6 +81,7 @@ namespace :test do
     end
 end
 
+=begin
 namespace :trojan do
     namespace :build do
 
@@ -147,3 +148,5 @@ namespace :trojan do
         end
     end
 end
+=end
+
