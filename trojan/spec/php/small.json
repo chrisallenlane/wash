@@ -1,0 +1,9 @@
+{
+    "name"     : "shell-only",
+    "language" : "php",
+    "chassis"  : "shell-only",
+    "payloads" : [],
+
+    "password" : "the-password",
+    "salt"     : "the-salt"
+}

