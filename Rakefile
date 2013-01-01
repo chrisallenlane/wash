@@ -75,6 +75,10 @@ namespace :trojan do
             # notify the user
             print 'Compiling PHP trojan....'
 
+            # delete the old builds
+            `rm ./trojan/bin/debug/php/*`
+            `rm ./trojan/bin/deploy/php/*`
+
             # iterate over the PHP-spec trojans
             `ls ./trojan/spec/php`.split.each do |f|
                 # buffer the erb parameters

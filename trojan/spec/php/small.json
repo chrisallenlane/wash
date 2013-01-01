@@ -4,6 +4,6 @@
     "chassis"  : "shell-only",
     "payloads" : [],
 
-    "password" : "the-password",
-    "salt"     : "the-salt"
+    "password" : "89d5afb63a72760c32a12a554a9a8c32",
+    "salt"     : "c5e5f704ee"
 }

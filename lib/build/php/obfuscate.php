@@ -11,6 +11,8 @@
 require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'tiny-and-weird.php';
 
 # minify the specified file
+# @todo: I need to decouple this list, probably by implmeneting a regex match
+# exclusion on token names in tiny-and-weird.php
 $options = array(
     'remove_whitespace' => true,
     'tokens_to_ignore'  => array(
