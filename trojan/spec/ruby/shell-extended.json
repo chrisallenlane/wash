@@ -1,0 +1,12 @@
+{
+    "name"     : "shell-extended",
+    "language" : "php",
+    "chassis"  : "shell-extended",
+    "payloads" : [
+        "feh",
+        "file"
+    ],
+
+    "password" : "31ed570fbcd26ba848f315e9cee33ee3",
+    "salt"     : "7474b1554c"
+}

