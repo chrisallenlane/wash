@@ -29,7 +29,7 @@ src_files:
     - lib/js/wash.net.js
     - lib/js/wash.permastore.js
     - lib/js/wash.response.js
-    - lib/js/main.js
+    #- lib/js/main.js
 
 # stylesheets
 #
