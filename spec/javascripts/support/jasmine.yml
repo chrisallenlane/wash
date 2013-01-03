@@ -28,6 +28,9 @@ src_files:
     - lib/js/wash.net.js
     - lib/js/wash.permastore.js
     - lib/js/wash.response.js
+    - lib/js/extensions/wash.mysql.js
+    - lib/js/extensions/wash.remap.js
+    - lib/js/extensions/wash.sqlite3.js
 
 # stylesheets
 #

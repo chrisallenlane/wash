@@ -43,7 +43,7 @@ describe("shell.prompt", function() {
         expect(shell.history.commands[0]).toBe("new command | blah 2>&1");
     });
 
-    describe("mode object", function(){
+    describe("shell.prompt.mode", function(){
         it("should get its value", function() {
             expect(shell.prompt.mode.get()).toBe('shell');
         });
@@ -54,7 +54,7 @@ describe("shell.prompt", function() {
         });
     });
 
-    describe("context object", function(){
+    describe("shell.prompt.context", function(){
         it("should get its value", function() {
             shell.prompt.context.set('wash>');
             expect(shell.prompt.context.get()).toBe('wash>');
