@@ -12,10 +12,24 @@
 #
 src_files:
     #- public/javascripts/**/*.js
-    - 'lib/js/vendor/jquery.min.js'
-    - 'lib/js/wash.*.js'
-    - 'lib/js/shell.*.js'
-    - 'lib/js/extensions/wash.*.js'
+    - lib/js/vendor/jquery.min.js
+    - lib/js/shell.js
+    - lib/js/shell.connection.js
+    - lib/js/shell.history.js
+    - lib/js/shell.key-monitor.js
+    - lib/js/shell.output.js
+    - lib/js/shell.prompt.js
+    - lib/js/shell.sidebar.js
+    - lib/js/shell.status.js
+    - lib/js/wash.js
+    - lib/js/wash.command.js
+    - lib/js/wash.connection.js
+    - lib/js/wash.crypto.js
+    - lib/js/wash.help.js
+    - lib/js/wash.net.js
+    - lib/js/wash.permastore.js
+    - lib/js/wash.response.js
+    - lib/js/main.js
 
 # stylesheets
 #
@@ -41,7 +55,7 @@ stylesheets:
 #   - helpers/**/*.js
 #
 helpers:
-  - 'helpers/**/*.js'
+  #- javascripts/helpers/jasmine-jquery.js
 # spec_files
 #
 #  Return an array of filepaths relative to spec_dir to include.
