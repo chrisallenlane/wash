@@ -14,34 +14,34 @@ describe("shell.history", function() {
 
     it("should traverse the command history", function() {
         loadFixtures('index.html');
-        /**
-         * @note @kludge: I'm hitting some _really_ weird issue whereby
-         * (essentially) $('#prompt').val() is not returning the same value as
-         * $('#prompt').attr('value'). I'm not sure wherein the bug lies, but
-         * I'm fairly certain it's not within my own code. With that said,
-         * I'm going to consider the following tests sufficient, even though
-         * I can't actually read the value of the fixtured #prompt.
-         */
+        shell.init();
+
         expect(shell.history.position).toBe(3);
-        expect(shell.history.commands[shell.history.position - 1]).toBe('command three');
+        expect(shell.prompt.get()).toBe('');
 
         shell.history.backward();
         expect(shell.history.position).toBe(2);
-        expect(shell.history.commands[shell.history.position - 1]).toBe('command two');
+        expect(shell.prompt.get()).toBe('command three');
 
         shell.history.backward();
         expect(shell.history.position).toBe(1);
-        expect(shell.history.commands[shell.history.position - 1]).toBe('command one');
-        expect(shell.history.commands[shell.history.position - 2]).not.toBeDefined(); //bounds checking
+        expect(shell.prompt.get()).toBe('command two');
+
+        shell.history.backward();
+        expect(shell.history.position).toBe(0);
+        expect(shell.prompt.get()).toBe('command one');
+
+        shell.history.forward();
+        expect(shell.history.position).toBe(1);
+        expect(shell.prompt.get()).toBe('command two');
 
         shell.history.forward();
         expect(shell.history.position).toBe(2);
-        expect(shell.history.commands[shell.history.position - 1]).toBe('command two');
+        expect(shell.prompt.get()).toBe('command three');
 
         shell.history.forward();
         expect(shell.history.position).toBe(3);
-        expect(shell.history.commands[shell.history.position - 1]).toBe('command three');
-        expect(shell.history.commands[shell.history.position]).not.toBeDefined(); //bounds checking
+        expect(shell.prompt.get()).toBe('');
     });
     
     it("should reset", function() {
