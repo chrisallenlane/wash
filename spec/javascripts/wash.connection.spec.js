@@ -1,6 +1,4 @@
 describe("wash.connection", function() {
-    loadFixtures('index.html');
-
     it("should initialize to the appropriate values", function() {
         expect(wash.connection.domain).toBe('');
         expect(wash.connection.protocol).toBe('http');
@@ -14,13 +12,13 @@ describe("wash.connection", function() {
         expect(help_text).not.toBe('');
     });
 
-    it("should properly parse a URL into a domain and path", function() {
+    it("should parse a URL into a domain and path", function() {
         parts = wash.connection.parse_url('example.com/path/to/the/page');
         expect(parts.domain).toBe('example.com');
         expect(parts.path).toBe('/path/to/the/page');
     });
 
-    it("should successfully set new connection parameters", function() {
+    it("should set new connection parameters", function() {
         wash.connection.set('url'          , 'example.com/the/new/path');
         wash.connection.set('protocol'     , 'https');
         wash.connection.set('port'         , '443');
