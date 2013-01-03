@@ -1,4 +1,10 @@
 describe("shell.history", function() {
+
+    beforeEach(function() {
+        loadFixtures('index.html');
+        jasmine.Ajax.useMock();
+    });
+
     it("should initialize to the appropriate values", function() {
         expect(shell.history.commands.length).toBe(0);
         expect(shell.history.current).toBe('');
@@ -13,7 +19,6 @@ describe("shell.history", function() {
     });
 
     it("should traverse the command history", function() {
-        loadFixtures('index.html');
         shell.init();
 
         expect(shell.history.position).toBe(3);

@@ -1,4 +1,11 @@
 describe("shell.prompt", function() {
+
+    beforeEach(function() {
+        loadFixtures('index.html');
+        shell.init();
+        jasmine.Ajax.useMock();
+    });
+
     it("should set its value", function() {
         shell.prompt.set('new value');
         expect(shell.prompt.get()).toBe('new value');
@@ -23,15 +30,17 @@ describe("shell.prompt", function() {
 
         // mock a new command
         shell.prompt.context.set('wash>');
-        shell.prompt.set('new command');
-
+        // use some html characters so we can assert that they
+        // are NOT being html-encoded (&amp;, etc.)
+        shell.prompt.set('new command | blah 2>&1');
         shell.prompt.enter();
 
-
-
-        console.log($('#output').text());
-        //shell.prompt.set('newer value');
-        //expect(shell.prompt.get()).toBe('newer value');
+        // expect the output to be written to the terminal
+        expect($('#output').text()).toBe('wash> new command | blah 2>&1');
+        // expect the prompt to be clear
+        expect(shell.prompt.get()).toBe('');
+        // expect there to be a command on the command history
+        expect(shell.history.commands[0]).toBe("new command | blah 2>&1");
     });
 
     describe("mode object", function(){
