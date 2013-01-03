@@ -11,7 +11,6 @@
 #   - dist/**/*.js
 #
 src_files:
-    #- public/javascripts/**/*.js
     - lib/js/vendor/jquery.min.js
     - lib/js/shell.js
     - lib/js/shell.connection.js
@@ -29,7 +28,6 @@ src_files:
     - lib/js/wash.net.js
     - lib/js/wash.permastore.js
     - lib/js/wash.response.js
-    #- lib/js/main.js
 
 # stylesheets
 #
