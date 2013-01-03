@@ -30,9 +30,9 @@ end
 namespace :lint do
     desc "Runs all source files through an appropriate linter"
     task :all do
-        Rake::Task['test:lint:js'].execute
-        Rake::Task['test:lint:php'].execute
-        Rake::Task['test:lint:ruby'].execute
+        Rake::Task['lint:js'].execute
+        Rake::Task['lint:php'].execute
+        Rake::Task['lint:ruby'].execute
     end
 
     desc "Runs JavaScript files through jshint"
