@@ -1,0 +1,93 @@
+# src_files
+#
+# Return an array of filepaths relative to src_dir to include before jasmine specs.
+# Default: []
+#
+# EXAMPLE:
+#
+# src_files:
+#   - lib/source1.js
+#   - lib/source2.js
+#   - dist/**/*.js
+#
+src_files:
+    - lib/js/vendor/jquery.min.js
+    - lib/js/shell.js
+    - lib/js/shell.connection.js
+    - lib/js/shell.history.js
+    - lib/js/shell.key-monitor.js
+    - lib/js/shell.output.js
+    - lib/js/shell.prompt.js
+    - lib/js/shell.sidebar.js
+    - lib/js/shell.status.js
+    - lib/js/wash.js
+    - lib/js/wash.command.js
+    - lib/js/wash.connection.js
+    - lib/js/wash.crypto.js
+    - lib/js/wash.help.js
+    - lib/js/wash.net.js
+    - lib/js/wash.permastore.js
+    - lib/js/wash.response.js
+    - lib/js/extensions/wash.mysql.js
+    - lib/js/extensions/wash.remap.js
+    - lib/js/extensions/wash.sqlite3.js
+
+# stylesheets
+#
+# Return an array of stylesheet filepaths relative to src_dir to include before jasmine specs.
+# Default: []
+#
+# EXAMPLE:
+#
+# stylesheets:
+#   - css/style.css
+#   - stylesheets/*.css
+#
+stylesheets:
+
+# helpers
+#
+# Return an array of filepaths relative to spec_dir to include before jasmine specs.
+# Default: ["helpers/**/*.js"]
+#
+# EXAMPLE:
+#
+# helpers:
+#   - helpers/**/*.js
+#
+helpers:
+  #- javascripts/helpers/jasmine-jquery.js
+# spec_files
+#
+#  Return an array of filepaths relative to spec_dir to include.
+# Default: ["**/*[sS]pec.js"]
+#
+# EXAMPLE:
+#
+# spec_files:
+#   - **/*[sS]pec.js
+#
+spec_files:
+  - '**/*[sS]pec.js'
+
+# src_dir
+#
+# Source directory path. Your src_files must be returned relative to this path. Will use root if left blank.
+# Default: project root
+#
+# EXAMPLE:
+#
+# src_dir: public
+#
+src_dir:
+
+# spec_dir
+#
+# Spec directory path. Your spec_files must be returned relative to this path.
+# Default: spec/javascripts
+#
+# EXAMPLE:
+#
+# spec_dir: spec/javascripts
+#
+spec_dir:

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>wash</title>
+    </head>
+    <body>
+        <div id='shell'>
+            <div id='connection'>
+                <!-- protocol -->
+                <select id='protocol' title='Specify the protocol (http/https).'>
+                    <option value='http'>http://</option>
+                    <option value='https'>https://</option>
+                </select>
+
+                <!-- URL -->
+                <input type='text' id='url' placeholder='example.com/path/to/trojan.php'
+                    title='Specify the path to the trojan file, including the host.' >
+
+                <!-- port -->
+                <input type='number' id='port' value='80' maxlength='5'
+                    title='Specify the connection port.' >
+
+                <!-- password -->
+                <input type='password' id='password' placeholder='password'
+                    title='Specify the password to command the trojan.'>
+
+                <!-- request type -->
+                <label>Request Type:
+                <select id='request_type' title='Specify the request type.'>
+                    <option value='post'>POST</option>
+                    <option value='get'>GET</option>
+                    <!-- @todo
+                    <option value='put'>PUT</option>
+                    <option value='delete'>DELETE</option>
+                    -->
+                </select></label>
+            </div>
+
+            <!-- a sidebar that can be used for ad-hoc UI -->
+            <div id='sidebar'></div>
+
+            <form id='terminal'>
+
+                <!-- derp -->
+                <noscript>
+                    <p class='warning'>You have JavaScript disabled. Wash needs
+                    JavaScript enabled to work.</p>
+                </noscript>
+
+                <!-- terminal output will be injected into this div -->
+                <pre><div id='output'></div></pre>
+
+                <!-- this is the actual prompt line -->
+                <pre><span id='prompt_context'></span></pre>
+                <pre><input autofocus type='text' id='prompt' autocomplete='off'></pre>
+            </form>
+
+            <!-- editor window -->
+            <div id='editor'></div>
+
+            <!-- status bar -->
+            <div id='status'>
+                <span>Status text can go here.</span>
+            </div>
+        </div>
+    </body>
+</html>
