@@ -9,43 +9,32 @@ http://twitter.com/#!/chrisallenlane
 
 About
 -----
-- pentester web shell
-- "swiss army knife"
+`wash` is a framework for creating and interfacing with web trojans.
 
-Features
---------
-- extensible
-- does not require apache configuration to install (right?). No proxy needed.
-- minification and obfuscation (except maybe for the Ruby trojan)
-- platform-agnostic
+Documentation
+-------------
+Project documentation is available online:
 
-Creating Trojans
-----------------
-- Rake
+### Overview ###
+<https://github.com/chrisallenlane/wash/wiki>.
 
-Extending
----------
-- remapping simple shell commands
-- useful for creating compatbile emulations of programs that don't write to stdout
+### Usage Guide ###
 
-Architecture
-------------
-- Callback functions
-- JSON back and forth
+### Trojan Authoring Guide ###
 
-API
----
-- JSON-based
+### Something ###
 
-
-Getting Help
-------------
+### Known Bugs and Roadmap ###
+https://github.com/chrisallenlane/wash/issues
 
 Contributing
 ------------
-- Pull requests
-- Contact me
+Contributions are welcome and encouraged. If you'd like to contribute, please fork this project, make your changes, and submit a pull request.
 
 License
 -------
-- GPL 2
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
