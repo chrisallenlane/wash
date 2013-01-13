@@ -43,6 +43,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see http://www.gnu.org/licenses/.
 
 
+[Project Wiki]: https://github.com/chrisallenlane/wash/wiki
 [Installing]: https://github.com/chrisallenlane/wash/wiki/Installing
 [Usage Guide]: https://github.com/chrisallenlane/wash/wiki/Usage-Guide
 [Architectural Overview]: https://github.com/chrisallenlane/wash/wiki/Architectural-Overview
