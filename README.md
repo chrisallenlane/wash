@@ -9,7 +9,9 @@ http://twitter.com/#!/chrisallenlane
 
 About
 -----
-`wash` is a framework for creating and interfacing with web trojans.
+`wash` is a framework for creating and interfacing with trojans that can
+establish a "web shell" on a compromised web server. It is designed with
+penetration testers in mind, and thus is highly versatile and extensible.
 
 
 Documentation
@@ -51,5 +53,3 @@ this program. If not, see http://www.gnu.org/licenses/.
 [Extending the Wash Client]: https://github.com/chrisallenlane/wash/wiki/Extending-the-Wash-Client
 [Creating Trojans]: https://github.com/chrisallenlane/wash/wiki/Creating-Trojans
 [Contributing]: https://github.com/chrisallenlane/wash/wiki/Contributing
-
-
