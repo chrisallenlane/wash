@@ -1,6 +1,7 @@
 require 'digest/sha1'
 require 'erb'
 require 'json'
+require 'webrick'
 include ERB::Util
 
 namespace :check do
@@ -175,12 +176,17 @@ namespace :trojan do
     end
 end
 
-
-# @kludge: there has to be a more elegant way to do this
-desc "Starts the web and proxy servers"
+desc "Starts a local web server"
 task :server do
-    `./lib/srv/webrick.rb &`
-    `./lib/srv/proxy.rb &`
+    # configure the local webserver
+    server = WEBrick::HTTPServer.new :Port => 1337
+    server.mount "/", WEBrick::HTTPServlet::FileHandler, './'
+
+    # configure shutdown
+    trap('INT') { server.stop }
+
+    # start
+    server.start
 end
 
 
