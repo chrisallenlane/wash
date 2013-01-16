@@ -9,5 +9,6 @@ describe("wash.command", function(){
         expect(wash.command.args).not.toBe(undefined);
         expect(wash.command.args.cmd).not.toBe(undefined);
         expect(wash.command.args.cwd).not.toBe(undefined);
+        expect(wash.command.args.password).not.toBe(undefined);
     });
 });
