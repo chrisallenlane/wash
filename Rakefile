@@ -121,7 +121,7 @@ namespace :trojan do
             end
         end
 
-        desc "Compiles the PHP trojans"
+        desc "Compiles the Ruby trojans"
         task :ruby do
             # notify the user
             puts 'Compiling Ruby trojans....'
