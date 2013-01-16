@@ -63,7 +63,7 @@ describe("wash", function() {
                 //spyOn(wash.net, 'send');
 
                 expect(wash.command.action).toBe('shell');
-                expect(wash.command.cmd).toBe('ls');
+                expect(wash.command.args.cmd).toBe('ls');
                 //expect(wash.net.send).toHaveBeenCalled();
             });
         });
