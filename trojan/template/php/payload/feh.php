@@ -1,3 +1,5 @@
+<?php
+
 /**
  * Downloads a file
  *
@@ -19,3 +21,5 @@ public function payload_feh($args){
     else { echo "File does not exist."; }
     die();
 }
+
+?>

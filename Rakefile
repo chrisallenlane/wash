@@ -99,7 +99,10 @@ namespace :trojan do
                 # load the trojan payloads
                 params[:payloads] = ''
                 trojan['payloads'].each do |payload|
-                    params[:payloads] +=  File.read('./trojan/template/php/payload/' + payload + '.php');
+                    payload_string = File.read('./trojan/template/php/payload/' + payload + '.php').strip
+                    payload_string.sub!(/^<\?php/,'')
+                    payload_string.sub!(/\?>$/,'')
+                    params[:payloads] += payload_string
                 end
                 
                 # compile the trojan's erb template
@@ -148,7 +151,7 @@ namespace :trojan do
                 # load the trojan payloads
                 params[:payloads] = ''
                 trojan['payloads'].each do |payload|
-                    params[:payloads] +=  File.read('./trojan/template/ruby/payload/' + payload + '.rb');
+                    params[:payloads] +=  File.read('./trojan/template/ruby/payload/' + payload + '.rb')
                 end
                 
                 # compile the trojan's erb template

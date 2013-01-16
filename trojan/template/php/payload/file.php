@@ -1,3 +1,5 @@
+<?php
+
 /**
  * Downloads a file
  *
@@ -75,3 +77,5 @@ public function payload_file_write($args){
     }
     $this->send_response();
 }
+
+?>

