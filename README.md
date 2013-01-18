@@ -11,7 +11,7 @@ About
 -----
 `wash` is a framework for creating and interfacing with trojans that can
 establish a "web shell" on a compromised web server. It is designed with
-penetration testers in mind, and thus is highly versatile and extensible.
+penetration testers in mind, and is thus highly versatile and extensible.
 
 
 Documentation
