@@ -13,10 +13,6 @@ About
 establish a "web shell" on a compromised web server. It is designed with
 penetration testers in mind, and thus is highly versatile and extensible.
 
-**Please note that this software is currently in Beta. It has one known issue
-that will currently limit its applicability in the "real world". This issue
-(#52) will be fixed in the near-term.**
-
 
 Documentation
 -------------
