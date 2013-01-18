@@ -1,7 +1,7 @@
 {
     "name"     : "shell-locked-all-payloads",
     "language" : "php",
-    "chassis"  : "shell-locked-payloads",
+    "chassis"  : "default",
     "payloads" : [
         "feh",
         "file"

