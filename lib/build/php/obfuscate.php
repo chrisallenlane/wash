@@ -16,6 +16,9 @@ $options = array(
     'patterns_to_ignore' => array(
         '/^payload/',
     ),
+    'tokens_to_ignore' => array(
+        'shell',
+    ),
 );
 $minifier = new TinyAndWeird($options);
 $source   = $minifier->minify($argv[1]);

