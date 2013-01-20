@@ -13,7 +13,7 @@ About
 establish a "web shell" on a compromised web server. It is designed with
 penetration testers in mind, and is thus highly versatile and extensible.
 
-**[View an Introduction on YouTube][yt]** 
+[View an Introduction on YouTube][YouTube]
 
 Documentation
 -------------
@@ -54,3 +54,4 @@ this program. If not, see http://www.gnu.org/licenses/.
 [Extending the Wash Client]: https://github.com/chrisallenlane/wash/wiki/Extending-the-Wash-Client
 [Creating Trojans]: https://github.com/chrisallenlane/wash/wiki/Creating-Trojans
 [Contributing]: https://github.com/chrisallenlane/wash/wiki/Contributing
+[YouTube]: http://bit.ly/wash-yt
