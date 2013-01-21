@@ -59,12 +59,13 @@ namespace :check do
 end
 
 namespace :lint do
-    desc "Runs all source files through an appropriate linter"
-    task :all do
-        Rake::Task['lint:js'].execute
-        Rake::Task['lint:php'].execute
-        Rake::Task['lint:ruby'].execute
-    end
+
+    #desc "Runs all source files through an appropriate linter"
+    #task :all do
+    #    Rake::Task['lint:js'].execute
+    #    Rake::Task['lint:php'].execute
+    #    Rake::Task['lint:ruby'].execute
+    #end
 
     desc "Runs JavaScript files through jshint"
     task :js do
@@ -78,17 +79,22 @@ namespace :lint do
         end
     end
 
-    desc "Runs PHP files through the linter (php -l)"
-    task :php do
-        puts 'Checking PHP files...'
-        puts `find . -iname '*.php' -print0 | xargs -0 -n1 -P10 php -l`
-    end
+    # @note: the PHP and Ruby linters aren't particularly helpful anymore,
+    # given that they can't successfully parse the rb.erb/php.erb templates.
+    # Since these linters are essentially just error-checkers rather than true
+    # linters anyway, I'm commenting them out for now. I may either improve 
+    # upon or remove them in the future.
+    #desc "Runs PHP files through the linter (php -l)"
+    #task :php do
+    #    puts 'Checking PHP files...'
+    #    puts `find . -iname '*.php' -print0 | xargs -0 -n1 -P10 php -l`
+    #end
 
-    desc "Runs Ruby files through the linter (ruby -wc)"
-    task :ruby do
-        puts 'Checking Ruby files...'
-        puts `find . -iname '*.rb' -print0 | xargs -0 -n1 -P10 ruby -wc`
-    end
+    #desc "Runs Ruby files through the linter (ruby -wc)"
+    #task :ruby do
+    #    puts 'Checking Ruby files...'
+    #    puts `find . -iname '*.rb' -print0 | xargs -0 -n1 -P10 ruby -wc`
+    #end
 end
 
 
