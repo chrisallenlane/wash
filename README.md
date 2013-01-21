@@ -20,6 +20,7 @@ Documentation
 Project documentation is available online:
 
 - [Project Wiki][]
+- [Installing][]
 - [Usage Guide][]
 - [Architectural Overview][]
 - [Client/Trojan API][]
