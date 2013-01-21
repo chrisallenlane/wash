@@ -12,7 +12,7 @@ namespace :check do
 
         # check for system dependencies
         missing            = []
-        shell_dependencies = %w[ack-grep gem grep jshint nodejs npm php ruby]
+        shell_dependencies = %w[ack-grep gem grep nodejs npm php ruby]
         shell_dependencies.each do |d|
             if `which #{d}`.empty?
                 puts "Missing: shell dependency #{d} is NOT installed." 
@@ -23,7 +23,7 @@ namespace :check do
         puts "Try: sudo apt-get install " + missing.join(" ") unless missing.empty?
 
         # check for gem dependencies
-        missing            = []
+        missing          = []
         gem_dependencies = %w[jasmine]
         gem_dependencies.each do |d|
             if `which #{d}`.empty?
@@ -46,7 +46,7 @@ namespace :check do
         end
         missing.each { |m| puts "Try: npm install -g #{m}" } unless missing.empty?
 
-        puts "All node dependencies appear to be satisfied." if satisfied
+        puts "All dependencies appear to be satisfied." if satisfied
     end
 
     desc "Searches for todos and such in the source"
