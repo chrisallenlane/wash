@@ -22,6 +22,18 @@ namespace :check do
         end
         puts "Try: sudo apt-get install " + missing.join(" ") unless missing.empty?
 
+        # check for gem dependencies
+        missing            = []
+        gem_dependencies = %w[jasmine]
+        gem_dependencies.each do |d|
+            if `which #{d}`.empty?
+                puts "Missing: gem dependency #{d} is NOT installed." 
+                missing.push d
+                satisfied = false
+            end
+        end
+        puts "Try: gem install " + missing.join(" ") unless missing.empty?
+
         # check for nodejs dependencies
         missing           = []
         node_dependencies = %w[jshint]
