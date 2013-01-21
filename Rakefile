@@ -12,7 +12,7 @@ namespace :check do
 
         # check for system dependencies
         missing            = []
-        shell_dependencies = %w[ack-grep gem grep nodejs npm php ruby]
+        shell_dependencies = %w[ack-grep gem grep nodejs npm php5 ruby]
         shell_dependencies.each do |d|
             if `which #{d}`.empty?
                 puts "Missing: shell dependency #{d} is NOT installed." 
