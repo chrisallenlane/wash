@@ -1,3 +1,11 @@
+Deprecation Notice
+==================
+`wash` is now deprecated and unsupported. I encourage all users to migrate to
+`novahot` - the successor to `wash`, and a superior piece of software:
+
+https://github.com/chrisallenlane/novahot
+
+
 Wash (Web Application SHell)
 ============================
 
